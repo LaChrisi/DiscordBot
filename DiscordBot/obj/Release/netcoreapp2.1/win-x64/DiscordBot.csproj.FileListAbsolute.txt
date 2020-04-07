@@ -1,0 +1,13 @@
+C:\Users\ch.mueller\source\repos\DiscordBot\DiscordBot\bin\Release\netcoreapp2.1\win-x64\hostpolicy.dll
+C:\Users\ch.mueller\source\repos\DiscordBot\DiscordBot\bin\Release\netcoreapp2.1\win-x64\hostfxr.dll
+C:\Users\ch.mueller\source\repos\DiscordBot\DiscordBot\bin\Release\netcoreapp2.1\win-x64\DiscordBot.exe
+C:\Users\ch.mueller\source\repos\DiscordBot\DiscordBot\bin\Release\netcoreapp2.1\win-x64\DiscordBot.deps.json
+C:\Users\ch.mueller\source\repos\DiscordBot\DiscordBot\bin\Release\netcoreapp2.1\win-x64\DiscordBot.runtimeconfig.json
+C:\Users\ch.mueller\source\repos\DiscordBot\DiscordBot\bin\Release\netcoreapp2.1\win-x64\DiscordBot.runtimeconfig.dev.json
+C:\Users\ch.mueller\source\repos\DiscordBot\DiscordBot\bin\Release\netcoreapp2.1\win-x64\DiscordBot.dll
+C:\Users\ch.mueller\source\repos\DiscordBot\DiscordBot\bin\Release\netcoreapp2.1\win-x64\DiscordBot.pdb
+C:\Users\ch.mueller\source\repos\DiscordBot\DiscordBot\obj\Release\netcoreapp2.1\win-x64\DiscordBot.csproj.CoreCompileInputs.cache
+C:\Users\ch.mueller\source\repos\DiscordBot\DiscordBot\obj\Release\netcoreapp2.1\win-x64\DiscordBot.AssemblyInfoInputs.cache
+C:\Users\ch.mueller\source\repos\DiscordBot\DiscordBot\obj\Release\netcoreapp2.1\win-x64\DiscordBot.AssemblyInfo.cs
+C:\Users\ch.mueller\source\repos\DiscordBot\DiscordBot\obj\Release\netcoreapp2.1\win-x64\DiscordBot.dll
+C:\Users\ch.mueller\source\repos\DiscordBot\DiscordBot\obj\Release\netcoreapp2.1\win-x64\DiscordBot.pdb

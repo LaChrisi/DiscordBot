@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+	  <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
+	  <StartupObject>DiscordBot.Program</StartupObject>
+	  <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+	  <SignAssembly>false</SignAssembly>
+	  <AssemblyOriginatorKeyFile>LaChrisi.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20190511115921_Migration.cs" />
+    <Compile Remove="Migrations\20190511120215_Migration.cs" />
+    <Compile Remove="Migrations\20190511121004_Mig1.cs" />
+    <Compile Remove="Migrations\20190511123959_Mig.cs" />
+    <Compile Remove="Migrations\20190511130203_Mig.cs" />
+    <Compile Remove="Migrations\20190511130410_Test.cs" />
+    <Compile Remove="Migrations\20190511130832_Mig.cs" />
+    <Compile Remove="Migrations\20190511132323_Mif.cs" />
+    <Compile Remove="Migrations\20190511133113_Mig.cs" />
+    <Compile Remove="Migrations\20190511145929_Mig.cs" />
+    <Compile Remove="Migrations\20190511152530_Mig.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Discord.Net" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Design" Version="1.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\Datatypes\" />
+    <Folder Include="Resources\Extensions\" />
+  </ItemGroup>
+
+</Project>
