@@ -12,7 +12,7 @@ namespace DiscordBot.Core.Moderation
         [Command("setvote"), SummaryAttribute("UP/DOWN Vote Reaction for x Messages in the channel")]
         public async Task SetVoteModule(int numberUP = 0, ulong channelID = 0, ulong messageID = 0)
         {
-            if (!(Context.User.Id == Data.UserIDs.LaChrisi))
+            if (!(Context.User.Id == Core.Data.UserIDs.LaChrisi))
             {
                 await Context.Channel.SendMessageAsync(":x: You are not my god!");
                 return;
@@ -82,7 +82,7 @@ namespace DiscordBot.Core.Moderation
         [Command("setvoteall"), SummaryAttribute("UP/DOWN Vote Button for all Messages in the channel")]
         public async Task SetVoteAllModule(ulong ChannelID = 0, ulong MessageID = 0)
         {
-            if (!(Context.User.Id == Data.UserIDs.LaChrisi))
+            if (!(Context.User.Id == Core.Data.UserIDs.LaChrisi))
             {
                 await Context.Channel.SendMessageAsync(":x: You are not my god!");
                 return;

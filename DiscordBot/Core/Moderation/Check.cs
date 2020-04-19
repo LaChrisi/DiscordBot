@@ -14,7 +14,7 @@ namespace DiscordBot.Core.Moderation
         [Command("check"), SummaryAttribute("checkt den Channel und pinnt Nachrichten im Nachhinein.")]
         public async Task CheckModule(ulong ChannelID = 0, ulong MessageID = 0)
         {
-            if (!(Context.User.Id == Data.UserIDs.LaChrisi))
+            if (!(Context.User.Id == Core.Data.UserIDs.LaChrisi))
             {
                 await Context.Channel.SendMessageAsync(":x: You are not my god!");
                 return;

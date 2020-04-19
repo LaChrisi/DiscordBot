@@ -13,7 +13,7 @@ namespace DiscordBot.Core.Moderation
         [Command("status"), SummaryAttribute("Status zu String")]
         public async Task StatusModule(String what, String newStatus)
         {
-            if (!(Context.User.Id == Data.UserIDs.LaChrisi))
+            if (!(Context.User.Id == Core.Data.UserIDs.LaChrisi))
             {
                 await Context.Channel.SendMessageAsync(":x: You are not my god!");
                 return;

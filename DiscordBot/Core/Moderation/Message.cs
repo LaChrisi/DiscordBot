@@ -13,7 +13,7 @@ namespace DiscordBot.Core.Moderation
         [Command("say"), SummaryAttribute("writes as bot")]
         public async Task SayModule(ulong channelID = 0, String what = "")
         {
-            if (!(Context.User.Id == Data.UserIDs.LaChrisi))
+            if (!(Context.User.Id == Core.Data.UserIDs.LaChrisi))
             {
                 await Context.Channel.SendMessageAsync(":x: You are not my god!");
                 return;
@@ -32,7 +32,7 @@ namespace DiscordBot.Core.Moderation
         [Command("delete"), SummaryAttribute("deletes messages")]
         public async Task DeleteModule(ulong channelID = 0, ulong messageID = 0)
         {
-            if (!(Context.User.Id == Data.UserIDs.LaChrisi))
+            if (!(Context.User.Id == Core.Data.UserIDs.LaChrisi))
             {
                 await Context.Channel.SendMessageAsync(":x: You are not my god!");
                 return;

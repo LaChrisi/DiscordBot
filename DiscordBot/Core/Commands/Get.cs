@@ -19,7 +19,7 @@ namespace DiscordBot.Core.Commands
                 await Context.Channel.SendMessageAsync($"get stats | stat | s\nget reactions | reaction | r **<MessageID>**");
             }
 
-            [Command("stats"), Alias("s", "stat"), Summary("returns your overall stats")]
+            /*[Command("stats"), Alias("s", "stat"), Summary("returns your overall stats")]
             public async Task StatsModule(ulong UserID = 0)
             {
                 if (UserID != 0 && Context.User.Id == Data.UserIDs.LaChrisi)
@@ -28,7 +28,7 @@ namespace DiscordBot.Core.Commands
                     await Context.Channel.SendMessageAsync($":x: You are not my god!");
                 else
                     await Context.Channel.SendMessageAsync($"{Context.User.Mention} you have\n:+1: {Data.Data.GetLikes(Context.User.Id)} likes\n:-1: {Data.Data.GetDislikes(Context.User.Id)} dislikes\n:notepad_spiral: {Data.Data.GetPosts(Context.User.Id)} posts");
-            }
+            }*/
            
             [Command("reactions"), Alias("r", "reaction"), Summary("get reaction count command")]
             public async Task ReactionCountModule(ulong MessageID = 0)

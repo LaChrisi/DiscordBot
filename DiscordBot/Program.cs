@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Data.SQLite;
 
 using Discord;
 using Discord.WebSocket;
@@ -54,11 +55,11 @@ namespace DiscordBot
 
             if (Reaction.Emote.Name == "👍")
             {
-                await Data.SaveLikes(Message.Value.Author.Id, -1);
+                //await Data.SaveLikes(Message.Value.Author.Id, -1);
             }
             else if (Reaction.Emote.Name == "👎")
             {
-                await Data.SaveDislikes(Message.Value.Author.Id, -1);
+                //await Data.SaveDislikes(Message.Value.Author.Id, -1);
             }
         }
 
@@ -85,11 +86,11 @@ namespace DiscordBot
 
             if (Reaction.Emote.Name == "👍")
             {
-                await Data.SaveLikes(Message.Value.Author.Id, 1);
+                //await Data.SaveLikes(Message.Value.Author.Id, 1);
             }
             else if (Reaction.Emote.Name == "👎")
             {
-                await Data.SaveDislikes(Message.Value.Author.Id, 1);
+                //await Data.SaveDislikes(Message.Value.Author.Id, 1);
             }
         }
 
@@ -101,6 +102,8 @@ namespace DiscordBot
         private async Task Client_Ready()
         {
             await Client.SetGameAsync("an sich rum...", "", ActivityType.Playing);
+
+            
 
             Timer timer = new Timer
             {
@@ -143,7 +146,7 @@ namespace DiscordBot
 
                 await x.AddReactionAsync(new Emoji("👍"));
                 await x.AddReactionAsync(new Emoji("👎"));
-                await Data.SavePosts(Context.User.Id, 1);
+                //await Data.SavePosts(Context.User.Id, 1);
                 return;
             }
 
@@ -151,7 +154,7 @@ namespace DiscordBot
             {
                 await Message.AddReactionAsync(new Emoji("👍"));
                 await Message.AddReactionAsync(new Emoji("👎"));
-                await Data.SavePosts(Context.User.Id,1);
+                //await Data.SavePosts(Context.User.Id,1);
                 return;
             }
 

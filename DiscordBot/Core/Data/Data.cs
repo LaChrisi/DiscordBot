@@ -2,13 +2,74 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using DiscordBot.Resources.Database;
 using System.Linq;
+using System.Data.SQLite;
 
 namespace DiscordBot.Core.Data
 {
     public static class Data
     {
+        public static string Version()
+        {
+            string cs = "Data Source=DiscordBot.db";
+            string stm = "SELECT SQLITE_VERSION()";
+
+            using var con = new SQLiteConnection(cs, true);
+            con.Open();
+
+            using var cmd = new SQLiteCommand(stm, con);
+            string version = cmd.ExecuteScalar().ToString();
+
+            return version;
+        }
+
+        public static string Read()
+        {
+            string cs = "Data Source=DiscordBot.db";
+            string stm = "SELECT * FROM user";
+
+            using var con = new SQLiteConnection(cs, true);
+            con.Open();
+
+            using var cmd = new SQLiteCommand(stm, con);
+            using SQLiteDataReader rdr = cmd.ExecuteReader();
+
+            string ausgabe = "";
+
+            while (rdr.Read())
+            {
+                ausgabe = ausgabe + rdr.GetInt64(0) + ";" + rdr.GetString(1) + ";" + rdr.GetInt32(2) + ";" + rdr.GetInt32(3) + ";" + rdr.GetInt32(4) + ";" + rdr.GetInt32(5) + "\n";
+            }
+
+            return ausgabe;
+        }
+
+        public static int Write(string query, Dictionary<string, object> args)
+        {
+            int numberOfRowsAffected;
+
+            //setup the connection to the database
+            using (var con = new SQLiteConnection("Data Source=test.db"))
+            {
+                con.Open();
+
+                //open a new command
+                using (var cmd = new SQLiteCommand(query, con))
+                {
+                    //set the arguments given in the query
+                    foreach (var pair in args)
+                    {
+                        cmd.Parameters.AddWithValue(pair.Key, pair.Value);
+                    }
+
+                    //execute the query and get the number of row affected
+                    numberOfRowsAffected = cmd.ExecuteNonQuery();
+                }
+
+                return numberOfRowsAffected;
+            }
+        }
+        /*
         public static int GetLikes(ulong UserId)
         {
             using (var DbContext = new SqliteDbContext())
@@ -113,5 +174,6 @@ namespace DiscordBot.Core.Data
                 await DbContext.SaveChangesAsync();
             }
         }
+        */
     }
 }
