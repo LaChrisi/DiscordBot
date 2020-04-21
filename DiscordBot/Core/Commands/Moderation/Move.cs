@@ -14,9 +14,9 @@ namespace DiscordBot.Core.Moderation
         [Command("move"), Alias("m"), Summary("moves the message")]
         public async Task MoveModule(ulong messageID = 0, ulong channelID = 0)
         {
-            if (Context.User.Id != Core.Data.UserIDs.LaChrisi)
+            if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.admin))
             {
-                await Context.Channel.SendMessageAsync($":x: You are not my god!");
+                await Context.Channel.SendMessageAsync($":x: You need to be at least admin to use this command!");
                 return;
             }
 

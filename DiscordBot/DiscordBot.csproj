@@ -27,8 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Database\DiscordBot.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="Core\Data\DiscordBot.db">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

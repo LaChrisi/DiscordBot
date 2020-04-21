@@ -19,16 +19,28 @@ namespace DiscordBot.Core.Commands
                 await Context.Channel.SendMessageAsync($"get stats | stat | s\nget reactions | reaction | r **<MessageID>**");
             }
 
-            /*[Command("stats"), Alias("s", "stat"), Summary("returns your overall stats")]
+            [Command("stats"), Alias("s", "stat"), Summary("returns your overall stats")]
             public async Task StatsModule(ulong UserID = 0)
             {
-                if (UserID != 0 && Context.User.Id == Data.UserIDs.LaChrisi)
-                    await Context.Channel.SendMessageAsync($"{Context.Client.GetUser(UserID).Mention} you have\n:+1: {Data.Data.GetLikes(UserID)} likes\n:-1: {Data.Data.GetDislikes(UserID)} dislikes\n:notepad_spiral: {Data.Data.GetPosts(UserID)} posts");
-                else if(UserID != 0 && !(Context.User.Id == Data.UserIDs.LaChrisi))
-                    await Context.Channel.SendMessageAsync($":x: You are not my god!");
+                if (UserID != 0 && Data.Privileg.CheckById(Context.User.Id, Data.Privileg.admin))
+                {
+                    Data.User user = Data.User.GetById(UserID);
+                    if (user != null)
+                        await Context.Channel.SendMessageAsync($"Stats for {Context.Client.GetUser(UserID).Mention}:\n:+1: - {user.upvotes}\n:-1: - {user.downvotes}\n in {user.posts} posts");
+                    else
+                        await Context.Channel.SendMessageAsync($"User not found");
+                }
+                else if(UserID != 0 && !Data.Privileg.CheckById(Context.User.Id, Data.Privileg.admin))
+                    await Context.Channel.SendMessageAsync($":x: You need to be at least admin to use this command!");
                 else
-                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} you have\n:+1: {Data.Data.GetLikes(Context.User.Id)} likes\n:-1: {Data.Data.GetDislikes(Context.User.Id)} dislikes\n:notepad_spiral: {Data.Data.GetPosts(Context.User.Id)} posts");
-            }*/
+                {
+                    Data.User user = Data.User.GetById(Context.Message.Author.Id);
+                    if (user != null)
+                        await Context.Channel.SendMessageAsync($"Stats for {Context.Client.GetUser(Context.Message.Author.Id).Mention}:\n:+1: - {user.upvotes}\n:-1: - {user.downvotes}\n in {user.posts} posts");
+                    else
+                        await Context.Channel.SendMessageAsync($"User not found");
+                }
+            }
            
             [Command("reactions"), Alias("r", "reaction"), Summary("get reaction count command")]
             public async Task ReactionCountModule(ulong MessageID = 0)
@@ -47,17 +59,16 @@ namespace DiscordBot.Core.Commands
                 }
             }
 
-
             [Command("server"), Summary("get all server IDs")]
             public async Task ServerModule()
             {
-                if (!(Context.User.Id == Data.UserIDs.LaChrisi))
+                if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.owner))
                 {
                     await Context.Channel.SendMessageAsync(":x: You are not my god!");
                     return;
                 }
 
-                String ausgabe = "";
+                string ausgabe = "";
 
                 foreach (var x in Context.Client.Guilds)
                 {

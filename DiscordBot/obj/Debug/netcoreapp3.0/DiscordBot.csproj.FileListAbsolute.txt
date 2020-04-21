@@ -185,7 +185,6 @@ C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\obj\Debug\netcoreapp3.0\Disc
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\obj\Debug\netcoreapp3.0\DiscordBot.genruntimeconfig.cache
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.0\System.Linq.Async.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\obj\Debug\netcoreapp3.0\DiscordBot.csproj.CoreCompileInputs.cache
-C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.0\Database\DiscordBot.db
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.0\System.Data.SQLite.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.0\runtimes\linux-x64\native\netstandard2.0\SQLite.Interop.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.0\runtimes\osx-x64\native\netstandard2.0\SQLite.Interop.dll

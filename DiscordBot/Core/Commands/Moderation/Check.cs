@@ -14,9 +14,9 @@ namespace DiscordBot.Core.Moderation
         [Command("check"), SummaryAttribute("checkt den Channel und pinnt Nachrichten im Nachhinein.")]
         public async Task CheckModule(ulong ChannelID = 0, ulong MessageID = 0)
         {
-            if (!(Context.User.Id == Core.Data.UserIDs.LaChrisi))
+            if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.admin))
             {
-                await Context.Channel.SendMessageAsync(":x: You are not my god!");
+                await Context.Channel.SendMessageAsync(":x: You need to be at least admin to use this command!");
                 return;
             }
 
