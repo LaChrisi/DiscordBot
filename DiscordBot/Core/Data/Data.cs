@@ -2,115 +2,74 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using DiscordBot.Resources.Database;
 using System.Linq;
+using System.Data.SQLite;
+using System.Data;
 
 namespace DiscordBot.Core.Data
 {
     public static class Data
     {
-        public static int GetLikes(ulong UserId)
+        public static string Version()
         {
-            using (var DbContext = new SqliteDbContext())
-            {
-                if (DbContext.Votes.Where(x => x.UserId == UserId).Count() < 1)
-                    return 0;
-                return DbContext.Votes.Where(x => x.UserId == UserId).Select(x => x.Likes).FirstOrDefault();
-            }
+            string cs = "Data Source=..\\DiscordBot.db";
+            string stm = "SELECT SQLITE_VERSION()";
+
+            using var con = new SQLiteConnection(cs, true);
+            con.Open();
+
+            using var cmd = new SQLiteCommand(stm, con);
+            string version = cmd.ExecuteScalar().ToString();
+
+            return version;
         }
 
-        public static int GetDislikes(ulong UserId)
+        public static DataTable ExecuteRead(string query, Dictionary<string, object> args)
         {
-            using (var DbContext = new SqliteDbContext())
-            {
-                if (DbContext.Votes.Where(x => x.UserId == UserId).Count() < 1)
-                    return 0;
-                return DbContext.Votes.Where(x => x.UserId == UserId).Select(x => x.Dislikes).FirstOrDefault();
-            }
-        }
+            if (string.IsNullOrEmpty(query.Trim()))
+                return null;
 
-        public static int GetPosts(ulong UserId)
-        {
-            using (var DbContext = new SqliteDbContext())
+            //using (var con = new SQLiteConnection("Data Source=Core\\Data\\DiscordBot.db"))
+            using (var con = new SQLiteConnection("Data Source=..\\DiscordBot.db"))
             {
-                if (DbContext.Votes.Where(x => x.UserId == UserId).Count() < 1)
-                    return 0;
-                return DbContext.Votes.Where(x => x.UserId == UserId).Select(x => x.Posts).FirstOrDefault();
-            }
-        }
-
-        public static async Task SaveLikes(ulong UserId, int Amount)
-        {
-            using (var DbContext = new SqliteDbContext())
-            {
-                if (DbContext.Votes.Where(x => x.UserId == UserId).Count() < 1)
+                con.Open();
+                using (var cmd = new SQLiteCommand(query, con))
                 {
-                    DbContext.Votes.Add(new Votes
+                    foreach (KeyValuePair<string, object> entry in args)
                     {
-                        UserId = UserId,
-                        Likes = Amount,
-                        Dislikes = 0,
-                        Posts = 1
-                    });
-                }
-                else
-                {
-                    Votes Current = DbContext.Votes.Where(x => x.UserId == UserId).FirstOrDefault();
-                    Current.Likes += Amount;
-                    DbContext.Votes.Update(Current);
-                }
+                        cmd.Parameters.AddWithValue(entry.Key, entry.Value);
+                    }
 
-                await DbContext.SaveChangesAsync();
+                    var da = new SQLiteDataAdapter(cmd);
+
+                    var dt = new DataTable();
+                    da.Fill(dt);
+
+                    da.Dispose();
+                    return dt;
+                }
             }
         }
 
-        public static async Task SaveDislikes(ulong UserId, int Amount)
+        public static int ExecuteWrite(string query, Dictionary<string, object> args)
         {
-            using (var DbContext = new SqliteDbContext())
+            int numberOfRowsAffected;
+
+            using (var con = new SQLiteConnection("Data Source=..\\DiscordBot.db"))
             {
-                if (DbContext.Votes.Where(x => x.UserId == UserId).Count() < 1)
+                con.Open();
+
+                using (var cmd = new SQLiteCommand(query, con))
                 {
-                    DbContext.Votes.Add(new Votes
+                    foreach (var pair in args)
                     {
-                        UserId = UserId,
-                        Dislikes = Amount,
-                        Likes = 0,
-                        Posts = 1
-                    });
-                }
-                else
-                {
-                    Votes Current = DbContext.Votes.Where(x => x.UserId == UserId).FirstOrDefault();
-                    Current.Dislikes += Amount;
-                    DbContext.Votes.Update(Current);
+                        cmd.Parameters.AddWithValue(pair.Key, pair.Value);
+                    }
+
+                    numberOfRowsAffected = cmd.ExecuteNonQuery();
                 }
 
-                await DbContext.SaveChangesAsync();
-            }
-        }
-
-        public static async Task SavePosts(ulong UserId, int Amount)
-        {
-            using (var DbContext = new SqliteDbContext())
-            {
-                if (DbContext.Votes.Where(x => x.UserId == UserId).Count() < 1)
-                {
-                    DbContext.Votes.Add(new Votes
-                    {
-                        UserId = UserId,
-                        Likes = 0,
-                        Dislikes = 0,
-                        Posts = Amount
-                    });
-                }
-                else
-                {
-                    Votes Current = DbContext.Votes.Where(x => x.UserId == UserId).FirstOrDefault();
-                    Current.Posts += Amount;
-                    DbContext.Votes.Update(Current);
-                }
-
-                await DbContext.SaveChangesAsync();
+                return numberOfRowsAffected;
             }
         }
     }

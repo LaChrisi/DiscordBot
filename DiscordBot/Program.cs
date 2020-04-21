@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Data.SQLite;
 
 using Discord;
 using Discord.WebSocket;
@@ -54,11 +55,25 @@ namespace DiscordBot
 
             if (Reaction.Emote.Name == "👍")
             {
-                await Data.SaveLikes(Message.Value.Author.Id, -1);
+                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
+                User user = User.GetById(mes.Author.Id);
+
+                if (user != null)
+                {
+                    user.upvotes--;
+                    User.Edit(user);
+                }
             }
             else if (Reaction.Emote.Name == "👎")
             {
-                await Data.SaveDislikes(Message.Value.Author.Id, -1);
+                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
+                User user = User.GetById(mes.Author.Id);
+
+                if (user != null)
+                {
+                    user.downvotes--;
+                    User.Edit(user);
+                }
             }
         }
 
@@ -85,11 +100,25 @@ namespace DiscordBot
 
             if (Reaction.Emote.Name == "👍")
             {
-                await Data.SaveLikes(Message.Value.Author.Id, 1);
+                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
+                User user = User.GetById(mes.Author.Id);
+
+                if (user != null)
+                {
+                    user.upvotes++;
+                    User.Edit(user);
+                }
             }
             else if (Reaction.Emote.Name == "👎")
             {
-                await Data.SaveDislikes(Message.Value.Author.Id, 1);
+                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
+                User user = User.GetById(mes.Author.Id);
+
+                if (user != null)
+                {
+                    user.downvotes++;
+                    User.Edit(user);
+                }
             }
         }
 
@@ -101,6 +130,8 @@ namespace DiscordBot
         private async Task Client_Ready()
         {
             await Client.SetGameAsync("an sich rum...", "", ActivityType.Playing);
+
+            
 
             Timer timer = new Timer
             {
@@ -143,7 +174,19 @@ namespace DiscordBot
 
                 await x.AddReactionAsync(new Emoji("👍"));
                 await x.AddReactionAsync(new Emoji("👎"));
-                await Data.SavePosts(Context.User.Id, 1);
+
+                User user = User.GetById(Message.Author.Id);
+
+                if (user != null)
+                {
+                    user.posts++;
+                    User.Edit(user);
+                }
+                else
+                {
+                    User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
+                }
+
                 return;
             }
 
@@ -151,7 +194,19 @@ namespace DiscordBot
             {
                 await Message.AddReactionAsync(new Emoji("👍"));
                 await Message.AddReactionAsync(new Emoji("👎"));
-                await Data.SavePosts(Context.User.Id,1);
+
+                User user = User.GetById(Message.Author.Id);
+
+                if (user != null)
+                {
+                    user.posts++;
+                    User.Edit(user);
+                }
+                else
+                {
+                    User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
+                }
+
                 return;
             }
 

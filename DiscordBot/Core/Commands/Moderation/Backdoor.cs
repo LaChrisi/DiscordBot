@@ -15,7 +15,7 @@ namespace DiscordBot.Core.Moderation
         [Command("backdoor"), SummaryAttribute("Server invite erstellen lassen")]
         public async Task BackdoorModule(ulong GuildId)
         {
-            if (!(Context.User.Id == Data.UserIDs.LaChrisi))
+            if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.owner))
             {
                 await Context.Channel.SendMessageAsync(":x: You are not my god!");
                 return;

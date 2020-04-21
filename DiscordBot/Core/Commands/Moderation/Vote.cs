@@ -9,12 +9,14 @@ namespace DiscordBot.Core.Moderation
 {
     public class Vote : ModuleBase<SocketCommandContext>
     {
+        //funktioniert nicht!
+
         [Command("setvote"), SummaryAttribute("UP/DOWN Vote Reaction for x Messages in the channel")]
         public async Task SetVoteModule(int numberUP = 0, ulong channelID = 0, ulong messageID = 0)
         {
-            if (!(Context.User.Id == Data.UserIDs.LaChrisi))
+            if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.admin))
             {
-                await Context.Channel.SendMessageAsync(":x: You are not my god!");
+                await Context.Channel.SendMessageAsync(":x: You need to be at least admin to use this command!");
                 return;
             }
 
@@ -82,9 +84,9 @@ namespace DiscordBot.Core.Moderation
         [Command("setvoteall"), SummaryAttribute("UP/DOWN Vote Button for all Messages in the channel")]
         public async Task SetVoteAllModule(ulong ChannelID = 0, ulong MessageID = 0)
         {
-            if (!(Context.User.Id == Data.UserIDs.LaChrisi))
+            if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.admin))
             {
-                await Context.Channel.SendMessageAsync(":x: You are not my god!");
+                await Context.Channel.SendMessageAsync(":x: You need to be at least admin to use this command!");
                 return;
             }
 
