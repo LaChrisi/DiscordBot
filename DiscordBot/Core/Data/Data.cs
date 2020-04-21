@@ -29,7 +29,6 @@ namespace DiscordBot.Core.Data
             if (string.IsNullOrEmpty(query.Trim()))
                 return null;
 
-            //using (var con = new SQLiteConnection("Data Source=Core\\Data\\DiscordBot.db"))
             using (var con = new SQLiteConnection("Data Source=..\\DiscordBot.db"))
             {
                 con.Open();

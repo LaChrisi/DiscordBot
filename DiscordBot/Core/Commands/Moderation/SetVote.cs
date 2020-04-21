@@ -7,7 +7,7 @@ using Discord.WebSocket;
 
 namespace DiscordBot.Core.Moderation
 {
-    public class Vote : ModuleBase<SocketCommandContext>
+    public class SetVote : ModuleBase<SocketCommandContext>
     {
         //funktioniert nicht!
 

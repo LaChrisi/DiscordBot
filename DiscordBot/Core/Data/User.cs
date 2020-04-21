@@ -15,6 +15,8 @@ namespace DiscordBot.Core.Data
         public int downvotes { get; set; }
         public int privileg { get; set; }
 
+        public static string header = "id | name | posts | upvotes | downvotes | privileg";
+
         public User(ulong id, string name, int privileg, int posts = 0, int upvotes = 0, int downvotes = 0)
         {
             this.id = id;
@@ -25,18 +27,9 @@ namespace DiscordBot.Core.Data
             this.downvotes = downvotes;
         }
 
-        public string WriteHead()
+        public override string ToString()
         {
-            string ausgabe = "id | name | posts | upvotes | downvotes | privileg";
-
-            return ausgabe;
-        }
-
-        public string Write()
-        {
-            string ausgabe = this.id + " | " + this.name + " | " + this.posts + " | " + this.upvotes + " | " + this.downvotes + " | " + this.privileg;
-
-            return ausgabe;
+            return this.id + " | " + this.name + " | " + this.posts + " | " + this.upvotes + " | " + this.downvotes + " | " + this.privileg;
         }
 
         public static List<User> GetAll()
@@ -55,8 +48,7 @@ namespace DiscordBot.Core.Data
 
             foreach (var item in dt.Rows)
             {
-                var user = new User((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToString(dt.Rows[i]["name"]), Convert.ToInt16(dt.Rows[i]["privileg"]), Convert.ToInt32(dt.Rows[i]["posts"]), Convert.ToInt32(dt.Rows[i]["upvotes"]), Convert.ToInt32(dt.Rows[i]["downvotes"]));
-                list.Add(user);
+                list.Add(new User((ulong) Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToString(dt.Rows[i]["name"]), Convert.ToInt16(dt.Rows[i]["privileg"]), Convert.ToInt32(dt.Rows[i]["posts"]), Convert.ToInt32(dt.Rows[i]["upvotes"]), Convert.ToInt32(dt.Rows[i]["downvotes"])));
                 i++;
             }
 
@@ -79,9 +71,7 @@ namespace DiscordBot.Core.Data
                 return null;
             }
 
-            var user = new User((ulong)Convert.ToInt64(dt.Rows[0]["id"]), Convert.ToString(dt.Rows[0]["name"]), Convert.ToInt16(dt.Rows[0]["privileg"]), Convert.ToInt32(dt.Rows[0]["posts"]), Convert.ToInt32(dt.Rows[0]["upvotes"]), Convert.ToInt32(dt.Rows[0]["downvotes"]));
-
-            return user;
+            return new User((ulong) Convert.ToInt64(dt.Rows[0]["id"]), Convert.ToString(dt.Rows[0]["name"]), Convert.ToInt16(dt.Rows[0]["privileg"]), Convert.ToInt32(dt.Rows[0]["posts"]), Convert.ToInt32(dt.Rows[0]["upvotes"]), Convert.ToInt32(dt.Rows[0]["downvotes"]));
         }
 
         public static int Add(User user)

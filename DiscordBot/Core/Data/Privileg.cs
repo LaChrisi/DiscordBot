@@ -7,7 +7,7 @@ namespace DiscordBot.Core.Data
 {
     class Privileg
     {
-        public int id { get; set; }
+        public ulong id { get; set; }
         public string name { get; set; }
 
         public static int user = 0;
@@ -15,7 +15,7 @@ namespace DiscordBot.Core.Data
         public static int admin = 2;
         public static int owner = 3;
 
-        public Privileg(int id, string name)
+        public Privileg(ulong id, string name)
         {
             this.id = id;
             this.name = name;
@@ -52,7 +52,7 @@ namespace DiscordBot.Core.Data
 
             foreach (var item in dt.Rows)
             {
-                var privileg = new Privileg(Convert.ToInt32(dt.Rows[i]["id"]), Convert.ToString(dt.Rows[i]["name"]));
+                var privileg = new Privileg((ulong) Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToString(dt.Rows[i]["name"]));
                 list.Add(privileg);
                 i++;
             }

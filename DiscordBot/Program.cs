@@ -154,6 +154,7 @@ namespace DiscordBot
             if (Context.User.IsBot)
                 return;
 
+            //Feher in Console loggen
             int ArgPos = 0;
             if (Message.HasStringPrefix("!", ref ArgPos) || Message.HasMentionPrefix(Client.CurrentUser, ref ArgPos))
             {
@@ -165,10 +166,11 @@ namespace DiscordBot
                 return;
             }
             
+            //memes verschieben
             if((Context.Guild.Id == ServerIDs.landfill && Message.Channel.Id != ServerIDs.landfill_memes) && (Message.Content.StartsWith("https://9gag.com/") || Message.Content.StartsWith("https://www.reddit.com/")))
             {
                 var channel = Client.GetChannel(ServerIDs.landfill_memes) as ISocketMessageChannel;
-                var x = await channel.SendMessageAsync($"meme from: {Message.Author.Mention}\n{Message.Content.ToString()}");
+                var x = await channel.SendMessageAsync($"meme from: {Message.Author.Mention}\n{Message.Content}");
 
                 await Context.Channel.DeleteMessageAsync(Message.Id);
 
@@ -190,33 +192,53 @@ namespace DiscordBot
                 return;
             }
 
-            if ((Message.Channel.Id == ServerIDs.saltyAutismKids_davidsBadComics || Message.Channel.Id == ServerIDs.saltyAutismKids_davidsBadMemes || Message.Channel.Id == ServerIDs.pabliSible_9gagnshit || Message.Channel.Id == ServerIDs.landfill_memes || Message.Channel.Id == ServerIDs.landfill_geheim || Message.Channel.Id == ServerIDs.pabliSible_test || Message.Channel.Id == ServerIDs.pabliSible_siftnstuff) && (Message.Content.ToString() == "" || Message.Content.Contains("https://") || Message.Content.Contains("http://")))
+            //Vote erstellen
             {
-                await Message.AddReactionAsync(new Emoji("👍"));
-                await Message.AddReactionAsync(new Emoji("👎"));
+                var vote_channel_list = Vote_Channel.GetAllByChannelId(Message.Channel.Id);
 
-                User user = User.GetById(Message.Author.Id);
-
-                if (user != null)
+                if (vote_channel_list.Count > 0)
                 {
-                    user.posts++;
-                    User.Edit(user);
+                    foreach (var vote_channel in vote_channel_list)
+                    {
+                        if (vote_channel.aktiv == 1)
+                        {
+                            var vote = Vote.GetById(vote_channel.vote);
+                            string[] what = vote.what.Split(';');
+
+                            foreach (var what_item in what)
+                            {
+                                if (Message.Content.Contains(what_item) && what_item != "" || Message.Content.ToString().Trim() == what_item)
+                                {
+                                    string[] how = vote.how.Split(';');
+
+                                    foreach (var how_item in how)
+                                    {
+                                        await Message.AddReactionAsync(new Emoji(how_item));
+                                    }
+
+                                    if (vote.id == 1)
+                                    {
+                                        User user = User.GetById(Message.Author.Id);
+
+                                        if (user != null)
+                                        {
+                                            user.posts++;
+                                            User.Edit(user);
+                                        }
+                                        else
+                                        {
+                                            User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
+                                        }
+                                    }
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
-                else
-                {
-                    User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
-                }
-
-                return;
             }
-
-            if (Message.Channel.Id == ServerIDs.landfill_geheim && (Message.Content.ToLower().Trim().Contains("r6") || Message.Content.ToLower().Trim().Contains("rainbowsix") || Message.Content.ToLower().Trim().Contains("rainbowshit") || Message.Content.ToLower().Trim().Contains("rainbow") || Message.Content.ToLower().Trim().Contains("siege")))
-            {
-                await Message.AddReactionAsync(new Emoji("🌈"));
-                await Message.AddReactionAsync(new Emoji("💩"));
-                return;
-            }
-
+            //Borderlands 3
             if (Message.Channel.Id == ServerIDs.pabliSible_siftnstuff && !Message.Content.Contains("Borderlands 3") && Message.Author.IsWebhook)
             {
                 await Message.DeleteAsync();
