@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
-using System.Data.SQLite;
 using MySql.Data.MySqlClient;
 using System.Data;
 
@@ -13,63 +12,85 @@ namespace DiscordBot.Core.Data
     {
         public static string Version()
         {
-            
-            string stm = "SELECT VERSION()";
+            try
+            {
+                string sql = "SELECT VERSION()";
 
-            using var con = new MySqlConnection(Token.cs);
-            con.Open();
+                using var con = new MySqlConnection(Token.cs);
+                con.Open();
 
-            using var cmd = new MySqlCommand(stm, con);
-            string version = cmd.ExecuteScalar().ToString();
+                using var cmd = new MySqlCommand(sql, con);
 
-            return version;
+                return cmd.ExecuteScalar().ToString();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
         }
 
         public static DataTable ExecuteRead(string query, Dictionary<string, object> args)
         {
-            if (string.IsNullOrEmpty(query.Trim()))
-                return null;
+            try
+            { 
+                if (string.IsNullOrEmpty(query.Trim()))
+                    return null;
 
-            using (var con = new MySqlConnection(Token.cs))
-            {
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                using (var con = new MySqlConnection(Token.cs))
                 {
-                    foreach (KeyValuePair<string, object> entry in args)
+                    con.Open();
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        cmd.Parameters.AddWithValue(entry.Key, entry.Value);
+                        foreach (KeyValuePair<string, object> entry in args)
+                        {
+                            cmd.Parameters.AddWithValue(entry.Key, entry.Value);
+                        }
+
+                        var da = new MySqlDataAdapter(cmd);
+
+                        var dt = new DataTable();
+                        da.Fill(dt);
+
+                        da.Dispose();
+                        return dt;
                     }
-
-                    var da = new MySqlDataAdapter(cmd);
-
-                    var dt = new DataTable();
-                    da.Fill(dt);
-
-                    da.Dispose();
-                    return dt;
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
             }
         }
 
         public static int ExecuteWrite(string query, Dictionary<string, object> args)
         {
-            int numberOfRowsAffected;
-
-            using (var con = new MySqlConnection(Token.cs))
+            try
             {
-                con.Open();
+                int numberOfRowsAffected;
 
-                using (var cmd = new MySqlCommand(query, con))
+                using (var con = new MySqlConnection(Token.cs))
                 {
-                    foreach (var pair in args)
+                    con.Open();
+
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        cmd.Parameters.AddWithValue(pair.Key, pair.Value);
+                        foreach (var pair in args)
+                        {
+                            cmd.Parameters.AddWithValue(pair.Key, pair.Value);
+                        }
+
+                        numberOfRowsAffected = cmd.ExecuteNonQuery();
                     }
 
-                    numberOfRowsAffected = cmd.ExecuteNonQuery();
+                    return numberOfRowsAffected;
                 }
-
-                return numberOfRowsAffected;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return 0;
             }
         }
     }

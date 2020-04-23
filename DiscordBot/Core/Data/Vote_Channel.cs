@@ -57,6 +57,33 @@ namespace DiscordBot.Core.Data
             return list;
         }
 
+        public static List<Vote_Channel> GetAllByVoteId(ulong id)
+        {
+            var query = "SELECT * FROM vote_channel WHERE vote = @vote";
+            var args = new Dictionary<string, object>
+            {
+                {"@vote", id}
+            };
+
+            DataTable dt = Data.ExecuteRead(query, args);
+
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                return null;
+            }
+
+            List<Vote_Channel> list = new List<Vote_Channel>();
+            int i = 0;
+
+            foreach (var item in dt.Rows)
+            {
+                list.Add(new Vote_Channel((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToInt16(dt.Rows[i]["aktiv"]), (ulong)Convert.ToInt64(dt.Rows[i]["vote"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"])));
+                i++;
+            }
+
+            return list;
+        }
+
         public static List<Vote_Channel> GetAllByChannelId(ulong id)
         {
             var query = "SELECT * FROM vote_channel WHERE channel = @channel";
@@ -111,7 +138,41 @@ namespace DiscordBot.Core.Data
             {
                 {"@aktiv", vote_channel.aktiv},
                 {"@vote", vote_channel.vote},
-                {"@channel", vote_channel.channel},
+                {"@channel", vote_channel.channel}
+            };
+
+            return Data.ExecuteWrite(query, args);
+        }
+
+        public static int DeleteById(ulong id)
+        {
+            const string query = "DELETE FROM vote_channel WHERE id = @id";
+
+            var args = new Dictionary<string, object>
+            {
+                {"@id", id}
+            };
+
+            return Data.ExecuteWrite(query, args);
+        }
+
+        public static int DeleteAllByVoteId(ulong id)
+        {
+            var query = "DELETE * FROM vote_channel WHERE vote = @id";
+            var args = new Dictionary<string, object>
+            {
+                {"@id", id}
+            };
+
+            return Data.ExecuteWrite(query, args);
+        }
+
+        public static int DeleteAllByChannelId(ulong id)
+        {
+            var query = "DELETE * FROM vote_channel WHERE channel = @id";
+            var args = new Dictionary<string, object>
+            {
+                {"@id", id}
             };
 
             return Data.ExecuteWrite(query, args);

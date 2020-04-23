@@ -89,5 +89,32 @@ namespace DiscordBot.Core.Data
 
             return Data.ExecuteWrite(query, args);
         }
+
+        public static int DeleteById(ulong id)
+        {
+            const string query = "DELETE FROM vote WHERE id = @id";
+
+            var args = new Dictionary<string, object>
+            {
+                {"@id", id}
+            };
+
+            return Data.ExecuteWrite(query, args);
+        }
+
+        public static int Edit(Vote vote)
+        {
+            const string query = "UPDATE vote SET name = @name, what = @what, how = @how WHERE id = @id";
+
+            var args = new Dictionary<string, object>
+            {
+                {"@id", vote.id},
+                {"@name", vote.name},
+                {"@what", vote.what},
+                {"@how", vote.how}
+            };
+
+            return Data.ExecuteWrite(query, args);
+        }
     }
 }

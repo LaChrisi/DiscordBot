@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Data.SQLite;
 using System.Data;
 
 namespace DiscordBot.Core.Data
@@ -93,7 +92,7 @@ namespace DiscordBot.Core.Data
 
         public static int DeleteById(ulong id)
         {
-            const string query = "DELETE from user WHERE id = @id";
+            const string query = "DELETE FROM user WHERE id = @id";
 
             var args = new Dictionary<string, object>
             {

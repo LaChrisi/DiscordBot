@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
-using System.Data.SQLite;
 
 using Discord;
 using Discord.WebSocket;

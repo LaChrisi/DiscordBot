@@ -108,6 +108,29 @@ namespace DiscordBot.Core.Data
             return Data.ExecuteWrite(query, args);
         }
 
+        public static int DeleteById(ulong id)
+        {
+            const string query = "DELETE FROM channel WHERE id = @id";
+
+            var args = new Dictionary<string, object>
+            {
+                {"@id", id}
+            };
+
+            return Data.ExecuteWrite(query, args);
+        }
+
+        public static int DeleteAllByServerId(ulong id)
+        {
+            var query = "DELETE * FROM channel WHERE server = @id";
+            var args = new Dictionary<string, object>
+            {
+                {"@id", id}
+            };
+
+            return Data.ExecuteWrite(query, args);
+        }
+
         public static int Edit(Channel channel)
         {
             const string query = "UPDATE channel SET name = @name, server = @server WHERE id = @id";
