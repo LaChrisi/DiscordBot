@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Data.SQLite;
+using MySql.Data.MySqlClient;
 using System.Data;
 
 namespace DiscordBot.Core.Data
@@ -12,13 +13,13 @@ namespace DiscordBot.Core.Data
     {
         public static string Version()
         {
-            string cs = "Data Source=..\\DiscordBot.db";
-            string stm = "SELECT SQLITE_VERSION()";
+            
+            string stm = "SELECT VERSION()";
 
-            using var con = new SQLiteConnection(cs, true);
+            using var con = new MySqlConnection(Token.cs);
             con.Open();
 
-            using var cmd = new SQLiteCommand(stm, con);
+            using var cmd = new MySqlCommand(stm, con);
             string version = cmd.ExecuteScalar().ToString();
 
             return version;
@@ -29,17 +30,17 @@ namespace DiscordBot.Core.Data
             if (string.IsNullOrEmpty(query.Trim()))
                 return null;
 
-            using (var con = new SQLiteConnection("Data Source=..\\DiscordBot.db"))
+            using (var con = new MySqlConnection(Token.cs))
             {
                 con.Open();
-                using (var cmd = new SQLiteCommand(query, con))
+                using (var cmd = new MySqlCommand(query, con))
                 {
                     foreach (KeyValuePair<string, object> entry in args)
                     {
                         cmd.Parameters.AddWithValue(entry.Key, entry.Value);
                     }
 
-                    var da = new SQLiteDataAdapter(cmd);
+                    var da = new MySqlDataAdapter(cmd);
 
                     var dt = new DataTable();
                     da.Fill(dt);
@@ -54,11 +55,11 @@ namespace DiscordBot.Core.Data
         {
             int numberOfRowsAffected;
 
-            using (var con = new SQLiteConnection("Data Source=..\\DiscordBot.db"))
+            using (var con = new MySqlConnection(Token.cs))
             {
                 con.Open();
 
-                using (var cmd = new SQLiteCommand(query, con))
+                using (var cmd = new MySqlCommand(query, con))
                 {
                     foreach (var pair in args)
                     {
