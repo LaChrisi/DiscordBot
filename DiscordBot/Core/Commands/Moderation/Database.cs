@@ -141,6 +141,45 @@ namespace DiscordBot.Core.Moderation
             [Group("vote"), Summary("Database commands for vote")]
             public class VoteGroup : ModuleBase<SocketCommandContext>
             {
+                [Command("add"), Alias("a"), Summary("add new")]
+                public async Task AddModule(string name, string what, string how)
+                {
+                    if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
+                    {
+                        await Context.Channel.SendMessageAsync(":x: You are not my god!");
+                        return;
+                    }
+
+                    try
+                    {
+                        Vote.Add(new Vote(name, what, how));
+                    }
+                    catch (Exception e)
+                    {
+                        await Context.Channel.SendMessageAsync($"Error:\n{e.Message}");
+                    }
+                }
+
+                [Command("get"), Alias("g"), Summary("get by id")]
+                public async Task GetModule(ulong id)
+                {
+                    if (!Privileg.CheckById(Context.User.Id, Privileg.admin))
+                    {
+                        await Context.Channel.SendMessageAsync(":x: You need to be at least admin to use this command!");
+                        return;
+                    }
+
+                    try
+                    {
+                        var item = Vote.GetById(id);
+                        await Context.Channel.SendMessageAsync(Vote.header + "\n" + item.ToString());
+                    }
+                    catch (Exception e)
+                    {
+                        await Context.Channel.SendMessageAsync($"Error:\n{e.Message}");
+                    }
+                }
+
                 [Command("getall"), Alias("ga"), Summary("gets all")]
                 public async Task GetAllModule()
                 {
@@ -168,8 +207,8 @@ namespace DiscordBot.Core.Moderation
                     }
                 }
 
-                [Command("add"), Alias("a"), Summary("add new")]
-                public async Task AddModule(string name, string what, string how)
+                [Command("delete"), Alias("d"), Summary("delete by id")]
+                public async Task DeleteModule(ulong id)
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
@@ -179,7 +218,31 @@ namespace DiscordBot.Core.Moderation
 
                     try
                     {
-                        Vote.Add(new Vote(name, what, how));
+                        Vote.DeleteById(id);
+                    }
+                    catch (Exception e)
+                    {
+                        await Context.Channel.SendMessageAsync($"Error:\n{e.Message}");
+                    }
+
+                }
+
+                [Command("set"), Alias("s"), Summary("set by id")]
+                public async Task SetModule(ulong id, string name, string what, string how)
+                {
+                    if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
+                    {
+                        await Context.Channel.SendMessageAsync(":x: You are not my god!");
+                        return;
+                    }
+
+                    try
+                    {
+                        var item = Vote.GetById(id);
+                        item.name = name;
+                        item.what = what;
+                        item.how = how;
+                        Vote.Edit(item);
                     }
                     catch (Exception e)
                     {
@@ -259,6 +322,26 @@ namespace DiscordBot.Core.Moderation
                     }
                 }
 
+                [Command("delete"), Alias("d"), Summary("delete by id")]
+                public async Task DeleteModule(ulong id)
+                {
+                    if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
+                    {
+                        await Context.Channel.SendMessageAsync(":x: You are not my god!");
+                        return;
+                    }
+
+                    try
+                    {
+                        Vote_Channel.DeleteById(id);
+                    }
+                    catch (Exception e)
+                    {
+                        await Context.Channel.SendMessageAsync($"Error:\n{e.Message}");
+                    }
+
+                }
+
                 [Command("set"), Alias("s"), Summary("set by id")]
                 public async Task SetModule(ulong id, int aktiv, ulong vote = 0, ulong channel = 0)
                 {
@@ -287,6 +370,8 @@ namespace DiscordBot.Core.Moderation
                     }
                 }
             }
+            
+
         }
     }
 }
