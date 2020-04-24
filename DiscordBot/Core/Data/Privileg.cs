@@ -122,6 +122,7 @@ namespace DiscordBot.Core.Data
             }
             else
                 return false;
+                
         }
     }
 }

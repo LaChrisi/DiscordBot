@@ -25,6 +25,7 @@ namespace DiscordBot.Core.Commands
                 if (UserID != 0 && Data.Privileg.CheckById(Context.User.Id, Data.Privileg.admin))
                 {
                     Data.User user = Data.User.GetById(UserID);
+
                     if (user != null)
                         await Context.Channel.SendMessageAsync($"Stats for {Context.Client.GetUser(UserID).Mention}:\n:+1: - {user.upvotes}\n:-1: - {user.downvotes}\n in {user.posts} posts");
                     else
@@ -35,6 +36,7 @@ namespace DiscordBot.Core.Commands
                 else
                 {
                     Data.User user = Data.User.GetById(Context.Message.Author.Id);
+
                     if (user != null)
                         await Context.Channel.SendMessageAsync($"Stats for {Context.Client.GetUser(Context.Message.Author.Id).Mention}:\n:+1: - {user.upvotes}\n:-1: - {user.downvotes}\n in {user.posts} posts");
                     else

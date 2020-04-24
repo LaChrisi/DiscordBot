@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "KWnKS01RXkxyhL6/1a17XFxg0m/2dO19eTbajXS4rKISwZo9JRN25jnKRhs1fmdIZpl3+sTxlMid5yTxBVbBow==",
+  "dgSpecHash": "QEMX0nXIzMK1ko+nrDdyNFIydZle8c5Dlky1Jm7ub5P/uO1L72dsjhQbc80+LTQ8ehGKQ+11d/ajrnn3Tg26Ug==",
   "success": true,
   "projectFilePath": "C:\\Users\\Chris\\Desktop\\GitHub\\DiscordBot\\DiscordBot\\DiscordBot.csproj",
   "expectedPackageFiles": [
@@ -159,12 +159,13 @@
     "C:\\Users\\Chris\\.nuget\\packages\\system.xml.xmldocument\\4.0.1\\system.xml.xmldocument.4.0.1.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\system.xml.xpath\\4.0.1\\system.xml.xpath.4.0.1.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\system.xml.xpath.xmldocument\\4.0.1\\system.xml.xpath.xmldocument.4.0.1.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.ref\\3.0.0\\microsoft.netcore.app.ref.3.0.0.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\3.0.0\\microsoft.windowsdesktop.app.ref.3.0.0.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-x64\\3.0.3\\microsoft.netcore.app.runtime.linux-x64.3.0.3.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-x64\\3.0.3\\microsoft.aspnetcore.app.runtime.linux-x64.3.0.3.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.0.1\\microsoft.aspnetcore.app.ref.3.0.1.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\3.0.3\\microsoft.netcore.app.host.linux-x64.3.0.3.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.0.1\\microsoft.aspnetcore.app.ref.3.0.1.nupkg.sha512"
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.ref\\3.0.0\\microsoft.netcore.app.ref.3.0.0.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.0.3\\microsoft.netcore.app.host.win-x64.3.0.3.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-x64\\3.0.3\\microsoft.aspnetcore.app.runtime.linux-x64.3.0.3.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\3.0.0\\microsoft.windowsdesktop.app.ref.3.0.0.nupkg.sha512"
   ],
   "logs": []
 }

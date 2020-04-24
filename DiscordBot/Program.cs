@@ -84,24 +84,44 @@ namespace DiscordBot
             var userMessage = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
             var Reactions = userMessage.Reactions;
 
-            foreach (var x in Reactions)
+            var channel_event_list = Channel_Event.GetAllByChannelIdAndType(Channel.Id, 'e');
+
+            foreach (var channel_event in channel_event_list)
             {
-                if (x.Key.Name == "👍" && x.Value.ReactionCount >= 5)
+                if (channel_event.aktiv != 1)
+                    continue;
+
+                var e = Event.GetById(channel_event.Event);
+
+                foreach (var reaction in Reactions)
                 {
-                    await userMessage.AddReactionAsync(new Emoji("⭐"));
-                    await userMessage.PinAsync();
-                }
-                else if (x.Key.Name == "👎" && x.Value.ReactionCount >= 5)
-                {
-                    await userMessage.AddReactionAsync(new Emoji("💩"));
+                    if (reaction.Key.Name == e.what && reaction.Value.ReactionCount >= Convert.ToInt32(channel_event.when) - 1)
+                    {
+                        string[] how = e.how.Split(";");
+
+                        if (how.Length == 1)
+                        {
+                            if (how[0] == "pin")
+                            {
+                                await userMessage.PinAsync();
+                            }
+                        }
+                        else if (how.Length == 2)
+                        {
+                            if (how[0] == "emote")
+                            {
+                                await userMessage.AddReactionAsync(new Emoji(how[1]));
+                            }
+                        }
+                    }
                 }
             }
-
+            
             if (Reaction.Emote.Name == "👍")
             {
                 var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
                 User user = User.GetById(mes.Author.Id);
-
+            
                 if (user != null)
                 {
                     user.upvotes++;
@@ -112,7 +132,7 @@ namespace DiscordBot
             {
                 var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
                 User user = User.GetById(mes.Author.Id);
-
+            
                 if (user != null)
                 {
                     user.downvotes++;
@@ -121,7 +141,9 @@ namespace DiscordBot
             }
         }
 
+#pragma warning disable CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.
         private async Task Client_Log(LogMessage Message)
+#pragma warning restore CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.
         {
             Console.WriteLine($"{DateTime.Now} at {Message.Source}] {Message.Message}");
         }
@@ -147,13 +169,13 @@ namespace DiscordBot
 
         private async Task Client_MessageReceived(SocketMessage MessageParam)
         {
+            if (MessageParam.Source == MessageSource.System || MessageParam.Source == MessageSource.Bot)
+                return;
+
             var Message = MessageParam as SocketUserMessage;
             var Context = new SocketCommandContext(Client, Message);
 
-            if (Context.User.IsBot)
-                return;
-
-            //Feher in Console loggen
+            //Command - Feher in Console loggen
             int ArgPos = 0;
             if (Message.HasStringPrefix("!", ref ArgPos) || Message.HasMentionPrefix(Client.CurrentUser, ref ArgPos))
             {
@@ -164,31 +186,121 @@ namespace DiscordBot
 
                 return;
             }
-            
-            //memes verschieben
-            if((Context.Guild.Id == ServerIDs.landfill && Message.Channel.Id != ServerIDs.landfill_memes) && (Message.Content.StartsWith("https://9gag.com/") || Message.Content.StartsWith("https://www.reddit.com/")))
+
+            //channel_event handler
             {
-                var channel = Client.GetChannel(ServerIDs.landfill_memes) as ISocketMessageChannel;
-                var x = await channel.SendMessageAsync($"meme from: {Message.Author.Mention}\n{Message.Content}");
+                var channel_event_list = Channel_Event.GetAllByChannelId(Context.Channel.Id);
 
-                await Context.Channel.DeleteMessageAsync(Message.Id);
-
-                await x.AddReactionAsync(new Emoji("👍"));
-                await x.AddReactionAsync(new Emoji("👎"));
-
-                User user = User.GetById(Message.Author.Id);
-
-                if (user != null)
+                foreach (var channel_event in channel_event_list)
                 {
-                    user.posts++;
-                    User.Edit(user);
-                }
-                else
-                {
-                    User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
-                }
+                    if (channel_event.aktiv != 1)
+                        continue;
 
-                return;
+                    var e = Event.GetById(channel_event.Event);
+
+                    //move
+                    if (channel_event.type == 'm')
+                    {
+                        string[] when = channel_event.when.Split(";");
+
+                        foreach (var when_item in when)
+                        {
+                            if (Context.Message.Content.Contains(when_item) && when_item != "" || when_item == "" && Context.Message.Attachments.Count > 0)
+                            {
+                                if (e.what == "move")
+                                {
+                                    var channel = Client.GetChannel((ulong)Convert.ToInt64(e.how)) as ISocketMessageChannel;
+                                    var x = await channel.SendMessageAsync($"meme from: {Message.Author.Mention}\n{Message.Content}");
+
+                                    await Context.Channel.DeleteMessageAsync(Message.Id);
+
+                                    await x.AddReactionAsync(new Emoji("👍"));
+                                    await x.AddReactionAsync(new Emoji("👎"));
+
+                                    User user = User.GetById(Message.Author.Id);
+
+                                    if (user != null)
+                                    {
+                                        user.posts++;
+                                        User.Edit(user);
+                                    }
+                                    else
+                                    {
+                                        User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
+                                    }
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+
+                    //copy
+                    if (channel_event.type == 'c')
+                    {
+                        string[] when = channel_event.when.Split(";");
+
+                        foreach (var when_item in when)
+                        {
+                            if (Context.Message.Content.Contains(when_item) && when_item != "" || when_item == "" && Context.Message.Attachments.Count > 0)
+                            {
+                                if (e.what == "copy")
+                                {
+                                    var channel = Client.GetChannel((ulong)Convert.ToInt64(e.how)) as ISocketMessageChannel;
+                                    var x = await channel.SendMessageAsync($"meme from: {Message.Author.Mention}\n{Message.Content}");
+
+                                    await x.AddReactionAsync(new Emoji("👍"));
+                                    await x.AddReactionAsync(new Emoji("👎"));
+
+                                    User user = User.GetById(Message.Author.Id);
+
+                                    if (user != null)
+                                    {
+                                        user.posts++;
+                                        User.Edit(user);
+                                    }
+                                    else
+                                    {
+                                        User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
+                                    }
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+
+                    //delete
+                    if (channel_event.type == 'd')
+                    {
+                        string[] when = channel_event.when.Split(";");
+
+                        foreach (var when_item in when)
+                        {
+                            //nicht enthalten
+                            if (e.what == "not")
+                            {
+                                if  (!Context.Message.Content.Contains(when_item))
+                                {
+                                    await Context.Channel.DeleteMessageAsync(Message.Id);
+                                }
+
+                                break;
+                            }
+                            else if (e.what == "in")
+                            {
+                                if (Context.Message.Content.Contains(when_item))
+                                {
+                                    await Context.Channel.DeleteMessageAsync(Message.Id);
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+
+
+                }
             }
 
             //Vote erstellen
@@ -206,7 +318,7 @@ namespace DiscordBot
 
                             foreach (var what_item in what)
                             {
-                                if (Message.Content.Contains(what_item) && what_item != "" || Message.Content.ToString().Trim() == what_item)
+                                if (Message.Content.Contains(what_item) && what_item != "" || what_item == "" && Context.Message.Attachments.Count > 0)
                                 {
                                     string[] how = vote.how.Split(';');
 
@@ -237,11 +349,7 @@ namespace DiscordBot
                     }
                 }
             }
-            //Borderlands 3
-            if (Message.Channel.Id == ServerIDs.pabliSible_siftnstuff && !Message.Content.Contains("Borderlands 3") && Message.Author.IsWebhook)
-            {
-                await Message.DeleteAsync();
-            }
+
         }
     }
 }
