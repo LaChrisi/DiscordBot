@@ -37,116 +37,130 @@ namespace DiscordBot
             await Commands.AddModulesAsync(Assembly.GetEntryAssembly(), null);
 
             Client.Ready += Client_Ready;
+
             Client.Log += Client_Log;
+
             Client.ReactionAdded += Client_ReactionAdded;
             Client.ReactionRemoved += Client_ReactionRemoved;
 
-            await Client.LoginAsync(TokenType.Bot, Token.token);
+            Client.JoinedGuild += Client_JoinedGuild;
+            Client.GuildUpdated += Client_GuildUpdated;
+            Client.LeftGuild += Client_LeftGuild;
+
+            Client.ChannelCreated += Client_ChannelCreated;
+            Client.ChannelUpdated += Client_ChannelUpdated;
+            Client.ChannelDestroyed += Client_ChannelDestroyed;
+
+            Client.UserJoined += Client_UserJoined;
+            Client.UserUpdated += Client_UserUpdated;
+            
+#if DEBUG
+            await Client.LoginAsync(TokenType.Bot, Token.token_test);
+#else
+            await Client.LoginAsync(TokenType.Bot, Token.token_prod);
+#endif
+
             await Client.StartAsync();
 
             await Task.Delay(-1);
         }
 
-        private async Task Client_ReactionRemoved(Cacheable<IUserMessage, ulong> Message, ISocketMessageChannel Channel, SocketReaction Reaction)
-        {
-            if (Reaction.User.Value.IsBot)
-                return;
-
-            if (Reaction.Emote.Name == "👍")
-            {
-                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
-                User user = User.GetById(mes.Author.Id);
-
-                if (user != null)
-                {
-                    user.upvotes--;
-                    User.Edit(user);
-                }
-            }
-            else if (Reaction.Emote.Name == "👎")
-            {
-                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
-                User user = User.GetById(mes.Author.Id);
-
-                if (user != null)
-                {
-                    user.downvotes--;
-                    User.Edit(user);
-                }
-            }
-        }
-
-        private async Task Client_ReactionAdded(Cacheable<IUserMessage, ulong> Message, ISocketMessageChannel Channel, SocketReaction Reaction)
-        {
-            if (Reaction.User.Value.IsBot)
-                return;
-
-            var userMessage = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
-            var Reactions = userMessage.Reactions;
-
-            var channel_event_list = Channel_Event.GetAllByChannelIdAndType(Channel.Id, 'e');
-
-            foreach (var channel_event in channel_event_list)
-            {
-                if (channel_event.aktiv != 1)
-                    continue;
-
-                var e = Event.GetById(channel_event.Event);
-
-                foreach (var reaction in Reactions)
-                {
-                    if (reaction.Key.Name == e.what && reaction.Value.ReactionCount >= Convert.ToInt32(channel_event.when) - 1)
-                    {
-                        string[] how = e.how.Split(";");
-
-                        if (how.Length == 1)
-                        {
-                            if (how[0] == "pin")
-                            {
-                                await userMessage.PinAsync();
-                            }
-                        }
-                        else if (how.Length == 2)
-                        {
-                            if (how[0] == "emote")
-                            {
-                                await userMessage.AddReactionAsync(new Emoji(how[1]));
-                            }
-                        }
-                    }
-                }
-            }
-            
-            if (Reaction.Emote.Name == "👍")
-            {
-                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
-                User user = User.GetById(mes.Author.Id);
-            
-                if (user != null)
-                {
-                    user.upvotes++;
-                    User.Edit(user);
-                }
-            }
-            else if (Reaction.Emote.Name == "👎")
-            {
-                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
-                User user = User.GetById(mes.Author.Id);
-            
-                if (user != null)
-                {
-                    user.downvotes++;
-                    User.Edit(user);
-                }
-            }
-        }
-
 #pragma warning disable CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.
+
+        private async Task Client_UserJoined(SocketGuildUser arg)
+        {
+            if (arg.IsBot)
+                return;
+
+            var user = User.GetById(arg.Id);
+
+            if (user == null)
+                User.Add(new User(user.id, user.name, 0));
+        }
+
+        private async Task Client_UserUpdated(SocketUser user_before, SocketUser user_after)
+        {
+            if (user_before.IsBot)
+                return;
+
+            var user = User.GetById(user_before.Id);
+
+            if (user != null)
+            {
+                user.name = user_after.ToString();
+                User.Edit(user);
+            }
+            else
+            {
+                User.Add(new User(user_before.Id, user_after.ToString(), 0));
+            }
+        }
+
+        private async Task Client_ChannelCreated(SocketChannel arg)
+        {
+            var channel = arg as IGuildChannel;
+            Channel.Add(new Channel(channel.Id, channel.Name, channel.GuildId));
+        }
+
+        private async Task Client_ChannelUpdated(SocketChannel arg1, SocketChannel arg2)
+        {
+            var channel_after = arg2 as IGuildChannel;
+
+            var channel = Channel.GetById(arg1.Id);
+
+            if (channel != null)
+            {
+                channel.name = channel_after.Name;
+                Channel.Edit(channel);
+            }
+            else
+            {
+                Channel.Add(new Channel(channel_after.Id, channel_after.Name, channel_after.GuildId));
+            }
+        }
+
+        private async Task Client_ChannelDestroyed(SocketChannel channel)
+        {
+            Channel.DeleteById(channel.Id);
+        }
+
+        private async Task Client_JoinedGuild(SocketGuild guild)
+        {
+            Server.Add(new Server(guild.Id, guild.Name));
+
+            foreach (var channel in guild.Channels)
+            {
+                Channel.Add(new Channel(channel.Id, channel.Name, guild.Id));
+            }
+        }
+
+        private async Task Client_GuildUpdated(SocketGuild server_before, SocketGuild server_after)
+        {
+            var server = Server.GetById(server_before.Id);
+
+            if (server != null)
+            {
+                server.name = server_after.Name;
+                Server.Edit(server);
+            }
+            else
+            {
+                Server.Add(new Server(server_after.Id, server_after.Name));
+            }
+        }
+
+        private async Task Client_LeftGuild(SocketGuild guild)
+        {
+            Channel.DeleteAllByServerId(guild.Id);
+            Server.DeleteById(guild.Id);
+        }
+
         private async Task Client_Log(LogMessage Message)
-#pragma warning restore CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.
         {
             Console.WriteLine($"{DateTime.Now} at {Message.Source}] {Message.Message}");
         }
+
+#pragma warning restore CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.
 
         private async Task Client_Ready()
         {
@@ -175,139 +189,144 @@ namespace DiscordBot
             var Message = MessageParam as SocketUserMessage;
             var Context = new SocketCommandContext(Client, Message);
 
-            //Command - Feher in Console loggen
-            int ArgPos = 0;
-            if (Message.HasStringPrefix("!", ref ArgPos) || Message.HasMentionPrefix(Client.CurrentUser, ref ArgPos))
+            //command handler - log
             {
-                var Result = await Commands.ExecuteAsync(Context, ArgPos, null);
+                int ArgPos = 0;
+                if (Message.HasStringPrefix("!", ref ArgPos) || Message.HasMentionPrefix(Client.CurrentUser, ref ArgPos))
+                {
+                    var Result = await Commands.ExecuteAsync(Context, ArgPos, null);
 
-                if (!Result.IsSuccess)
-                    Console.WriteLine($"{DateTime.Now} at Commands] Somthing went wrong with executing a command.\nText: {Context.Message.Content}\nError: {Result.ErrorReason}");
+                    if (!Result.IsSuccess)
+                        Console.WriteLine($"{DateTime.Now} at Commands] Somthing went wrong with executing a command.\nText: {Context.Message.Content}\nError: {Result.ErrorReason}");
 
-                return;
+                    return;
+                }
             }
 
             //channel_event handler
             {
                 var channel_event_list = Channel_Event.GetAllByChannelId(Context.Channel.Id);
 
-                foreach (var channel_event in channel_event_list)
+                if (channel_event_list != null)
                 {
-                    if (channel_event.aktiv != 1)
-                        continue;
-
-                    var e = Event.GetById(channel_event.Event);
-
-                    //move
-                    if (channel_event.type == 'm')
+                    foreach (var channel_event in channel_event_list)
                     {
-                        string[] when = channel_event.when.Split(";");
+                        if (channel_event.aktiv != 1)
+                            continue;
 
-                        foreach (var when_item in when)
+                        var e = Event.GetById(channel_event.Event);
+
+                        //move
+                        if (channel_event.type == 'm')
                         {
-                            if (Context.Message.Content.Contains(when_item) && when_item != "" || when_item == "" && Context.Message.Attachments.Count > 0)
+                            string[] when = channel_event.when.Split(";");
+
+                            foreach (var when_item in when)
                             {
-                                if (e.what == "move")
+                                if (Context.Message.Content.Contains(when_item) && when_item != "" || when_item == "" && Context.Message.Attachments.Count > 0)
                                 {
-                                    var channel = Client.GetChannel((ulong)Convert.ToInt64(e.how)) as ISocketMessageChannel;
-                                    var x = await channel.SendMessageAsync($"meme from: {Message.Author.Mention}\n{Message.Content}");
-
-                                    await Context.Channel.DeleteMessageAsync(Message.Id);
-
-                                    await x.AddReactionAsync(new Emoji("👍"));
-                                    await x.AddReactionAsync(new Emoji("👎"));
-
-                                    User user = User.GetById(Message.Author.Id);
-
-                                    if (user != null)
+                                    if (e.what == "move")
                                     {
-                                        user.posts++;
-                                        User.Edit(user);
+                                        var channel = Client.GetChannel((ulong)Convert.ToInt64(e.how)) as ISocketMessageChannel;
+                                        var x = await channel.SendMessageAsync($"meme from: {Message.Author.Mention}\n{Message.Content}");
+
+                                        await Context.Channel.DeleteMessageAsync(Message.Id);
+
+                                        await x.AddReactionAsync(new Emoji("👍"));
+                                        await x.AddReactionAsync(new Emoji("👎"));
+
+                                        User user = User.GetById(Message.Author.Id);
+
+                                        if (user != null)
+                                        {
+                                            user.posts++;
+                                            User.Edit(user);
+                                        }
+                                        else
+                                        {
+                                            User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
+                                        }
                                     }
-                                    else
-                                    {
-                                        User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
-                                    }
+
+                                    break;
                                 }
-
-                                break;
                             }
                         }
-                    }
 
-                    //copy
-                    if (channel_event.type == 'c')
-                    {
-                        string[] when = channel_event.when.Split(";");
-
-                        foreach (var when_item in when)
+                        //copy
+                        if (channel_event.type == 'c')
                         {
-                            if (Context.Message.Content.Contains(when_item) && when_item != "" || when_item == "" && Context.Message.Attachments.Count > 0)
+                            string[] when = channel_event.when.Split(";");
+
+                            foreach (var when_item in when)
                             {
-                                if (e.what == "copy")
+                                if (Context.Message.Content.Contains(when_item) && when_item != "" || when_item == "" && Context.Message.Attachments.Count > 0)
                                 {
-                                    var channel = Client.GetChannel((ulong)Convert.ToInt64(e.how)) as ISocketMessageChannel;
-                                    var x = await channel.SendMessageAsync($"meme from: {Message.Author.Mention}\n{Message.Content}");
-
-                                    await x.AddReactionAsync(new Emoji("👍"));
-                                    await x.AddReactionAsync(new Emoji("👎"));
-
-                                    User user = User.GetById(Message.Author.Id);
-
-                                    if (user != null)
+                                    if (e.what == "copy")
                                     {
-                                        user.posts++;
-                                        User.Edit(user);
+                                        var channel = Client.GetChannel((ulong)Convert.ToInt64(e.how)) as ISocketMessageChannel;
+                                        var x = await channel.SendMessageAsync($"meme from: {Message.Author.Mention}\n{Message.Content}");
+
+                                        await x.AddReactionAsync(new Emoji("👍"));
+                                        await x.AddReactionAsync(new Emoji("👎"));
+
+                                        User user = User.GetById(Message.Author.Id);
+
+                                        if (user != null)
+                                        {
+                                            user.posts++;
+                                            User.Edit(user);
+                                        }
+                                        else
+                                        {
+                                            User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
+                                        }
                                     }
-                                    else
-                                    {
-                                        User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
-                                    }
+
+                                    break;
                                 }
-
-                                break;
                             }
                         }
-                    }
 
-                    //delete
-                    if (channel_event.type == 'd')
-                    {
-                        string[] when = channel_event.when.Split(";");
-
-                        foreach (var when_item in when)
+                        //delete
+                        if (channel_event.type == 'd')
                         {
-                            //nicht enthalten
-                            if (e.what == "not")
-                            {
-                                if  (!Context.Message.Content.Contains(when_item))
-                                {
-                                    await Context.Channel.DeleteMessageAsync(Message.Id);
-                                }
+                            string[] when = channel_event.when.Split(";");
 
-                                break;
-                            }
-                            else if (e.what == "in")
+                            foreach (var when_item in when)
                             {
-                                if (Context.Message.Content.Contains(when_item))
+                                //nicht enthalten
+                                if (e.what == "not")
                                 {
-                                    await Context.Channel.DeleteMessageAsync(Message.Id);
-                                }
+                                    if (!Context.Message.Content.Contains(when_item))
+                                    {
+                                        await Context.Channel.DeleteMessageAsync(Message.Id);
+                                    }
 
-                                break;
+                                    break;
+                                }
+                                else if (e.what == "in")
+                                {
+                                    if (Context.Message.Content.Contains(when_item))
+                                    {
+                                        await Context.Channel.DeleteMessageAsync(Message.Id);
+                                    }
+
+                                    break;
+                                }
                             }
                         }
+
+
                     }
-
-
                 }
             }
 
-            //Vote erstellen
+            //vote handler
             {
                 var vote_channel_list = Vote_Channel.GetAllByChannelId(Message.Channel.Id);
 
-                if (vote_channel_list.Count > 0)
+                if (vote_channel_list.Count != null)
                 {
                     foreach (var vote_channel in vote_channel_list)
                     {
@@ -350,6 +369,100 @@ namespace DiscordBot
                 }
             }
 
+        }
+
+        private async Task Client_ReactionAdded(Cacheable<IUserMessage, ulong> Message, ISocketMessageChannel Channel, SocketReaction Reaction)
+        {
+            if (Reaction.User.Value.IsBot)
+                return;
+
+            var userMessage = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
+            var Reactions = userMessage.Reactions;
+
+            var channel_event_list = Channel_Event.GetAllByChannelIdAndType(Channel.Id, 'e');
+
+            foreach (var channel_event in channel_event_list)
+            {
+                if (channel_event.aktiv != 1)
+                    continue;
+
+                var e = Event.GetById(channel_event.Event);
+
+                foreach (var reaction in Reactions)
+                {
+                    if (reaction.Key.Name == e.what && reaction.Value.ReactionCount >= Convert.ToInt32(channel_event.when) - 1)
+                    {
+                        string[] how = e.how.Split(";");
+
+                        if (how.Length == 1)
+                        {
+                            if (how[0] == "pin")
+                            {
+                                await userMessage.PinAsync();
+                            }
+                        }
+                        else if (how.Length == 2)
+                        {
+                            if (how[0] == "emote")
+                            {
+                                await userMessage.AddReactionAsync(new Emoji(how[1]));
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (Reaction.Emote.Name == "👍")
+            {
+                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
+                User user = User.GetById(mes.Author.Id);
+
+                if (user != null)
+                {
+                    user.upvotes++;
+                    User.Edit(user);
+                }
+            }
+            else if (Reaction.Emote.Name == "👎")
+            {
+                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
+                User user = User.GetById(mes.Author.Id);
+
+                if (user != null)
+                {
+                    user.downvotes++;
+                    User.Edit(user);
+                }
+            }
+        }
+
+        private async Task Client_ReactionRemoved(Cacheable<IUserMessage, ulong> Message, ISocketMessageChannel Channel, SocketReaction Reaction)
+        {
+            if (Reaction.User.Value.IsBot)
+                return;
+
+            if (Reaction.Emote.Name == "👍")
+            {
+                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
+                User user = User.GetById(mes.Author.Id);
+
+                if (user != null)
+                {
+                    user.upvotes--;
+                    User.Edit(user);
+                }
+            }
+            else if (Reaction.Emote.Name == "👎")
+            {
+                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
+                User user = User.GetById(mes.Author.Id);
+
+                if (user != null)
+                {
+                    user.downvotes--;
+                    User.Edit(user);
+                }
+            }
         }
     }
 }

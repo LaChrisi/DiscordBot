@@ -20,6 +20,12 @@ namespace DiscordBot.Core.Data
             this.how = how;
         }
 
+        public Event(string what, string how)
+        {
+            this.what = what;
+            this.how = how;
+        }
+
         public override string ToString()
         {
             return this.id + " | " + this.what + " | " + this.how;
