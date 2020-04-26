@@ -67,8 +67,7 @@ namespace DiscordBot.Core.Moderation
                     //falsche Argumente
                     else
                     {
-                    await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("try", "!setvote **<Anzahl>** **[<ChannelID>** **<MessageID>]**"), Data.Colors.error, "error"));
-                    await Context.Channel.SendMessageAsync("setvote **<Anzahl>** **[<ChannelID>** **<MessageID>]**");
+                    await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("try", "!setvote **<Number>** **[<ChannelID>** **<MessageID>]**"), Data.Colors.error, "error"));
                     }
                 }
                 finally

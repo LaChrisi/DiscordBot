@@ -207,6 +207,53 @@ namespace DiscordBot
                 }
             }
 
+            //vote handler
+            {
+                var vote_channel_list = Vote_Channel.GetAllByChannelId(Message.Channel.Id);
+
+                if (vote_channel_list != null)
+                {
+                    foreach (var vote_channel in vote_channel_list)
+                    {
+                        if (vote_channel.aktiv == 1)
+                        {
+                            var vote = Vote.GetById(vote_channel.vote);
+                            string[] what = vote.what.Split(';');
+
+                            foreach (var what_item in what)
+                            {
+                                if (Message.Content.Contains(what_item) && what_item != "" || what_item == "" && Context.Message.Attachments.Count > 0)
+                                {
+                                    string[] how = vote.how.Split(';');
+
+                                    foreach (var how_item in how)
+                                    {
+                                        await Message.AddReactionAsync(new Emoji(how_item));
+                                    }
+
+                                    if (vote.id == 1)
+                                    {
+                                        User user = User.GetById(Message.Author.Id);
+
+                                        if (user != null)
+                                        {
+                                            user.posts++;
+                                            User.Edit(user);
+                                        }
+                                        else
+                                        {
+                                            User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
+                                        }
+                                    }
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             //channel_event handler
             {
                 var channel_event_list = Channel_Event.GetAllByChannelId(Context.Channel.Id);
@@ -296,54 +343,7 @@ namespace DiscordBot
                     }
                 }
             }
-
-            //vote handler
-            {
-                var vote_channel_list = Vote_Channel.GetAllByChannelId(Message.Channel.Id);
-
-                if (vote_channel_list != null)
-                {
-                    foreach (var vote_channel in vote_channel_list)
-                    {
-                        if (vote_channel.aktiv == 1)
-                        {
-                            var vote = Vote.GetById(vote_channel.vote);
-                            string[] what = vote.what.Split(';');
-
-                            foreach (var what_item in what)
-                            {
-                                if (Message.Content.Contains(what_item) && what_item != "" || what_item == "" && Context.Message.Attachments.Count > 0)
-                                {
-                                    string[] how = vote.how.Split(';');
-
-                                    foreach (var how_item in how)
-                                    {
-                                        await Message.AddReactionAsync(new Emoji(how_item));
-                                    }
-
-                                    if (vote.id == 1)
-                                    {
-                                        User user = User.GetById(Message.Author.Id);
-
-                                        if (user != null)
-                                        {
-                                            user.posts++;
-                                            User.Edit(user);
-                                        }
-                                        else
-                                        {
-                                            User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
-                                        }
-                                    }
-
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
+            
         }
 
         private async Task Client_ReactionAdded(Cacheable<IUserMessage, ulong> Message, ISocketMessageChannel Channel, SocketReaction Reaction)
@@ -394,7 +394,7 @@ namespace DiscordBot
                         }
                         else if (what_list.Length == 2)
                         {
-                            if (reaction.Key.Name == what_list[0] && reaction.Value.ReactionCount >= Convert.ToInt32(channel_event.when) + 1)
+                            if (reaction.Key.Name == what_list[0] && reaction.Value.ReactionCount == Convert.ToInt32(channel_event.when) + 1)
                             {
                                 string[] how = e.how.Split(";");
 

@@ -119,7 +119,7 @@ namespace DiscordBot.Core.Moderation
                 }
 
                 [Command("set"), Alias("s"), Summary("set by id")]
-                public async Task SetModule(ulong id, int privileg, int posts = 0, int upvotes = 0, int downvotes = 0)
+                public async Task SetModule(ulong id, int privileg, string name = "", int posts = 0, int upvotes = 0, int downvotes = 0)
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
@@ -130,10 +130,21 @@ namespace DiscordBot.Core.Moderation
                     try
                     {
                         var item = User.GetById(id);
+
                         item.privileg = privileg;
-                        item.posts = posts;
-                        item.upvotes = upvotes;
-                        item.downvotes = downvotes;
+
+                        if (name != "")
+                            item.name = name;
+
+                        if (posts != 0)
+                            item.posts = posts;
+
+                        if (upvotes != 0)
+                            item.upvotes = upvotes;
+
+                        if (downvotes != 0)
+                            item.downvotes = downvotes;
+
                         await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("user", $"rows affected: {User.Edit(item)}"), Colors.information));
                     }
                     catch (Exception e)
