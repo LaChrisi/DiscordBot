@@ -10,6 +10,8 @@ using Discord.Commands;
 using DiscordBot.Core.Data;
 using System.Collections.Generic;
 using System.Linq;
+using Discord.Rest;
+using System.ComponentModel.DataAnnotations;
 
 namespace DiscordBot
 {
@@ -229,54 +231,9 @@ namespace DiscordBot
                                 {
                                     if (e.what == "move")
                                     {
-                                        var message = await Context.Channel.GetMessageAsync(Message.Id) as IUserMessage;
                                         var channel = Client.GetChannel((ulong)Convert.ToInt64(e.how)) as ISocketMessageChannel;
-                                        var a = message.Attachments;
-                                        List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
-                                        var x = message;
 
-                                        try
-                                        {
-                                            if (a.Count == 1)
-                                            {
-                                                if (message.Content != "")
-                                                    fields.Add(Field.CreateFieldBuilder("message", message.Content));
-
-                                                x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)message.Author, fields, Colors.meme, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})", imgURL: a.First().Url));
-                                            }
-                                            else
-                                            {
-                                                if (message.Content.EndsWith(".jpg") || message.Content.EndsWith(".jpeg") || message.Content.EndsWith(".png"))
-                                                {
-                                                    fields.Add(Field.CreateFieldBuilder("message", message.Content));
-                                                    x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)message.Author, fields, Colors.meme, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})", imgURL: message.Content));
-                                                }
-                                                else
-                                                {
-                                                    fields.Add(Field.CreateFieldBuilder("message", message.Content));
-                                                    x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)message.Author, fields, Colors.meme, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})"));
-                                                }
-                                            }
-                                        }
-                                        finally
-                                        {
-                                            await x.AddReactionAsync(new Emoji("👍"));
-                                            await x.AddReactionAsync(new Emoji("👎"));
-                                        }
-
-                                        await Context.Channel.DeleteMessageAsync(Message.Id);
-
-                                        User user = User.GetById(Message.Author.Id);
-
-                                        if (user != null)
-                                        {
-                                            user.posts++;
-                                            User.Edit(user);
-                                        }
-                                        else
-                                        {
-                                            User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
-                                        }
+                                        Copy_Message(Message, channel.Id, true);
                                     }
 
                                     break;
@@ -295,40 +252,9 @@ namespace DiscordBot
                                 {
                                     if (e.what == "copy")
                                     {
-                                        var message = await Context.Channel.GetMessageAsync(Message.Id) as IUserMessage;
                                         var channel = Client.GetChannel((ulong)Convert.ToInt64(e.how)) as ISocketMessageChannel;
-                                        var a = message.Attachments;
-                                        List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
-                                        var x = message;
 
-                                        try
-                                        {
-                                            if (a.Count == 1)
-                                            {
-                                                if (message.Content != "")
-                                                    fields.Add(Field.CreateFieldBuilder("message", message.Content));
-
-                                                x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)message.Author, fields, Colors.meme, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})", imgURL: a.First().Url));
-                                            }
-                                            else
-                                            {
-                                                if (message.Content.EndsWith(".jpg") || message.Content.EndsWith(".jpeg") || message.Content.EndsWith(".png"))
-                                                {
-                                                    fields.Add(Field.CreateFieldBuilder("message", message.Content));
-                                                    x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)message.Author, fields, Colors.meme, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})", imgURL: message.Content));
-                                                }
-                                                else
-                                                {
-                                                    fields.Add(Field.CreateFieldBuilder("message", message.Content));
-                                                    x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)message.Author, fields, Colors.meme, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})"));
-                                                }
-                                            }
-                                        }
-                                        finally
-                                        {
-                                            await x.AddReactionAsync(new Emoji("👍"));
-                                            await x.AddReactionAsync(new Emoji("👎"));
-                                        }
+                                        Copy_Message(Message, channel.Id);
                                     }
 
                                     break;
@@ -353,6 +279,7 @@ namespace DiscordBot
 
                                     break;
                                 }
+                                //enthalten
                                 else if (e.what == "in")
                                 {
                                     if (Context.Message.Content.Contains(when_item))
@@ -441,22 +368,46 @@ namespace DiscordBot
 
                     foreach (var reaction in Reactions)
                     {
-                        if (reaction.Key.Name == e.what && reaction.Value.ReactionCount >= Convert.ToInt32(channel_event.when) + 1)
-                        {
-                            string[] how = e.how.Split(";");
+                        string[] what_list = e.what.Split(";");
 
-                            if (how.Length == 1)
+                        if (what_list.Length == 1)
+                        {
+                            if (reaction.Key.Name == e.what && reaction.Value.ReactionCount >= Convert.ToInt32(channel_event.when) + 1)
                             {
-                                if (how[0] == "pin")
+                                string[] how = e.how.Split(";");
+
+                                if (how.Length == 1)
                                 {
-                                    await userMessage.PinAsync();
+                                    if (how[0] == "pin")
+                                    {
+                                        await userMessage.PinAsync();
+                                    }
+                                }
+                                else if (how.Length == 2)
+                                {
+                                    if (how[0] == "emote")
+                                    {
+                                        await userMessage.AddReactionAsync(new Emoji(how[1]));
+                                    }
                                 }
                             }
-                            else if (how.Length == 2)
+                        }
+                        else if (what_list.Length == 2)
+                        {
+                            if (reaction.Key.Name == what_list[0] && reaction.Value.ReactionCount >= Convert.ToInt32(channel_event.when) + 1)
                             {
-                                if (how[0] == "emote")
+                                string[] how = e.how.Split(";");
+
+                                if (how.Length == 1)
                                 {
-                                    await userMessage.AddReactionAsync(new Emoji(how[1]));
+                                    if (what_list[1] == "copy")
+                                    {
+                                        Copy_Message(userMessage, (ulong)Convert.ToInt64(how[0]));
+                                    }
+                                    else if (what_list[1] == "move")
+                                    {
+                                        Copy_Message(userMessage, (ulong)Convert.ToInt64(how[0]), true);
+                                    }
                                 }
                             }
                         }
@@ -466,8 +417,16 @@ namespace DiscordBot
 
             if (Reaction.Emote.Name == "👍")
             {
-                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
-                User user = User.GetById(mes.Author.Id);
+                User user = null;
+
+                if (userMessage.Embeds.Count == 1 && userMessage.Embeds.FirstOrDefault().Color == Colors.meme)
+                {
+                    user = User.GetById((ulong)Convert.ToInt64(userMessage.Embeds.FirstOrDefault().Footer.Value.Text));
+                }
+                else
+                {
+                    user = User.GetById(userMessage.Author.Id);
+                }
 
                 if (user != null)
                 {
@@ -477,8 +436,16 @@ namespace DiscordBot
             }
             else if (Reaction.Emote.Name == "👎")
             {
-                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
-                User user = User.GetById(mes.Author.Id);
+                User user = null;
+
+                if (userMessage.Embeds.Count == 1 && userMessage.Embeds.FirstOrDefault().Color == Colors.meme)
+                {
+                    user = User.GetById((ulong)Convert.ToInt64(userMessage.Embeds.FirstOrDefault().Footer.Value.Text));
+                }
+                else
+                {
+                    user = User.GetById(userMessage.Author.Id);
+                }
 
                 if (user != null)
                 {
@@ -493,10 +460,20 @@ namespace DiscordBot
             if (Reaction.User.Value.IsBot)
                 return;
 
+            var userMessage = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
+
             if (Reaction.Emote.Name == "👍")
             {
-                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
-                User user = User.GetById(mes.Author.Id);
+                User user = null;
+
+                if (userMessage.Embeds.Count == 1 && userMessage.Embeds.FirstOrDefault().Color == Colors.meme)
+                {
+                    user = User.GetById((ulong)Convert.ToInt64(userMessage.Embeds.FirstOrDefault().Footer.Value.Text));
+                }
+                else
+                {
+                    user = User.GetById(userMessage.Author.Id);
+                }
 
                 if (user != null)
                 {
@@ -506,8 +483,16 @@ namespace DiscordBot
             }
             else if (Reaction.Emote.Name == "👎")
             {
-                var mes = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
-                User user = User.GetById(mes.Author.Id);
+                User user = null;
+
+                if (userMessage.Embeds.Count == 1 && userMessage.Embeds.FirstOrDefault().Color == Colors.meme)
+                {
+                    user = User.GetById((ulong)Convert.ToInt64(userMessage.Embeds.FirstOrDefault().Footer.Value.Text));
+                }
+                else
+                {
+                    user = User.GetById(userMessage.Author.Id);
+                }
 
                 if (user != null)
                 {
@@ -515,6 +500,72 @@ namespace DiscordBot
                     User.Edit(user);
                 }
             }
+        }
+
+        public static async void Copy_Message(IUserMessage Message, ulong channelId, bool move = false)
+        {
+            var channel = Client.GetChannel(channelId) as ISocketMessageChannel;
+            var attachments = Message.Attachments;
+            var embeds = Message.Embeds;
+            List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+            var x = Message;
+
+            try
+            {
+                if (embeds.Count == 1 && Message.Author == Client.CurrentUser)
+                {
+                    x = await channel.SendMessageAsync(embed: embeds.FirstOrDefault().ToEmbedBuilder().Build());
+                }
+                else if (embeds.Count == 1 && !(Message.Author == Client.CurrentUser))
+                {
+                    if(embeds.FirstOrDefault().Image != null)
+                    {
+                        if (Message.Content != "")
+                            fields.Add(Field.CreateFieldBuilder("message", Message.Content));
+
+                        x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Image.Value.Url, footer: Message.Author.Id.ToString()));
+                    }  
+                    else if (embeds.FirstOrDefault().Thumbnail != null)
+                    {
+                        if (Message.Content != "")
+                            fields.Add(Field.CreateFieldBuilder("message", Message.Content));
+
+                        x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Thumbnail.Value.Url, footer: Message.Author.Id.ToString()));
+                    }
+
+                }
+                else
+                {
+                    if (attachments.Count == 1)
+                    {
+                        if (Message.Content != "")
+                            fields.Add(Field.CreateFieldBuilder("message", Message.Content));
+
+                        x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachments.First().Url, footer: Message.Author.Id.ToString()));
+                    }
+                    else
+                    {
+                        if (Message.Content.EndsWith(".jpg") || Message.Content.EndsWith(".jpeg") || Message.Content.EndsWith(".png"))
+                        {
+                            fields.Add(Field.CreateFieldBuilder("message", Message.Content));
+                            x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: Message.Content, footer: Message.Author.Id.ToString()));
+                        }
+                        else
+                        {
+                            fields.Add(Field.CreateFieldBuilder("message", Message.Content));
+                            x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", footer: Message.Author.Id.ToString()));
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                await x.AddReactionAsync(new Emoji("👍"));
+                await x.AddReactionAsync(new Emoji("👎"));
+            }
+
+            if (move)
+                await Message.DeleteAsync();
         }
     }
 }

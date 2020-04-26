@@ -46,6 +46,28 @@ namespace DiscordBot.Core.Data
 
             return embed.Build();
         }
+
+        public static Discord.Embed New(EmbedAuthor author, List<EmbedFieldBuilder> fields, Color color, string title = "", string description = "", string imgURL = "", string thumbnailUrl = "", string footer = "")
+        {
+            EmbedBuilder embed = new EmbedBuilder();
+
+            embed.WithAuthor(author.Name, author.IconUrl, author.Url);
+            embed.WithTitle(title);
+            embed.WithDescription(description);
+            embed.WithImageUrl(imgURL);
+            embed.WithThumbnailUrl(thumbnailUrl);
+
+            foreach (var field in fields)
+            {
+                embed.AddField(field);
+            }
+
+            embed.WithColor(color);
+            embed.WithFooter(f => f.Text = footer);
+            embed.WithTimestamp(DateTimeOffset.Now);
+
+            return embed.Build();
+        }
     }
 
     class Colors

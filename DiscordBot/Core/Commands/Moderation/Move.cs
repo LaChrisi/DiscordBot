@@ -30,42 +30,8 @@ namespace DiscordBot.Core.Moderation
             try
             {
                 var message = await Context.Channel.GetMessageAsync(messageID) as IUserMessage;
-                var channel = Context.Client.GetChannel(channelID) as ISocketMessageChannel;
 
-                var a = message.Attachments;
-                List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
-                var x = message;
-
-                try
-                {
-                    if (a.Count == 1)
-                    {
-                        if(message.Content != "")
-                            fields.Add(Data.Field.CreateFieldBuilder("message", message.Content));
-
-                        x = await channel.SendMessageAsync(embed: Data.Embed.New((SocketUser)message.Author, fields, Data.Colors.meme, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})", imgURL: a.First().Url));
-                    }
-                    else
-                    {
-                        if (message.Content.EndsWith(".jpg") || message.Content.EndsWith(".jpeg") || message.Content.EndsWith(".png"))
-                        {
-                            fields.Add(Data.Field.CreateFieldBuilder("message", message.Content));
-                            x = await channel.SendMessageAsync(embed: Data.Embed.New((SocketUser)message.Author, fields, Data.Colors.meme, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})", imgURL: message.Content));
-                        }
-                        else
-                        {
-                            fields.Add(Data.Field.CreateFieldBuilder("message", message.Content));
-                            x = await channel.SendMessageAsync(embed: Data.Embed.New((SocketUser)message.Author, fields, Data.Colors.meme, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})"));
-                        }    
-                    }    
-                }
-                finally
-                {
-                    await x.AddReactionAsync(new Emoji("👍"));
-                    await x.AddReactionAsync(new Emoji("👎"));
-                }
-
-                await Context.Channel.DeleteMessageAsync(messageID);
+                Program.Copy_Message(message, channelID, true);
             }
             catch (Exception e)
             {
