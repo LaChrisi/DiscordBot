@@ -17,43 +17,43 @@ namespace DiscordBot.Core.Moderation
         {
             if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.owner))
             {
-                await Context.Channel.SendMessageAsync(":x: You are not my god!");
+                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("warning", "You are not my god!"), Data.Colors.warning));
                 return;
             }
 
             if (Context.Client.Guilds.Where(x => x.Id == GuildId).Count() < 1)
             {
-                await Context.Channel.SendMessageAsync(":x: I am not in a guild with id=" + GuildId);
+                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("error", "guild not found!"), Data.Colors.error));
                 return;
             }
 
             SocketGuild Guild = Context.Client.Guilds.Where(x => x.Id == GuildId).FirstOrDefault();
-            var Invites = await Guild.GetInvitesAsync();
-            if (Invites.Count() < 1)
+            var invites = await Guild.GetInvitesAsync();
+
+            if (invites.Count() < 1)
             {
                 try
                 {
-                    await Guild.TextChannels.First().CreateInviteAsync();
+                    await Guild.SystemChannel.CreateInviteAsync();
                 }
                 catch (Exception e)
                 {
-                    await Context.Channel.SendMessageAsync($":x: Creating an invit for guild {Guild.Name} went wrong with error: {e.Message}");
+                    await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder($"Creating an invit for guild {Guild.Name} went wrong", e.Message), Data.Colors.error, "error"));
                     return;
                 }
             }
 
-            Invites = null;
-            Invites = await Guild.GetInvitesAsync();
+            invites = null;
+            invites = await Guild.GetInvitesAsync();
 
-            EmbedBuilder Embed = new EmbedBuilder();
+            List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
 
-            Embed.WithAuthor($"Invites for guild {Guild.Name}:", Guild.IconUrl);
-            Embed.WithColor(40, 200, 150);
+            foreach (var invite in invites)
+            {
+                fields.Add(Data.Field.CreateFieldBuilder($"{Guild.Name} - {invite.ChannelName}", $"[{invite.Url}]({invite.Url})"));
+            }
 
-            foreach (var Current in Invites)
-                Embed.AddField("Invite:",$"[{Current.Url}]({Current.Url})");
-
-            await Context.Channel.SendMessageAsync("", false, Embed.Build());
+            await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, fields, Data.Colors.information));
         }
     }
 }

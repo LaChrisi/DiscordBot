@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,13 +17,13 @@ namespace DiscordBot.Core.Moderation
         {
             if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.admin))
             {
-                await Context.Channel.SendMessageAsync($":x: You need to be at least admin to use this command!");
+                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Data.Colors.warning));
                 return;
             }
 
             if (messageID == 0 || channelID == 0)
             {
-                await Context.Channel.SendMessageAsync($"move **<MessageID>** **<ChatID>**");
+                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("try", "!move **<MessageID>** **<ChannelID>**"), Data.Colors.error, "error"));
                 return;
             }
 
@@ -31,15 +32,40 @@ namespace DiscordBot.Core.Moderation
                 var message = await Context.Channel.GetMessageAsync(messageID) as IUserMessage;
                 var channel = Context.Client.GetChannel(channelID) as ISocketMessageChannel;
 
-                var x = await channel.SendMessageAsync($"meme from: {message.Author.Mention}\n{message.Content.ToString()}");
-                await x.AddReactionAsync(new Emoji("👍"));
-                await x.AddReactionAsync(new Emoji("👎"));
+                var a = message.Attachments;
+                List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+                var x = message;
+
+                try
+                {
+                    if (a.Count == 1)
+                    {
+                        x = await channel.SendMessageAsync(embed: Data.Embed.New((SocketUser)message.Author, fields, Data.Colors.information, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})", imgURL: a.First().Url));
+                    }
+                    else
+                    {
+                        if (message.Content.EndsWith(".jpg") || message.Content.EndsWith(".jpeg") || message.Content.EndsWith(".png"))
+                        {
+                            x = await channel.SendMessageAsync(embed: Data.Embed.New((SocketUser)message.Author, fields, Data.Colors.information, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})", imgURL: message.Content));
+                        }
+                        else
+                        {
+                            fields.Add(Data.Field.CreateFieldBuilder("message", message.Content));
+                            x = await channel.SendMessageAsync(embed: Data.Embed.New((SocketUser)message.Author, fields, Data.Colors.information, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})"));
+                        }    
+                    }    
+                }
+                finally
+                {
+                    await x.AddReactionAsync(new Emoji("👍"));
+                    await x.AddReactionAsync(new Emoji("👎"));
+                }
 
                 await Context.Channel.DeleteMessageAsync(messageID);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("error", e.Message), Data.Colors.error));
             }
         }
     }

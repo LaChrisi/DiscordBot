@@ -11,18 +11,19 @@ namespace DiscordBot.Core.Moderation
 {
     public class Check : ModuleBase<SocketCommandContext>
     {
+        //alt
         [Command("check"), SummaryAttribute("checkt den Channel und pinnt Nachrichten im Nachhinein.")]
         public async Task CheckModule(ulong ChannelID = 0, ulong MessageID = 0)
         {
             if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.admin))
             {
-                await Context.Channel.SendMessageAsync(":x: You need to be at least admin to use this command!");
+                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Data.Colors.warning));
                 return;
             }
 
             if (ChannelID == 0 || MessageID == 0)
             {
-                await Context.Channel.SendMessageAsync(":x: Something went wrong!\ntry: ``sudo!check <ChannelID> <StartMessageID>``");
+                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("try", "!check **<ChannelID>** **<StartMessageID>**"), Data.Colors.error, "error"));
             }
             else
             {
@@ -70,7 +71,7 @@ namespace DiscordBot.Core.Moderation
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Error:" + e.ToString());
+                    await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("error", e.Message), Data.Colors.error));
                 }
                 finally
                 {

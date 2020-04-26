@@ -8,6 +8,8 @@ using Discord.WebSocket;
 using Discord.Commands;
 
 using DiscordBot.Core.Data;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DiscordBot
 {
@@ -227,8 +229,36 @@ namespace DiscordBot
                                 {
                                     if (e.what == "move")
                                     {
+                                        var message = await Context.Channel.GetMessageAsync(Message.Id) as IUserMessage;
                                         var channel = Client.GetChannel((ulong)Convert.ToInt64(e.how)) as ISocketMessageChannel;
-                                        var x = await channel.SendMessageAsync($"meme from: {Message.Author.Mention}\n{Message.Content}");
+                                        var a = message.Attachments;
+                                        List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+                                        var x = message;
+
+                                        try
+                                        {
+                                            if (a.Count == 1)
+                                            {
+                                                x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)message.Author, fields, Colors.information, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})", imgURL: a.First().Url));
+                                            }
+                                            else
+                                            {
+                                                if (message.Content.EndsWith(".jpg") || message.Content.EndsWith(".jpeg") || message.Content.EndsWith(".png"))
+                                                {
+                                                    x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)message.Author, fields, Colors.information, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})", imgURL: message.Content));
+                                                }
+                                                else
+                                                {
+                                                    fields.Add(Core.Data.Field.CreateFieldBuilder("message", message.Content));
+                                                    x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)message.Author, fields, Colors.information, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})"));
+                                                }
+                                            }
+                                        }
+                                        finally
+                                        {
+                                            await x.AddReactionAsync(new Emoji("👍"));
+                                            await x.AddReactionAsync(new Emoji("👎"));
+                                        }
 
                                         await Context.Channel.DeleteMessageAsync(Message.Id);
 
@@ -326,7 +356,7 @@ namespace DiscordBot
             {
                 var vote_channel_list = Vote_Channel.GetAllByChannelId(Message.Channel.Id);
 
-                if (vote_channel_list.Count != null)
+                if (vote_channel_list != null)
                 {
                     foreach (var vote_channel in vote_channel_list)
                     {
@@ -381,31 +411,35 @@ namespace DiscordBot
 
             var channel_event_list = Channel_Event.GetAllByChannelIdAndType(Channel.Id, 'e');
 
-            foreach (var channel_event in channel_event_list)
+            if (channel_event_list != null)
             {
-                if (channel_event.aktiv != 1)
-                    continue;
-
-                var e = Event.GetById(channel_event.Event);
-
-                foreach (var reaction in Reactions)
+                foreach (var channel_event in channel_event_list)
                 {
-                    if (reaction.Key.Name == e.what && reaction.Value.ReactionCount >= Convert.ToInt32(channel_event.when) - 1)
-                    {
-                        string[] how = e.how.Split(";");
+                    if (channel_event.aktiv != 1)
+                        continue;
 
-                        if (how.Length == 1)
+                    var e = Event.GetById(channel_event.Event);
+
+
+                    foreach (var reaction in Reactions)
+                    {
+                        if (reaction.Key.Name == e.what && reaction.Value.ReactionCount >= Convert.ToInt32(channel_event.when) - 1)
                         {
-                            if (how[0] == "pin")
+                            string[] how = e.how.Split(";");
+
+                            if (how.Length == 1)
                             {
-                                await userMessage.PinAsync();
+                                if (how[0] == "pin")
+                                {
+                                    await userMessage.PinAsync();
+                                }
                             }
-                        }
-                        else if (how.Length == 2)
-                        {
-                            if (how[0] == "emote")
+                            else if (how.Length == 2)
                             {
-                                await userMessage.AddReactionAsync(new Emoji(how[1]));
+                                if (how[0] == "emote")
+                                {
+                                    await userMessage.AddReactionAsync(new Emoji(how[1]));
+                                }
                             }
                         }
                     }

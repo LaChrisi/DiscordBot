@@ -15,13 +15,13 @@ namespace DiscordBot.Core.Moderation
         {
             if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.owner))
             {
-                await Context.Channel.SendMessageAsync(":x: You are not my god!");
+                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("warning", "You are not my god!"), Data.Colors.warning));
                 return;
             }
 
             if (channelID == 0 || what == "")
             {
-                await Context.Channel.SendMessageAsync("sudo!say **<ChannelID> <What to Say>**");
+                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("try", "!say **<ChannelID>** **\"<What to Say>\"**"), Data.Colors.error, "error"));
                 return;
             }
 
@@ -34,13 +34,13 @@ namespace DiscordBot.Core.Moderation
         {
             if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.owner))
             {
-                await Context.Channel.SendMessageAsync(":x: You are not my god!");
+                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("warning", "You are not my god!"), Data.Colors.warning));
                 return;
             }
 
             if (channelID == 0 || messageID == 0)
             {
-                await Context.Channel.SendMessageAsync("sudo!delete **<ChannelID> <MessageID>**");
+                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("try", "!delete **<ChannelID>** **<MessageID>**"), Data.Colors.error, "error"));
                 return;
             }
 

@@ -13,7 +13,7 @@ namespace DiscordBot.Core.Commands
         [Command("hallo"), SummaryAttribute("Hallo Welt")]
         public async Task HalloModule()
         {
-            await Context.Channel.SendMessageAsync("Hallo " + Context.User.Username + "!");
+            await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Client.CurrentUser, Data.Field.CreateFieldBuilder("hallo", $"Hallo {Context.User.Username}!"), Data.Colors.information));
         }
 
 
