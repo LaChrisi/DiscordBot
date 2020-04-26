@@ -50,6 +50,7 @@ namespace DiscordBot.Core.Data
 
     class Colors
     {
+        public static Color meme = Color.Green;
         public static Color information = Color.Blue;
         public static Color warning = Color.Gold;
         public static Color error = Color.Red;

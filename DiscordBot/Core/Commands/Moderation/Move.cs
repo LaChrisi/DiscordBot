@@ -40,18 +40,22 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (a.Count == 1)
                     {
-                        x = await channel.SendMessageAsync(embed: Data.Embed.New((SocketUser)message.Author, fields, Data.Colors.information, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})", imgURL: a.First().Url));
+                        if(message.Content != "")
+                            fields.Add(Data.Field.CreateFieldBuilder("message", message.Content));
+
+                        x = await channel.SendMessageAsync(embed: Data.Embed.New((SocketUser)message.Author, fields, Data.Colors.meme, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})", imgURL: a.First().Url));
                     }
                     else
                     {
                         if (message.Content.EndsWith(".jpg") || message.Content.EndsWith(".jpeg") || message.Content.EndsWith(".png"))
                         {
-                            x = await channel.SendMessageAsync(embed: Data.Embed.New((SocketUser)message.Author, fields, Data.Colors.information, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})", imgURL: message.Content));
+                            fields.Add(Data.Field.CreateFieldBuilder("message", message.Content));
+                            x = await channel.SendMessageAsync(embed: Data.Embed.New((SocketUser)message.Author, fields, Data.Colors.meme, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})", imgURL: message.Content));
                         }
                         else
                         {
                             fields.Add(Data.Field.CreateFieldBuilder("message", message.Content));
-                            x = await channel.SendMessageAsync(embed: Data.Embed.New((SocketUser)message.Author, fields, Data.Colors.information, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})"));
+                            x = await channel.SendMessageAsync(embed: Data.Embed.New((SocketUser)message.Author, fields, Data.Colors.meme, description: $"meme from [{message.Channel.Name}]({message.GetJumpUrl()})"));
                         }    
                     }    
                 }
