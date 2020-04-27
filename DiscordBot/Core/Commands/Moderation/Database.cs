@@ -32,7 +32,7 @@ namespace DiscordBot.Core.Moderation
             public class UserGroup : ModuleBase<SocketCommandContext>
             {
                 [Command("add"), Alias("a"), Summary("add new")]
-                public async Task AddModule(ulong id, string name, int privileg, int posts = 0, int upvotes = 0, int downvotes = 0)
+                public async Task AddModule(ulong id, string name, int privileg, int posts = 0, int upvotes = 0, int downvotes = 0, int karma = -1)
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
@@ -42,7 +42,7 @@ namespace DiscordBot.Core.Moderation
 
                     try
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("user", $"rows affected: {User.Add(new User(id, name, privileg, posts, upvotes, downvotes))}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("user", $"rows affected: {User.Add(new User(id, name, privileg, posts, upvotes, downvotes, karma))}"), Colors.information));
                         
                     }
                     catch (Exception e)
@@ -119,7 +119,7 @@ namespace DiscordBot.Core.Moderation
                 }
 
                 [Command("set"), Alias("s"), Summary("set by id")]
-                public async Task SetModule(ulong id, int privileg, string name = "", int posts = 0, int upvotes = 0, int downvotes = 0)
+                public async Task SetModule(ulong id, int privileg, string name = "", int posts = 0, int upvotes = 0, int downvotes = 0, int karma = -1)
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
@@ -144,6 +144,9 @@ namespace DiscordBot.Core.Moderation
 
                         if (downvotes != 0)
                             item.downvotes = downvotes;
+
+                        if (karma != -1)
+                            item.karma = karma;
 
                         await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("user", $"rows affected: {User.Edit(item)}"), Colors.information));
                     }

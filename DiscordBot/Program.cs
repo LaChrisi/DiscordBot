@@ -37,6 +37,14 @@ namespace DiscordBot
                 LogLevel = LogSeverity.Debug
             });
 
+            Timer timer_hour = new Timer
+            {
+                AutoReset = false,
+                Interval = 60 * 60 * 1000,
+                Enabled = true
+            };
+            timer_hour.Elapsed += Timer_hour_Elapsed;
+
             Client.MessageReceived += Client_MessageReceived;
             await Commands.AddModulesAsync(Assembly.GetEntryAssembly(), null);
 
@@ -67,6 +75,19 @@ namespace DiscordBot
             await Client.StartAsync();
 
             await Task.Delay(-1);
+        }
+
+        private void Timer_hour_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            var user_list = User.GetAllWithKarma();
+
+            foreach (var user in user_list)
+            {
+                if (user.karma < 100)
+                {
+
+                }
+            }
         }
 
 #pragma warning disable CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.

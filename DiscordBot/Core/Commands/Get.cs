@@ -80,9 +80,9 @@ namespace DiscordBot.Core.Commands
                                 fields.Add(Data.Field.CreateFieldBuilder("status", 
                                     "!status **<play | watch | listen>** **<\"Status-Message\">**"));
                                 fields.Add(Data.Field.CreateFieldBuilder("data user",
-                                    "!data user add | a **<UserID>** **<Name>** **<Privileg>** **[<Posts>]** **[<Upvotes>]** **[<Downvotes>]**" + "\n" +
+                                    "!data user add | a **<UserID>** **<Name>** **<Privileg>** **[<Posts>]** **[<Upvotes>]** **[<Downvotes>]** **[<Karma>]**" + "\n" +
                                     "!data user delete | d **<UserID>**" + "\n" +
-                                    "!data user set | s **<UserID>** **<Privileg>** **[<Name>]** **[<Posts>]** **[<Upvotes>]** **[<Downvotes>]**"));
+                                    "!data user set | s **<UserID>** **<Privileg>** **[<Name>]** **[<Posts>]** **[<Upvotes>]** **[<Downvotes>]** **[<Karma>]**"));
                                 fields.Add(Data.Field.CreateFieldBuilder("data vote",
                                     "!data vote add | a **<Name>** **<\"What\">** **<\"How\">**" + "\n" +
                                     "!data vote delete | d **<VoteID>**" + "\n" +

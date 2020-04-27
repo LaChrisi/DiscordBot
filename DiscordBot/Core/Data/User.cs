@@ -13,10 +13,11 @@ namespace DiscordBot.Core.Data
         public int upvotes { get; set; }
         public int downvotes { get; set; }
         public int privileg { get; set; }
+        public int karma { get; set; }
 
         public static string header = "id | name | posts | upvotes | downvotes | privileg";
 
-        public User(ulong id, string name, int privileg, int posts = 0, int upvotes = 0, int downvotes = 0)
+        public User(ulong id, string name, int privileg, int posts = 0, int upvotes = 0, int downvotes = 0, int karma = -1)
         {
             this.id = id;
             this.name = name;
@@ -24,11 +25,12 @@ namespace DiscordBot.Core.Data
             this.posts = posts;
             this.upvotes = upvotes;
             this.downvotes = downvotes;
+            this.karma = karma;
         }
 
         public override string ToString()
         {
-            return this.id + " | " + this.name + " | " + this.posts + " | " + this.upvotes + " | " + this.downvotes + " | " + this.privileg;
+            return this.id + " | " + this.name + " | " + this.posts + " | " + this.upvotes + " | " + this.downvotes + " | " + this.privileg + " | " + this.karma;
         }
 
         public static List<User> GetAll()
@@ -47,7 +49,7 @@ namespace DiscordBot.Core.Data
 
             foreach (var item in dt.Rows)
             {
-                list.Add(new User((ulong) Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToString(dt.Rows[i]["name"]), Convert.ToInt16(dt.Rows[i]["privileg"]), Convert.ToInt32(dt.Rows[i]["posts"]), Convert.ToInt32(dt.Rows[i]["upvotes"]), Convert.ToInt32(dt.Rows[i]["downvotes"])));
+                list.Add(new User((ulong) Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToString(dt.Rows[i]["name"]), Convert.ToInt16(dt.Rows[i]["privileg"]), Convert.ToInt32(dt.Rows[i]["posts"]), Convert.ToInt32(dt.Rows[i]["upvotes"]), Convert.ToInt32(dt.Rows[i]["downvotes"]), Convert.ToInt32(dt.Rows[i]["karma"])));
                 i++;
             }
 
@@ -70,12 +72,12 @@ namespace DiscordBot.Core.Data
                 return null;
             }
 
-            return new User((ulong) Convert.ToInt64(dt.Rows[0]["id"]), Convert.ToString(dt.Rows[0]["name"]), Convert.ToInt16(dt.Rows[0]["privileg"]), Convert.ToInt32(dt.Rows[0]["posts"]), Convert.ToInt32(dt.Rows[0]["upvotes"]), Convert.ToInt32(dt.Rows[0]["downvotes"]));
+            return new User((ulong) Convert.ToInt64(dt.Rows[0]["id"]), Convert.ToString(dt.Rows[0]["name"]), Convert.ToInt16(dt.Rows[0]["privileg"]), Convert.ToInt32(dt.Rows[0]["posts"]), Convert.ToInt32(dt.Rows[0]["upvotes"]), Convert.ToInt32(dt.Rows[0]["downvotes"]), Convert.ToInt32(dt.Rows[0]["karma"]));
         }
 
         public static int Add(User user)
         {
-            const string query = "INSERT INTO user(id, name, posts, upvotes, downvotes, privileg) VALUES(@id, @name, @posts, @upvotes, @downvotes, @privileg)";
+            const string query = "INSERT INTO user(id, name, posts, upvotes, downvotes, privileg, karma) VALUES(@id, @name, @posts, @upvotes, @downvotes, @privileg, @karma)";
 
             var args = new Dictionary<string, object>
             {
@@ -84,7 +86,8 @@ namespace DiscordBot.Core.Data
                 {"@posts", user.posts},
                 {"@upvotes", user.upvotes},
                 {"@downvotes", user.downvotes},
-                {"@privileg", user.privileg}
+                {"@privileg", user.privileg},
+                {"@karma", user.karma}
             };
 
             return Data.ExecuteWrite(query, args);
@@ -104,7 +107,7 @@ namespace DiscordBot.Core.Data
 
         public static int Edit(User user)
         {
-            const string query = "UPDATE user SET name = @name, privileg = @privileg, posts = @posts, upvotes = @upvotes, downvotes = @downvotes WHERE id = @id";
+            const string query = "UPDATE user SET name = @name, privileg = @privileg, posts = @posts, upvotes = @upvotes, downvotes = @downvotes, karma = @karma WHERE id = @id";
 
             var args = new Dictionary<string, object>
             {
@@ -113,7 +116,8 @@ namespace DiscordBot.Core.Data
                 {"@posts", user.posts},
                 {"@upvotes", user.upvotes},
                 {"@downvotes", user.downvotes},
-                {"@privileg", user.privileg}
+                {"@privileg", user.privileg},
+                {"@karma", user.karma}
             };
 
             return Data.ExecuteWrite(query, args);
