@@ -128,6 +128,9 @@ namespace DiscordBot.Core.Commands
                         fields.Add(Data.Field.CreateFieldBuilder(":+1: - upvotes", user.upvotes.ToString()));
                         fields.Add(Data.Field.CreateFieldBuilder(":-1: - downvotes", user.downvotes.ToString()));
                         fields.Add(Data.Field.CreateFieldBuilder(":notepad_spiral: - posts", user.posts.ToString()));
+                        
+                        if(user.karma != -1)
+                            fields.Add(Data.Field.CreateFieldBuilder(":bar_chart: - karma", user.karma.ToString()));
 
                         await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Client.GetUser(UserID), fields, Data.Colors.information, "stats"));
                     }
@@ -147,6 +150,9 @@ namespace DiscordBot.Core.Commands
                         fields.Add(Data.Field.CreateFieldBuilder(":+1: - upvotes", user.upvotes.ToString()));
                         fields.Add(Data.Field.CreateFieldBuilder(":-1: - downvotes", user.downvotes.ToString()));
                         fields.Add(Data.Field.CreateFieldBuilder(":notepad_spiral: - posts", user.posts.ToString()));
+
+                        if (user.karma != -1)
+                            fields.Add(Data.Field.CreateFieldBuilder(":bar_chart: - karma", user.karma.ToString()));
 
                         await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, fields, Data.Colors.information, "stats"));
                     }

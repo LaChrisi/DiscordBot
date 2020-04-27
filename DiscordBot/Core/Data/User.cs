@@ -15,7 +15,7 @@ namespace DiscordBot.Core.Data
         public int privileg { get; set; }
         public int karma { get; set; }
 
-        public static string header = "id | name | posts | upvotes | downvotes | privileg";
+        public static string header = "id | name | posts | upvotes | downvotes | privileg | karma";
 
         public User(ulong id, string name, int privileg, int posts = 0, int upvotes = 0, int downvotes = 0, int karma = -1)
         {
@@ -58,8 +58,25 @@ namespace DiscordBot.Core.Data
 
         public static List<User> GetAllWithKarma()
         {
+            var query = "SELECT * FROM user WHERE NOT karma = -1";
+            var args = new Dictionary<string, object>();
+            DataTable dt = Data.ExecuteRead(query, args);
 
-            return null;
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                return null;
+            }
+
+            List<User> list = new List<User>();
+            int i = 0;
+
+            foreach (var item in dt.Rows)
+            {
+                list.Add(new User((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToString(dt.Rows[i]["name"]), Convert.ToInt16(dt.Rows[i]["privileg"]), Convert.ToInt32(dt.Rows[i]["posts"]), Convert.ToInt32(dt.Rows[i]["upvotes"]), Convert.ToInt32(dt.Rows[i]["downvotes"]), Convert.ToInt32(dt.Rows[i]["karma"])));
+                i++;
+            }
+
+            return list;
         }
 
         public static User GetById(ulong id)

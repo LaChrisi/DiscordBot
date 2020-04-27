@@ -20,6 +20,9 @@ namespace DiscordBot
         private static DiscordSocketClient Client;
         private CommandService Commands;
 
+        private Timer daily_timer;
+        private Timer hourly_timer;
+
         static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
 
@@ -36,14 +39,6 @@ namespace DiscordBot
                 DefaultRunMode = RunMode.Async,
                 LogLevel = LogSeverity.Debug
             });
-
-            Timer timer_hour = new Timer
-            {
-                AutoReset = false,
-                Interval = 60 * 60 * 1000,
-                Enabled = true
-            };
-            timer_hour.Elapsed += Timer_hour_Elapsed;
 
             Client.MessageReceived += Client_MessageReceived;
             await Commands.AddModulesAsync(Assembly.GetEntryAssembly(), null);
@@ -75,6 +70,66 @@ namespace DiscordBot
             await Client.StartAsync();
 
             await Task.Delay(-1);
+        }
+
+        private void SetUpHourlyTimer(TimeSpan alertTime)
+        {
+            DateTime current = DateTime.Now;
+            TimeSpan timeToGo = alertTime - current.TimeOfDay;
+
+            hourly_timer = new Timer
+            {
+                AutoReset = false,
+                Interval = timeToGo.TotalMilliseconds,
+                Enabled = true
+            };
+            hourly_timer.Elapsed += Hourly_timer_Elapsed;
+        }
+        //hourly_timer event
+        private void Hourly_timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Console.WriteLine(DateTime.Now.TimeOfDay + "hourly_timer event");
+
+            SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
+        }
+
+        private void SetUpDailyTimer(TimeSpan alertTime)
+        {
+            DateTime current = DateTime.Now;
+            TimeSpan timeToGo = alertTime - current.TimeOfDay;
+
+            if (timeToGo < TimeSpan.Zero)
+            {
+                timeToGo = new TimeSpan(24, 0, 0) + timeToGo;
+            }
+
+            daily_timer = new Timer
+            {
+                AutoReset = false,
+                Interval = timeToGo.TotalMilliseconds,
+                Enabled = true
+            };
+            daily_timer.Elapsed += Daily_timer_Elapsed;
+        }
+
+        //daily_timer event
+        private void Daily_timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Console.WriteLine(DateTime.Now.TimeOfDay + "daily_timer event");
+
+            var user_list = User.GetAllWithKarma();
+
+            foreach (var user in user_list)
+            {
+                user.karma -= 100;
+
+                if (user.karma < -100)
+                    user.karma = -100;
+
+                User.Edit(user);
+            }
+
+            SetUpDailyTimer(new TimeSpan(5, 0, 0));
         }
 
         private void Timer_hour_Elapsed(object sender, ElapsedEventArgs e)
@@ -191,7 +246,7 @@ namespace DiscordBot
         {
             await Client.SetGameAsync("an sich rum...", "", ActivityType.Playing);
 
-            
+
 
             Timer timer = new Timer
             {
