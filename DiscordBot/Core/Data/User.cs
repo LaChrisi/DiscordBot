@@ -56,6 +56,12 @@ namespace DiscordBot.Core.Data
             return list;
         }
 
+        public static List<User> GetAllWithKarma()
+        {
+
+            return null;
+        }
+
         public static User GetById(ulong id)
         {
             var query = "SELECT * FROM user WHERE id = @id";
