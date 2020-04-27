@@ -23,7 +23,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MySql.Data" Version="8.0.19" />
+    <PackageReference Include="MySql.Data" Version="8.0.20" />
   </ItemGroup>
 
 </Project>
