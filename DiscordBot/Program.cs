@@ -7,269 +7,20 @@ using Discord;
 using Discord.WebSocket;
 using Discord.Commands;
 
-using DiscordBot.Core.Data;
+using DiscordBot.Core.Classes;
 using System.Collections.Generic;
 using System.Linq;
-using Discord.Rest;
-using System.ComponentModel.DataAnnotations;
 
 namespace DiscordBot
 {
     public class Program
     {
-        private static DiscordSocketClient Client;
+        public static DiscordSocketClient Client;
         private CommandService Commands;
-
-        private Timer daily_timer;
-        private Timer hourly_timer;
 
         static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
-
-        private async Task MainAsync()
-        {
-            Client = new DiscordSocketClient(new DiscordSocketConfig
-            {
-                LogLevel = LogSeverity.Debug
-            });
-
-            Commands = new CommandService(new CommandServiceConfig
-            {
-                CaseSensitiveCommands = true,
-                DefaultRunMode = RunMode.Async,
-                LogLevel = LogSeverity.Debug
-            });
-
-            Client.MessageReceived += Client_MessageReceived;
-            await Commands.AddModulesAsync(Assembly.GetEntryAssembly(), null);
-
-            Client.Ready += Client_Ready;
-
-            Client.Log += Client_Log;
-
-            Client.ReactionAdded += Client_ReactionAdded;
-            Client.ReactionRemoved += Client_ReactionRemoved;
-
-            Client.JoinedGuild += Client_JoinedGuild;
-            Client.GuildUpdated += Client_GuildUpdated;
-            Client.LeftGuild += Client_LeftGuild;
-
-            Client.ChannelCreated += Client_ChannelCreated;
-            Client.ChannelUpdated += Client_ChannelUpdated;
-            Client.ChannelDestroyed += Client_ChannelDestroyed;
-
-            Client.UserJoined += Client_UserJoined;
-            Client.UserUpdated += Client_UserUpdated;
-            
-#if DEBUG
-            await Client.LoginAsync(TokenType.Bot, Token.token_test);
-#else
-            await Client.LoginAsync(TokenType.Bot, Token.token_prod);
-#endif
-
-            SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
-            SetUpDailyTimer(new TimeSpan(5, 0, 0));
-
-            await Client.StartAsync();
-
-            await Task.Delay(-1);
-        }
-
-        private void SetUpHourlyTimer(TimeSpan alertTime)
-        {
-            DateTime current = DateTime.Now;
-            TimeSpan timeToGo = alertTime - current.TimeOfDay;
-
-            hourly_timer = new Timer
-            {
-                AutoReset = false,
-                Interval = timeToGo.TotalMilliseconds
-            };
-            hourly_timer.Elapsed += Hourly_timer_Elapsed;
-
-            hourly_timer.Start();
-        }
         
-        //hourly_timer event
-        private async void Hourly_timer_Elapsed(object sender, ElapsedEventArgs eArgs)
-        {
-            Console.WriteLine(DateTime.Now.TimeOfDay + "hourly_timer event");
-
-            var channel_event_list = Channel_Event.GetAllByType('k');
-
-            foreach (var channel_event in channel_event_list)
-            {
-                var user = User.GetById((ulong)Convert.ToInt64(channel_event.when));
-                var e = Event.GetById(channel_event.Event);
-
-                if (e.what == "say")
-                {
-                    if (e.how == "remind")
-                    {
-                        var channel = Client.GetChannel(channel_event.channel) as ISocketMessageChannel;
-                        var reminder = await channel.SendMessageAsync(embed: Core.Data.Embed.New(Client.GetUser(user.id), Field.CreateFieldBuilder("warning", $"Your karma is {user.karma}.\nYou should post some new memes!"), Colors.warning, "friendly reminder"));
-                        Message.Add(new Message(user.id,reminder.Id, channel.Id, 'k'));
-                    }
-                }
-            }
-
-            SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
-        }
-
-        private void SetUpDailyTimer(TimeSpan alertTime)
-        {
-            DateTime current = DateTime.Now;
-            TimeSpan timeToGo = alertTime - current.TimeOfDay;
-
-            if (timeToGo < TimeSpan.Zero)
-            {
-                timeToGo = new TimeSpan(24, 0, 0) + timeToGo;
-            }
-
-            daily_timer = new Timer
-            {
-                AutoReset = false,
-                Interval = timeToGo.TotalMilliseconds
-            };
-            daily_timer.Elapsed += Daily_timer_Elapsed;
-
-            daily_timer.Start();
-        }
-
-        //daily_timer event
-        private void Daily_timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            Console.WriteLine(DateTime.Now.TimeOfDay + "daily_timer event");
-
-            var user_list = User.GetAllWithKarma();
-
-            foreach (var user in user_list)
-            {
-                user.karma -= 100;
-
-                if (user.karma < -100)
-                    user.karma = -100;
-
-                User.Edit(user);
-            }
-
-            SetUpDailyTimer(new TimeSpan(5, 0, 0));
-        }
-
-#pragma warning disable CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.
-
-        private async Task Client_UserJoined(SocketGuildUser arg)
-        {
-            if (arg.IsBot)
-                return;
-
-            var user = User.GetById(arg.Id);
-
-            if (user == null)
-                User.Add(new User(user.id, user.name, 0));
-        }
-
-        private async Task Client_UserUpdated(SocketUser user_before, SocketUser user_after)
-        {
-            if (user_before.IsBot)
-                return;
-
-            var user = User.GetById(user_before.Id);
-
-            if (user != null)
-            {
-                user.name = user_after.ToString();
-                User.Edit(user);
-            }
-            else
-            {
-                User.Add(new User(user_before.Id, user_after.ToString(), 0));
-            }
-        }
-
-        private async Task Client_ChannelCreated(SocketChannel arg)
-        {
-            var channel = arg as IGuildChannel;
-            Channel.Add(new Channel(channel.Id, channel.Name, channel.GuildId));
-        }
-
-        private async Task Client_ChannelUpdated(SocketChannel arg1, SocketChannel arg2)
-        {
-            var channel_after = arg2 as IGuildChannel;
-
-            var channel = Channel.GetById(arg1.Id);
-
-            if (channel != null)
-            {
-                channel.name = channel_after.Name;
-                Channel.Edit(channel);
-            }
-            else
-            {
-                Channel.Add(new Channel(channel_after.Id, channel_after.Name, channel_after.GuildId));
-            }
-        }
-
-        private async Task Client_ChannelDestroyed(SocketChannel channel)
-        {
-            Channel.DeleteById(channel.Id);
-        }
-
-        private async Task Client_JoinedGuild(SocketGuild guild)
-        {
-            Server.Add(new Server(guild.Id, guild.Name));
-
-            foreach (var channel in guild.Channels)
-            {
-                Channel.Add(new Channel(channel.Id, channel.Name, guild.Id));
-            }
-        }
-
-        private async Task Client_GuildUpdated(SocketGuild server_before, SocketGuild server_after)
-        {
-            var server = Server.GetById(server_before.Id);
-
-            if (server != null)
-            {
-                server.name = server_after.Name;
-                Server.Edit(server);
-            }
-            else
-            {
-                Server.Add(new Server(server_after.Id, server_after.Name));
-            }
-        }
-
-        private async Task Client_LeftGuild(SocketGuild guild)
-        {
-            Channel.DeleteAllByServerId(guild.Id);
-            Server.DeleteById(guild.Id);
-        }
-
-        private async Task Client_Log(LogMessage Message)
-        {
-            Console.WriteLine($"{DateTime.Now} at {Message.Source}] {Message.Message}");
-        }
-
-#pragma warning restore CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.
-
-        private async Task Client_Ready()
-        {
-            await Client.SetGameAsync("an sich rum...", "", ActivityType.Playing);
-
-            Timer ready_timer = new Timer
-            {
-                AutoReset = false,
-                Interval = 5 * 60 * 1000,
-                Enabled = true
-            };
-            ready_timer.Elapsed += Ready_Timer;
-        }
-        private async void Ready_Timer(object sender, ElapsedEventArgs e)
-        {
-            await Client.SetGameAsync("sich um...", "", ActivityType.Watching);
-        }
-
         private async Task Client_MessageReceived(SocketMessage MessageParam)
         {
             if (MessageParam.Source == MessageSource.System || MessageParam.Source == MessageSource.Bot)
@@ -325,7 +76,22 @@ namespace DiscordBot
                                             user.posts++;
 
                                             if (user.karma != -1)
+                                            {
+                                                if (user.karma < 100 && user.karma + 20 >= 100)
+                                                {
+                                                    var message_list = Core.Classes.Message.GetAllByUserAndType(user.id, 'k');
+
+                                                    foreach (var message in message_list)
+                                                    {
+                                                        var channel = Client.GetChannel(message.channel) as ISocketMessageChannel;
+                                                        await channel.DeleteMessageAsync(message.message);
+                                                        Core.Classes.Message.DeleteById(message.id);
+                                                    }
+                                                }
+
                                                 user.karma += 20;
+                                            }
+                                               
 
                                             User.Edit(user);
                                         }
@@ -522,7 +288,21 @@ namespace DiscordBot
                     user.upvotes++;
 
                     if (user.karma != -1)
+                    {
+                        if (user.karma < 100 && user.karma + 20 >= 100)
+                        {
+                            var message_list = Core.Classes.Message.GetAllByUserAndType(user.id, 'k');
+
+                            foreach (var message in message_list)
+                            {
+                                var channel = Client.GetChannel(message.channel) as ISocketMessageChannel;
+                                await channel.DeleteMessageAsync(message.message);
+                                Core.Classes.Message.DeleteById(message.id);
+                            }
+                        }
+
                         user.karma += 20;
+                    }
 
                     User.Edit(user);
                 }
@@ -607,6 +387,169 @@ namespace DiscordBot
             }
         }
 
+        private async Task MainAsync()
+        {
+            Client = new DiscordSocketClient(new DiscordSocketConfig
+            {
+                LogLevel = LogSeverity.Debug
+            });
+
+            Commands = new CommandService(new CommandServiceConfig
+            {
+                CaseSensitiveCommands = true,
+                DefaultRunMode = RunMode.Async,
+                LogLevel = LogSeverity.Debug
+            });
+
+            Client.MessageReceived += Client_MessageReceived;
+            await Commands.AddModulesAsync(Assembly.GetEntryAssembly(), null);
+
+            Client.Ready += Client_Ready;
+
+            Client.Log += Client_Log;
+
+            Client.ReactionAdded += Client_ReactionAdded;
+            Client.ReactionRemoved += Client_ReactionRemoved;
+
+            Client.JoinedGuild += Client_JoinedGuild;
+            Client.GuildUpdated += Client_GuildUpdated;
+            Client.LeftGuild += Client_LeftGuild;
+
+            Client.ChannelCreated += Client_ChannelCreated;
+            Client.ChannelUpdated += Client_ChannelUpdated;
+            Client.ChannelDestroyed += Client_ChannelDestroyed;
+
+            Client.UserJoined += Client_UserJoined;
+            Client.UserUpdated += Client_UserUpdated;
+
+#if DEBUG
+            await Client.LoginAsync(TokenType.Bot, Token.token_test);
+#else
+            await Client.LoginAsync(TokenType.Bot, Token.token_prod);
+#endif
+
+            Core.Classes.Timer.SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
+            Core.Classes.Timer.SetUpDailyTimer(new TimeSpan(5, 0, 0));
+
+            await Client.StartAsync();
+
+            await Task.Delay(-1);
+        }
+
+#pragma warning disable CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.
+
+        private async Task Client_UserJoined(SocketGuildUser arg)
+        {
+            if (arg.IsBot)
+                return;
+
+            var user = User.GetById(arg.Id);
+
+            if (user == null)
+                User.Add(new User(user.id, user.name, 0));
+        }
+
+        private async Task Client_UserUpdated(SocketUser user_before, SocketUser user_after)
+        {
+            if (user_before.IsBot)
+                return;
+
+            var user = User.GetById(user_before.Id);
+
+            if (user != null)
+            {
+                user.name = user_after.ToString();
+                User.Edit(user);
+            }
+            else
+            {
+                User.Add(new User(user_before.Id, user_after.ToString(), 0));
+            }
+        }
+
+        private async Task Client_ChannelCreated(SocketChannel arg)
+        {
+            var channel = arg as IGuildChannel;
+            Channel.Add(new Channel(channel.Id, channel.Name, channel.GuildId));
+        }
+
+        private async Task Client_ChannelUpdated(SocketChannel arg1, SocketChannel arg2)
+        {
+            var channel_after = arg2 as IGuildChannel;
+
+            var channel = Channel.GetById(arg1.Id);
+
+            if (channel != null)
+            {
+                channel.name = channel_after.Name;
+                Channel.Edit(channel);
+            }
+            else
+            {
+                Channel.Add(new Channel(channel_after.Id, channel_after.Name, channel_after.GuildId));
+            }
+        }
+
+        private async Task Client_ChannelDestroyed(SocketChannel channel)
+        {
+            Channel.DeleteById(channel.Id);
+        }
+
+        private async Task Client_JoinedGuild(SocketGuild guild)
+        {
+            Server.Add(new Server(guild.Id, guild.Name));
+
+            foreach (var channel in guild.Channels)
+            {
+                Channel.Add(new Channel(channel.Id, channel.Name, guild.Id));
+            }
+        }
+
+        private async Task Client_GuildUpdated(SocketGuild server_before, SocketGuild server_after)
+        {
+            var server = Server.GetById(server_before.Id);
+
+            if (server != null)
+            {
+                server.name = server_after.Name;
+                Server.Edit(server);
+            }
+            else
+            {
+                Server.Add(new Server(server_after.Id, server_after.Name));
+            }
+        }
+
+        private async Task Client_LeftGuild(SocketGuild guild)
+        {
+            Channel.DeleteAllByServerId(guild.Id);
+            Server.DeleteById(guild.Id);
+        }
+
+        private async Task Client_Log(LogMessage Message)
+        {
+            Console.WriteLine($"{DateTime.Now} at {Message.Source}] {Message.Message}");
+        }
+
+#pragma warning restore CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.
+
+        private async Task Client_Ready()
+        {
+            await Client.SetGameAsync("an sich rum...", "", ActivityType.Playing);
+
+            System.Timers.Timer ready_timer = new System.Timers.Timer
+            {
+                AutoReset = false,
+                Interval = 5 * 60 * 1000,
+                Enabled = true
+            };
+            ready_timer.Elapsed += Ready_Timer;
+        }
+        private async void Ready_Timer(object sender, ElapsedEventArgs e)
+        {
+            await Client.SetGameAsync("sich um...", "", ActivityType.Watching);
+        }
+
         public static async void Copy_Message(IUserMessage Message, ulong channelId, bool move = false)
         {
             var channel = Client.GetChannel(channelId) as ISocketMessageChannel;
@@ -628,14 +571,14 @@ namespace DiscordBot
                         if (Message.Content != "")
                             fields.Add(Field.CreateFieldBuilder("message", Message.Content));
 
-                        x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Image.Value.Url, footer: Message.Author.Id.ToString()));
+                        x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Image.Value.Url, footer: Message.Author.Id.ToString()));
                     }  
                     else if (embeds.FirstOrDefault().Thumbnail != null)
                     {
                         if (Message.Content != "")
                             fields.Add(Field.CreateFieldBuilder("message", Message.Content));
 
-                        x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Thumbnail.Value.Url, footer: Message.Author.Id.ToString()));
+                        x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Thumbnail.Value.Url, footer: Message.Author.Id.ToString()));
                     }
 
                 }
@@ -646,19 +589,19 @@ namespace DiscordBot
                         if (Message.Content != "")
                             fields.Add(Field.CreateFieldBuilder("message", Message.Content));
 
-                        x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachments.First().Url, footer: Message.Author.Id.ToString()));
+                        x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachments.First().Url, footer: Message.Author.Id.ToString()));
                     }
                     else
                     {
                         if (Message.Content.EndsWith(".jpg") || Message.Content.EndsWith(".jpeg") || Message.Content.EndsWith(".png"))
                         {
                             fields.Add(Field.CreateFieldBuilder("message", Message.Content));
-                            x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: Message.Content, footer: Message.Author.Id.ToString()));
+                            x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: Message.Content, footer: Message.Author.Id.ToString()));
                         }
                         else
                         {
                             fields.Add(Field.CreateFieldBuilder("message", Message.Content));
-                            x = await channel.SendMessageAsync(embed: Core.Data.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", footer: Message.Author.Id.ToString()));
+                            x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", footer: Message.Author.Id.ToString()));
                         }
                     }
                 }

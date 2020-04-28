@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 
-namespace DiscordBot.Core.Data
+namespace DiscordBot.Core.Classes
 {
     public class User
     {
@@ -145,5 +145,30 @@ namespace DiscordBot.Core.Data
 
             return Data.ExecuteWrite(query, args);
         }
+
+        public static List<User> GetTop5Karma()
+        {
+            var query = "SELECT * FROM user ORDER BY karma DESC, upvotes DESC LIMIT 5";
+            var args = new Dictionary<string, object>();
+            DataTable dt = Data.ExecuteRead(query, args);
+
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                return null;
+            }
+
+            List<User> list = new List<User>();
+            int i = 0;
+
+            foreach (var item in dt.Rows)
+            {
+                list.Add(new User((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToString(dt.Rows[i]["name"]), Convert.ToInt16(dt.Rows[i]["privileg"]), Convert.ToInt32(dt.Rows[i]["posts"]), Convert.ToInt32(dt.Rows[i]["upvotes"]), Convert.ToInt32(dt.Rows[i]["downvotes"]), Convert.ToInt32(dt.Rows[i]["karma"])));
+                i++;
+            }
+
+            return list;
+        }
+        
+
     }
 }

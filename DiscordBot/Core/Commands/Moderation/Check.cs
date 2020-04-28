@@ -7,7 +7,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace DiscordBot.Core.Moderation
+namespace DiscordBot.Core.Commands.Moderation
 {
     public class Check : ModuleBase<SocketCommandContext>
     {
@@ -15,15 +15,15 @@ namespace DiscordBot.Core.Moderation
         [Command("check"), SummaryAttribute("checkt den Channel und pinnt Nachrichten im Nachhinein.")]
         public async Task CheckModule(ulong ChannelID = 0, ulong MessageID = 0)
         {
-            if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.admin))
+            if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.admin))
             {
-                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Data.Colors.warning));
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Classes.Colors.warning));
                 return;
             }
 
             if (ChannelID == 0 || MessageID == 0)
             {
-                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("try", "!check **<ChannelID>** **<StartMessageID>**"), Data.Colors.error, "error"));
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("try", "!check **<ChannelID>** **<StartMessageID>**"), Classes.Colors.error, "error"));
             }
             else
             {
@@ -71,7 +71,7 @@ namespace DiscordBot.Core.Moderation
                 }
                 catch (Exception e)
                 {
-                    await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("error", e.Message), Data.Colors.error));
+                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("error", e.Message), Classes.Colors.error));
                 }
                 finally
                 {

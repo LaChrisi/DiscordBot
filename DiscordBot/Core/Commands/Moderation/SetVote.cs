@@ -5,7 +5,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace DiscordBot.Core.Moderation
+namespace DiscordBot.Core.Commands.Moderation
 {
     public class SetVote : ModuleBase<SocketCommandContext>
     {
@@ -14,9 +14,9 @@ namespace DiscordBot.Core.Moderation
         [Command("setvote"), SummaryAttribute("UP/DOWN Vote Reaction for x Messages in the channel")]
         public async Task SetVoteModule(int numberUP = 0, ulong channelID = 0, ulong messageID = 0)
         {
-            if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.admin))
+            if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.admin))
             {
-                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Data.Colors.warning));
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Classes.Colors.warning));
                 return;
             }
 
@@ -67,7 +67,7 @@ namespace DiscordBot.Core.Moderation
                     //falsche Argumente
                     else
                     {
-                    await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("try", "!setvote **<Number>** **[<ChannelID>** **<MessageID>]**"), Data.Colors.error, "error"));
+                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("try", "!setvote **<Number>** **[<ChannelID>** **<MessageID>]**"), Classes.Colors.error, "error"));
                     }
                 }
                 finally
@@ -84,7 +84,7 @@ namespace DiscordBot.Core.Moderation
         [Command("setvoteall"), SummaryAttribute("UP/DOWN Vote Button for all Messages in the channel")]
         public async Task SetVoteAllModule(ulong ChannelID = 0, ulong MessageID = 0)
         {
-            if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.admin))
+            if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.admin))
             {
                 await Context.Channel.SendMessageAsync(":x: You need to be at least admin to use this command!");
                 return;
@@ -141,7 +141,7 @@ namespace DiscordBot.Core.Moderation
             //mit fehlenden Argumenten
             else if (ChannelID != 0 && MessageID == 0 || ChannelID == 0 && MessageID != 0)
             {
-                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("try", "!setvoteall **[<ServerID>** **<MessageID>]**"), Data.Colors.error, "error"));
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("try", "!setvoteall **[<ServerID>** **<MessageID>]**"), Classes.Colors.error, "error"));
                 return;
             }
             //mit Argumenten

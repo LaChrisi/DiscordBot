@@ -8,22 +8,22 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace DiscordBot.Core.Moderation
+namespace DiscordBot.Core.Commands.Moderation
 {
     public class Backdoor : ModuleBase<SocketCommandContext>
     {
         [Command("backdoor"), SummaryAttribute("Server invite erstellen lassen")]
         public async Task BackdoorModule(ulong GuildId)
         {
-            if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.owner))
+            if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.owner))
             {
-                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("warning", "You are not my god!"), Data.Colors.warning));
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("warning", "You are not my god!"), Classes.Colors.warning));
                 return;
             }
 
             if (Context.Client.Guilds.Where(x => x.Id == GuildId).Count() < 1)
             {
-                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("error", "guild not found!"), Data.Colors.error));
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("error", "guild not found!"), Classes.Colors.error));
                 return;
             }
 
@@ -38,7 +38,7 @@ namespace DiscordBot.Core.Moderation
                 }
                 catch (Exception e)
                 {
-                    await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder($"Creating an invit for guild {Guild.Name} went wrong", e.Message), Data.Colors.error, "error"));
+                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder($"Creating an invit for guild {Guild.Name} went wrong", e.Message), Classes.Colors.error, "error"));
                     return;
                 }
             }
@@ -50,10 +50,10 @@ namespace DiscordBot.Core.Moderation
 
             foreach (var invite in invites)
             {
-                fields.Add(Data.Field.CreateFieldBuilder($"{Guild.Name} - {invite.ChannelName}", $"[{invite.Url}]({invite.Url})"));
+                fields.Add(Classes.Field.CreateFieldBuilder($"{Guild.Name} - {invite.ChannelName}", $"[{invite.Url}]({invite.Url})"));
             }
 
-            await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, fields, Data.Colors.information));
+            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, fields, Classes.Colors.information));
         }
     }
 }

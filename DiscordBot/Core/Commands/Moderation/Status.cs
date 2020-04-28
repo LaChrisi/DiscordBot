@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 
-namespace DiscordBot.Core.Moderation
+namespace DiscordBot.Core.Commands.Moderation
 {
     public class Status : ModuleBase<SocketCommandContext>
     {
         [Command("status"), SummaryAttribute("set status")]
         public async Task StatusModule(String what, String newStatus)
         {
-            if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.owner))
+            if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.owner))
             {
-                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("warning", "You are not my god!"), Data.Colors.warning));
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("warning", "You are not my god!"), Classes.Colors.warning));
                 return;
             }
 
@@ -26,7 +26,7 @@ namespace DiscordBot.Core.Moderation
             else if (what.ToLower().Trim() == "listen")
                 await Context.Client.SetGameAsync(newStatus, "", ActivityType.Listening);
             else
-                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("error", "status not found!"), Data.Colors.error));
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("error", "status not found!"), Classes.Colors.error));
         }
     }
 }

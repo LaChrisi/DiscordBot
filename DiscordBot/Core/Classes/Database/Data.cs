@@ -6,7 +6,7 @@ using System.Linq;
 using MySql.Data.MySqlClient;
 using System.Data;
 
-namespace DiscordBot.Core.Data
+namespace DiscordBot.Core.Classes
 {
     public static class Data
     {

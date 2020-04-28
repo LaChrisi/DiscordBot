@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 
-using DiscordBot.Core.Data;
+using DiscordBot.Core.Classes;
 
-namespace DiscordBot.Core.Moderation
+namespace DiscordBot.Core.Commands.Moderation
 {
     public class Database : ModuleBase<SocketCommandContext>
     {
@@ -21,11 +21,11 @@ namespace DiscordBot.Core.Moderation
             {
                 if (!Privileg.CheckById(Context.User.Id, Privileg.admin))
                 {
-                    await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
+                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
                     return;
                 }
 
-                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("version", Data.Data.Version()), Colors.information));
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("version", Data.Version()), Colors.information));
             }
 
             [Group("user"), Summary("Database commands for user")]
@@ -36,18 +36,18 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         return;
                     }
 
                     try
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("user", $"rows affected: {User.Add(new User(id, name, privileg, posts, upvotes, downvotes, karma))}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("user", $"rows affected: {User.Add(new User(id, name, privileg, posts, upvotes, downvotes, karma))}"), Colors.information));
                         
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
                 }
 
@@ -56,18 +56,18 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.admin))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
                         return;
                     }
 
                     try
                     {
                         var item = User.GetById(id);
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(User.header, item.ToString()), Colors.information, "user"));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(User.header, item.ToString()), Colors.information, "user"));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
                 }
 
@@ -76,7 +76,7 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.admin))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
                         return;
                     }
 
@@ -90,11 +90,11 @@ namespace DiscordBot.Core.Moderation
                             ausgabe += item.ToString() + "\n";
                         }
 
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(User.header, ausgabe), Colors.information, "user"));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(User.header, ausgabe), Colors.information, "user"));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
                 }
 
@@ -103,17 +103,17 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         return;
                     }
 
                     try
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("user", $"rows affected: {User.DeleteById(id)}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("user", $"rows affected: {User.DeleteById(id)}"), Colors.information));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
 
                 }
@@ -123,7 +123,7 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         return;
                     }
 
@@ -148,11 +148,11 @@ namespace DiscordBot.Core.Moderation
                         if (karma != -1)
                             item.karma = karma;
 
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("user", $"rows affected: {User.Edit(item)}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("user", $"rows affected: {User.Edit(item)}"), Colors.information));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
                 }
             }
@@ -165,17 +165,17 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         return;
                     }
 
                     try
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("vote", $"rows affected: {Vote.Add(new Vote(name, what, how))}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("vote", $"rows affected: {Vote.Add(new Vote(name, what, how))}"), Colors.information));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
                 }
 
@@ -184,18 +184,18 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.admin))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
                         return;
                     }
 
                     try
                     {
                         var item = Vote.GetById(id);
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(Vote.header, item.ToString()), Colors.information, "vote"));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(Vote.header, item.ToString()), Colors.information, "vote"));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
                 }
 
@@ -204,7 +204,7 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.admin))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
                         return;
                     }
 
@@ -218,11 +218,11 @@ namespace DiscordBot.Core.Moderation
                             ausgabe += item.ToString() + "\n";
                         }
 
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(Vote.header, ausgabe), Colors.information, "vote"));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(Vote.header, ausgabe), Colors.information, "vote"));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
 
                     }
                 }
@@ -232,17 +232,17 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         return;
                     }
                     
                     try
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("vote", $"rows affected: {Vote.DeleteById(id)}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("vote", $"rows affected: {Vote.DeleteById(id)}"), Colors.information));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
 
                 }
@@ -252,7 +252,7 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         return;
                     }
 
@@ -262,11 +262,11 @@ namespace DiscordBot.Core.Moderation
                         item.name = name;
                         item.what = what;
                         item.how = how;
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("vote", $"rows affected: {Vote.Edit(item)}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("vote", $"rows affected: {Vote.Edit(item)}"), Colors.information));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
                 }
             }
@@ -279,17 +279,17 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         return;
                     }
 
                     try
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("vote_channel", $"rows affected: {Vote_Channel.Add(new Vote_Channel(aktiv, vote, channel))}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("vote_channel", $"rows affected: {Vote_Channel.Add(new Vote_Channel(aktiv, vote, channel))}"), Colors.information));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
                 }
 
@@ -298,7 +298,7 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.admin))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
                         return;
                     }
 
@@ -314,11 +314,11 @@ namespace DiscordBot.Core.Moderation
                                 ausgabe += item.ToString() + "\n";
                             }
 
-                            await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(Vote_Channel.header, ausgabe), Colors.information, "vote_channel"));
+                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(Vote_Channel.header, ausgabe), Colors.information, "vote_channel"));
                         }
                         catch (Exception e)
                         {
-                            await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                         }
                     }
                     else
@@ -333,11 +333,11 @@ namespace DiscordBot.Core.Moderation
                                 ausgabe += item.ToString() + "\n";
                             }
 
-                            await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(Vote_Channel.header, ausgabe), Colors.information, "vote_channel"));
+                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(Vote_Channel.header, ausgabe), Colors.information, "vote_channel"));
                         }
                         catch (Exception e)
                         {
-                            await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                         }
                     }
                 }
@@ -347,17 +347,17 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         return;
                     }
 
                     try
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("vote_channel", $"rows affected: {Vote_Channel.DeleteById(id)}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("vote_channel", $"rows affected: {Vote_Channel.DeleteById(id)}"), Colors.information));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
 
                 }
@@ -367,7 +367,7 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         return;
                     }
 
@@ -382,11 +382,11 @@ namespace DiscordBot.Core.Moderation
                         if(channel != 0)
                             item.channel = channel;
 
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("vote_channel", $"rows affected: {Vote_Channel.Edit(item)}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("vote_channel", $"rows affected: {Vote_Channel.Edit(item)}"), Colors.information));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
                 }
             }
@@ -399,17 +399,17 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         return;
                     }
 
                     try
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("event", $"rows affected: {Event.Add(new Event(what, how))}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("event", $"rows affected: {Event.Add(new Event(what, how))}"), Colors.information));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
                 }
 
@@ -418,7 +418,7 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.admin))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
                         return;
                     }
 
@@ -432,11 +432,11 @@ namespace DiscordBot.Core.Moderation
                             ausgabe += item.ToString() + "\n";
                         }
 
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(Event.header, ausgabe), Colors.information, "event"));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(Event.header, ausgabe), Colors.information, "event"));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
                 }
 
@@ -445,17 +445,17 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         return;
                     }
 
                     try
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("event", $"rows affected: {Event.DeleteById(id)}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("event", $"rows affected: {Event.DeleteById(id)}"), Colors.information));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
 
                 }
@@ -465,7 +465,7 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         return;
                     }
 
@@ -475,11 +475,11 @@ namespace DiscordBot.Core.Moderation
                         item.what = what;
                         item.how = how;
 
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("event", $"rows affected: {Event.Edit(item)}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("event", $"rows affected: {Event.Edit(item)}"), Colors.information));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
                 }
             }
@@ -492,17 +492,17 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         return;
                     }
 
                     try
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("channel_event", $"rows affected: {Channel_Event.Add(new Channel_Event(aktiv, channel, Event, when, type))}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("channel_event", $"rows affected: {Channel_Event.Add(new Channel_Event(aktiv, channel, Event, when, type))}"), Colors.information));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
                 }
 
@@ -511,7 +511,7 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.admin))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
                         return;
                     }
 
@@ -527,11 +527,11 @@ namespace DiscordBot.Core.Moderation
                                 ausgabe += item.ToString() + "\n";
                             }
 
-                            await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(Channel_Event.header, ausgabe), Colors.information, "channel_event"));
+                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(Channel_Event.header, ausgabe), Colors.information, "channel_event"));
                         }
                         catch (Exception e)
                         {
-                            await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                         }
                     }
                     else
@@ -546,11 +546,11 @@ namespace DiscordBot.Core.Moderation
                                 ausgabe += item.ToString() + "\n";
                             }
 
-                            await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(Channel_Event.header, ausgabe), Colors.information, "channel_event"));
+                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder(Channel_Event.header, ausgabe), Colors.information, "channel_event"));
                         }
                         catch (Exception e)
                         {
-                            await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                         }
                     }
                 }
@@ -560,17 +560,17 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         return;
                     }
 
                     try
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("channel_event", $"rows affected: {Channel_Event.DeleteById(id)}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("channel_event", $"rows affected: {Channel_Event.DeleteById(id)}"), Colors.information));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
 
                 }
@@ -580,7 +580,7 @@ namespace DiscordBot.Core.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         return;
                     }
 
@@ -601,11 +601,11 @@ namespace DiscordBot.Core.Moderation
                         if (type != ' ')
                             item.type = type;
 
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("channel_event", $"rows affected: {Channel_Event.Edit(item)}"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("channel_event", $"rows affected: {Channel_Event.Edit(item)}"), Colors.information));
                     }
                     catch (Exception e)
                     {
-                        await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
                     }
                 }
             }

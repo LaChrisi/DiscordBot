@@ -8,22 +8,22 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace DiscordBot.Core.Moderation
+namespace DiscordBot.Core.Commands.Moderation
 {
     public class Move : ModuleBase<SocketCommandContext>
     {
         [Command("move"), Alias("m"), Summary("moves the message")]
         public async Task MoveModule(ulong messageID = 0, ulong channelID = 0)
         {
-            if (!Data.Privileg.CheckById(Context.User.Id, Data.Privileg.admin))
+            if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.admin))
             {
-                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Data.Colors.warning));
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Classes.Colors.warning));
                 return;
             }
 
             if (messageID == 0 || channelID == 0)
             {
-                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("try", "!move **<MessageID>** **<ChannelID>**"), Data.Colors.error, "error"));
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("try", "!move **<MessageID>** **<ChannelID>**"), Classes.Colors.error, "error"));
                 return;
             }
 
@@ -35,7 +35,7 @@ namespace DiscordBot.Core.Moderation
             }
             catch (Exception e)
             {
-                await Context.Channel.SendMessageAsync(embed: Data.Embed.New(Context.Message.Author, Data.Field.CreateFieldBuilder("error", e.Message), Data.Colors.error));
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("error", e.Message), Classes.Colors.error));
             }
         }
     }
