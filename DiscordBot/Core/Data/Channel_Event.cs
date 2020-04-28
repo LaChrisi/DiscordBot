@@ -219,5 +219,32 @@ namespace DiscordBot.Core.Data
 
             return list;
         }
+
+        public static List<Channel_Event> GetAllByType(char type)
+        {
+            var query = $"SELECT * FROM channel_event WHERE type = @type";
+            var args = new Dictionary<string, object>
+            {
+                {"@type", type}
+            };
+
+            DataTable dt = Data.ExecuteRead(query, args);
+
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                return null;
+            }
+
+            List<Channel_Event> list = new List<Channel_Event>();
+            int i = 0;
+
+            foreach (var item in dt.Rows)
+            {
+                list.Add(new Channel_Event((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToInt16(dt.Rows[i]["aktiv"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), (ulong)Convert.ToInt64(dt.Rows[i]["event"]), Convert.ToString(dt.Rows[i]["when"]), Convert.ToChar(dt.Rows[i]["type"])));
+                i++;
+            }
+
+            return list;
+        }
     }
 }

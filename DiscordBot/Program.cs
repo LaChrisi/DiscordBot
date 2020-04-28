@@ -67,6 +67,9 @@ namespace DiscordBot
             await Client.LoginAsync(TokenType.Bot, Token.token_prod);
 #endif
 
+            SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
+            SetUpDailyTimer(new TimeSpan(5, 0, 0));
+
             await Client.StartAsync();
 
             await Task.Delay(-1);
@@ -80,15 +83,35 @@ namespace DiscordBot
             hourly_timer = new Timer
             {
                 AutoReset = false,
-                Interval = timeToGo.TotalMilliseconds,
-                Enabled = true
+                Interval = timeToGo.TotalMilliseconds
             };
             hourly_timer.Elapsed += Hourly_timer_Elapsed;
+
+            hourly_timer.Start();
         }
+        
         //hourly_timer event
-        private void Hourly_timer_Elapsed(object sender, ElapsedEventArgs e)
+        private async void Hourly_timer_Elapsed(object sender, ElapsedEventArgs eArgs)
         {
             Console.WriteLine(DateTime.Now.TimeOfDay + "hourly_timer event");
+
+            var channel_event_list = Channel_Event.GetAllByType('k');
+
+            foreach (var channel_event in channel_event_list)
+            {
+                var user = User.GetById((ulong)Convert.ToInt64(channel_event.when));
+                var e = Event.GetById(channel_event.Event);
+
+                if (e.what == "say")
+                {
+                    if (e.how == "remind")
+                    {
+                        var channel = Client.GetChannel(channel_event.channel) as ISocketMessageChannel;
+                        var reminder = await channel.SendMessageAsync(embed: Core.Data.Embed.New(Client.GetUser(user.id), Field.CreateFieldBuilder("warning", $"Your karma is {user.karma}.\nYou should post some new memes!"), Colors.warning, "friendly reminder"));
+                        Message.Add(new Message(user.id,reminder.Id, channel.Id, 'k'));
+                    }
+                }
+            }
 
             SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
         }
@@ -106,10 +129,11 @@ namespace DiscordBot
             daily_timer = new Timer
             {
                 AutoReset = false,
-                Interval = timeToGo.TotalMilliseconds,
-                Enabled = true
+                Interval = timeToGo.TotalMilliseconds
             };
             daily_timer.Elapsed += Daily_timer_Elapsed;
+
+            daily_timer.Start();
         }
 
         //daily_timer event
@@ -130,19 +154,6 @@ namespace DiscordBot
             }
 
             SetUpDailyTimer(new TimeSpan(5, 0, 0));
-        }
-
-        private void Timer_hour_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            var user_list = User.GetAllWithKarma();
-
-            foreach (var user in user_list)
-            {
-                if (user.karma < 100)
-                {
-
-                }
-            }
         }
 
 #pragma warning disable CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.
@@ -246,17 +257,15 @@ namespace DiscordBot
         {
             await Client.SetGameAsync("an sich rum...", "", ActivityType.Playing);
 
-
-
-            Timer timer = new Timer
+            Timer ready_timer = new Timer
             {
                 AutoReset = false,
                 Interval = 5 * 60 * 1000,
                 Enabled = true
             };
-            timer.Elapsed += Timer_Elapsed;
+            ready_timer.Elapsed += Ready_Timer;
         }
-        private async void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        private async void Ready_Timer(object sender, ElapsedEventArgs e)
         {
             await Client.SetGameAsync("sich um...", "", ActivityType.Watching);
         }
@@ -314,6 +323,10 @@ namespace DiscordBot
                                         if (user != null)
                                         {
                                             user.posts++;
+
+                                            if (user.karma != -1)
+                                                user.karma += 20;
+
                                             User.Edit(user);
                                         }
                                         else
@@ -507,6 +520,10 @@ namespace DiscordBot
                 if (user != null)
                 {
                     user.upvotes++;
+
+                    if (user.karma != -1)
+                        user.karma += 20;
+
                     User.Edit(user);
                 }
             }
@@ -526,6 +543,10 @@ namespace DiscordBot
                 if (user != null)
                 {
                     user.downvotes++;
+
+                    if (user.karma != -1)
+                        user.karma -= 20;
+
                     User.Edit(user);
                 }
             }
@@ -554,6 +575,10 @@ namespace DiscordBot
                 if (user != null)
                 {
                     user.upvotes--;
+
+                    if (user.karma != -1)
+                        user.karma -= 20;
+
                     User.Edit(user);
                 }
             }
@@ -573,6 +598,10 @@ namespace DiscordBot
                 if (user != null)
                 {
                     user.downvotes--;
+
+                    if (user.karma != -1)
+                        user.karma += 20;
+
                     User.Edit(user);
                 }
             }
