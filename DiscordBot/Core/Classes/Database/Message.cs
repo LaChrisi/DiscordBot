@@ -86,7 +86,7 @@ namespace DiscordBot.Core.Classes
 
             return list;
         }
-
+        
         public static Message GetById(ulong id)
         {
             var query = "SELECT * FROM message WHERE id = @id";

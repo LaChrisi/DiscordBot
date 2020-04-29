@@ -73,6 +73,25 @@ namespace DiscordBot.Core.Classes
             return new Event((ulong)Convert.ToInt64(dt.Rows[0]["id"]), Convert.ToString(dt.Rows[0]["what"]), Convert.ToString(dt.Rows[0]["how"]));
         }
 
+        public static Event GetRandomByWhat(string what)
+        {
+            var query = "SELECT * FROM event WHERE what = @what ORDER BY RAND() LIMIT 1";
+
+            var args = new Dictionary<string, object>
+            {
+                {"@what", what}
+            };
+
+            DataTable dt = Data.ExecuteRead(query, args);
+
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                return null;
+            }
+
+            return new Event((ulong)Convert.ToInt64(dt.Rows[0]["id"]), Convert.ToString(dt.Rows[0]["what"]), Convert.ToString(dt.Rows[0]["how"]));
+        }
+
         public static int Add(Event Event)
         {
             const string query = "INSERT INTO event(id, what, how) VALUES(@id, @what, @how)";

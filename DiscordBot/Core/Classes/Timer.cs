@@ -63,8 +63,9 @@ namespace DiscordBot.Core.Classes
                     {
                         if (user.karma < 100)
                         {
+                            var message = Event.GetRandomByWhat("reminder");
                             var channel = Program.Client.GetChannel(channel_event.channel) as ISocketMessageChannel;
-                            var reminder = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(Program.Client.GetUser(user.id), Field.CreateFieldBuilder("warning", $"Your karma is {user.karma}.\nYou should post some new memes!"), Colors.warning, "friendly reminder"));
+                            var reminder = await channel.SendMessageAsync(embed: Embed.New(Program.Client.GetUser(user.id), Field.CreateFieldBuilder("warning", $"Your karma is {user.karma}.\n{message.how}"), Colors.warning, "friendly reminder"));
                             Message.Add(new Message(user.id, reminder.Id, channel.Id, 'k'));
                         }
                     }
