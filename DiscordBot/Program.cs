@@ -301,7 +301,7 @@ namespace DiscordBot
                             }
                         }
 
-                        user.karma += 20;
+                        user.karma += 10;
                     }
 
                     User.Edit(user);
@@ -325,7 +325,7 @@ namespace DiscordBot
                     user.downvotes++;
 
                     if (user.karma != -1)
-                        user.karma -= 20;
+                        user.karma -= 10;
 
                     User.Edit(user);
                 }
@@ -357,7 +357,7 @@ namespace DiscordBot
                     user.upvotes--;
 
                     if (user.karma != -1)
-                        user.karma -= 20;
+                        user.karma -= 10;
 
                     User.Edit(user);
                 }
@@ -380,7 +380,7 @@ namespace DiscordBot
                     user.downvotes--;
 
                     if (user.karma != -1)
-                        user.karma += 20;
+                        user.karma += 10;
 
                     User.Edit(user);
                 }
