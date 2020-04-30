@@ -5,10 +5,10 @@ using Discord.WebSocket;
 
 namespace DiscordBot.Core.Classes
 {
-    class Timer
+    class Repetitive_Timer
     {
-        public static System.Timers.Timer daily_timer;
-        public static System.Timers.Timer hourly_timer;
+        public static Timer daily_timer;
+        public static Timer hourly_timer;
 
         public static void SetUpDailyTimer(TimeSpan alertTime)
         {
@@ -20,7 +20,7 @@ namespace DiscordBot.Core.Classes
                 timeToGo = new TimeSpan(24, 0, 0) + timeToGo;
             }
 
-            daily_timer = new System.Timers.Timer
+            daily_timer = new Timer
             {
                 AutoReset = false,
                 Interval = timeToGo.TotalMilliseconds
@@ -35,7 +35,7 @@ namespace DiscordBot.Core.Classes
             DateTime current = DateTime.Now;
             TimeSpan timeToGo = alertTime - current.TimeOfDay;
 
-            hourly_timer = new System.Timers.Timer
+            hourly_timer = new Timer
             {
                 AutoReset = false,
                 Interval = timeToGo.TotalMilliseconds
@@ -61,7 +61,7 @@ namespace DiscordBot.Core.Classes
                 {
                     if (e.how == "remind")
                     {
-                        if (user.karma < 100)
+                        if (user.karma < Convert.ToInt32(Global.GetByName("karma_threshold_to_remind").value))
                         {
                             var message = Event.GetRandomByWhat("reminder");
                             var channel = Program.Client.GetChannel(channel_event.channel) as ISocketMessageChannel;
@@ -84,15 +84,16 @@ namespace DiscordBot.Core.Classes
 
             foreach (var user in user_list)
             {
-                user.karma -= 100;
+                user.karma -= Convert.ToInt32(Global.GetByName("karma_daily_loss").value);
+                int karma_minimum = Convert.ToInt32(Global.GetByName("karma_minimum").value);
 
-                if (user.karma < -100)
-                    user.karma = -100;
+                if (user.karma < karma_minimum)
+                    user.karma = karma_minimum;
 
                 User.Edit(user);
             }
 
-            SetUpDailyTimer(new TimeSpan(5, 0, 0));
+            SetUpDailyTimer(new TimeSpan(Convert.ToInt32(Global.GetByName("daily_timer_hour").value), 0, 0));
         }
     }
 }

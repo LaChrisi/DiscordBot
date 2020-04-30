@@ -106,6 +106,27 @@ namespace DiscordBot.Core.Classes
             return new Message((ulong)Convert.ToInt64(dt.Rows[0]["id"]), (ulong)Convert.ToInt64(dt.Rows[0]["user"]), (ulong)Convert.ToInt64(dt.Rows[0]["message"]), (ulong)Convert.ToInt64(dt.Rows[0]["channel"]), Convert.ToChar(dt.Rows[0]["type"]));
         }
 
+        public static Message GetByMessageAndChannelAndType(ulong message, ulong channel, char type)
+        {
+            var query = "SELECT * FROM message WHERE message = @message AND channel = @channel AND type = @type";
+
+            var args = new Dictionary<string, object>
+            {
+                {"@message", message},
+                {"@channel", channel},
+                {"@type", type}
+            };
+
+            DataTable dt = Data.ExecuteRead(query, args);
+
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                return null;
+            }
+
+            return new Message((ulong)Convert.ToInt64(dt.Rows[0]["id"]), (ulong)Convert.ToInt64(dt.Rows[0]["user"]), (ulong)Convert.ToInt64(dt.Rows[0]["message"]), (ulong)Convert.ToInt64(dt.Rows[0]["channel"]), Convert.ToChar(dt.Rows[0]["type"]));
+        }
+
         public static int Add(Message message)
         {
             const string query = "INSERT INTO message(user, message, channel, type) VALUES(@user, @message, @channel, @type)";

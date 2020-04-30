@@ -2,14 +2,14 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Collections.Generic;
+using System.Linq;
 
 using Discord;
 using Discord.WebSocket;
 using Discord.Commands;
 
 using DiscordBot.Core.Classes;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DiscordBot
 {
@@ -77,7 +77,10 @@ namespace DiscordBot
 
                                             if (user.karma != -1)
                                             {
-                                                if (user.karma < 100 && user.karma + 20 >= 100)
+                                                int karma_threshold_to_remind = Convert.ToInt32(Global.GetByName("karma_threshold_to_remind").value);
+                                                int karma_per_post = Convert.ToInt32(Global.GetByName("karma_per_post").value);
+
+                                                if (user.karma < karma_threshold_to_remind && user.karma + karma_per_post >= karma_threshold_to_remind)
                                                 {
                                                     var message_list = Core.Classes.Message.GetAllByUserAndType(user.id, 'k');
 
@@ -89,7 +92,8 @@ namespace DiscordBot
                                                     }
                                                 }
 
-                                                user.karma += 20;
+                                                
+                                                user.karma += karma_per_post;
                                             }
                                                
 
@@ -289,7 +293,10 @@ namespace DiscordBot
 
                     if (user.karma != -1)
                     {
-                        if (user.karma < 100 && user.karma + 20 >= 100)
+                        int karma_threshold_to_remind = Convert.ToInt32(Global.GetByName("karma_threshold_to_remind").value);
+                        int karma_per_upvote = Convert.ToInt32(Global.GetByName("karma_per_upvote").value);
+
+                        if (user.karma < karma_threshold_to_remind && user.karma + karma_per_upvote >= karma_threshold_to_remind)
                         {
                             var message_list = Core.Classes.Message.GetAllByUserAndType(user.id, 'k');
 
@@ -301,7 +308,7 @@ namespace DiscordBot
                             }
                         }
 
-                        user.karma += 10;
+                        user.karma += karma_per_upvote;
                     }
 
                     User.Edit(user);
@@ -325,7 +332,7 @@ namespace DiscordBot
                     user.downvotes++;
 
                     if (user.karma != -1)
-                        user.karma -= 10;
+                        user.karma += Convert.ToInt32(Global.GetByName("karma_per_downvote").value);
 
                     User.Edit(user);
                 }
@@ -357,7 +364,7 @@ namespace DiscordBot
                     user.upvotes--;
 
                     if (user.karma != -1)
-                        user.karma -= 10;
+                        user.karma -= Convert.ToInt32(Global.GetByName("karma_per_upvote").value);
 
                     User.Edit(user);
                 }
@@ -380,7 +387,7 @@ namespace DiscordBot
                     user.downvotes--;
 
                     if (user.karma != -1)
-                        user.karma += 10;
+                        user.karma -= Convert.ToInt32(Global.GetByName("karma_per_downvote").value);
 
                     User.Edit(user);
                 }
@@ -428,8 +435,8 @@ namespace DiscordBot
             await Client.LoginAsync(TokenType.Bot, Token.token_prod);
 #endif
 
-            Core.Classes.Timer.SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
-            Core.Classes.Timer.SetUpDailyTimer(new TimeSpan(5, 0, 0));
+            Repetitive_Timer.SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
+            Repetitive_Timer.SetUpDailyTimer(new TimeSpan(Convert.ToInt32(Global.GetByName("daily_timer_hour").value), 0, 0));
 
             await Client.StartAsync();
 
@@ -535,19 +542,19 @@ namespace DiscordBot
 
         private async Task Client_Ready()
         {
-            await Client.SetGameAsync("an sich rum...", "", ActivityType.Playing);
+            await Client.SetGameAsync(Convert.ToString(Global.GetByName("ready_initial_activity_playing").value), "", ActivityType.Playing);
 
-            System.Timers.Timer ready_timer = new System.Timers.Timer
+            Timer ready_timer = new Timer
             {
                 AutoReset = false,
-                Interval = 5 * 60 * 1000,
+                Interval = Convert.ToInt32(Global.GetByName("ready_timer_minute").value) * 60 * 1000,
                 Enabled = true
             };
             ready_timer.Elapsed += Ready_Timer;
         }
         private async void Ready_Timer(object sender, ElapsedEventArgs e)
         {
-            await Client.SetGameAsync("sich um...", "", ActivityType.Watching);
+            await Client.SetGameAsync(Convert.ToString(Global.GetByName("ready_timer_elapsed_watching_activity").value), "", ActivityType.Watching);
         }
 
         public static async void Copy_Message(IUserMessage Message, ulong channelId, bool move = false)
@@ -558,58 +565,64 @@ namespace DiscordBot
             List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
             var x = Message;
 
-            try
+            if (Core.Classes.Message.GetByMessageAndChannelAndType(Message.Id, channel.Id, 'c') == null && !move || move)
             {
-                if (embeds.Count == 1 && Message.Author == Client.CurrentUser)
+                try
                 {
-                    x = await channel.SendMessageAsync(embed: embeds.FirstOrDefault().ToEmbedBuilder().Build());
-                }
-                else if (embeds.Count == 1 && !(Message.Author == Client.CurrentUser))
-                {
-                    if(embeds.FirstOrDefault().Image != null)
+                    if (embeds.Count == 1 && Message.Author == Client.CurrentUser)
                     {
-                        if (Message.Content != "")
-                            fields.Add(Field.CreateFieldBuilder("message", Message.Content));
-
-                        x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Image.Value.Url, footer: Message.Author.Id.ToString()));
-                    }  
-                    else if (embeds.FirstOrDefault().Thumbnail != null)
-                    {
-                        if (Message.Content != "")
-                            fields.Add(Field.CreateFieldBuilder("message", Message.Content));
-
-                        x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Thumbnail.Value.Url, footer: Message.Author.Id.ToString()));
+                        x = await channel.SendMessageAsync(embed: embeds.FirstOrDefault().ToEmbedBuilder().Build());
                     }
-
-                }
-                else
-                {
-                    if (attachments.Count == 1)
+                    else if (embeds.Count == 1 && !(Message.Author == Client.CurrentUser))
                     {
-                        if (Message.Content != "")
-                            fields.Add(Field.CreateFieldBuilder("message", Message.Content));
+                        if (embeds.FirstOrDefault().Image != null)
+                        {
+                            if (Message.Content != "")
+                                fields.Add(Field.CreateFieldBuilder("message", Message.Content));
 
-                        x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachments.First().Url, footer: Message.Author.Id.ToString()));
+                            x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Image.Value.Url, footer: Message.Author.Id.ToString()));
+                        }
+                        else if (embeds.FirstOrDefault().Thumbnail != null)
+                        {
+                            if (Message.Content != "")
+                                fields.Add(Field.CreateFieldBuilder("message", Message.Content));
+
+                            x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Thumbnail.Value.Url, footer: Message.Author.Id.ToString()));
+                        }
+
                     }
                     else
                     {
-                        if (Message.Content.EndsWith(".jpg") || Message.Content.EndsWith(".jpeg") || Message.Content.EndsWith(".png"))
+                        if (attachments.Count == 1)
                         {
-                            fields.Add(Field.CreateFieldBuilder("message", Message.Content));
-                            x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: Message.Content, footer: Message.Author.Id.ToString()));
+                            if (Message.Content != "")
+                                fields.Add(Field.CreateFieldBuilder("message", Message.Content));
+
+                            x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachments.First().Url, footer: Message.Author.Id.ToString()));
                         }
                         else
                         {
-                            fields.Add(Field.CreateFieldBuilder("message", Message.Content));
-                            x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", footer: Message.Author.Id.ToString()));
+                            if (Message.Content.EndsWith(".jpg") || Message.Content.EndsWith(".jpeg") || Message.Content.EndsWith(".png"))
+                            {
+                                fields.Add(Field.CreateFieldBuilder("message", Message.Content));
+                                x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: Message.Content, footer: Message.Author.Id.ToString()));
+                            }
+                            else
+                            {
+                                fields.Add(Field.CreateFieldBuilder("message", Message.Content));
+                                x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", footer: Message.Author.Id.ToString()));
+                            }
                         }
                     }
+
+                    if (!move)
+                        Core.Classes.Message.Add(new Message(Message.Author.Id, Message.Id, channel.Id, 'c'));
                 }
-            }
-            finally
-            {
-                await x.AddReactionAsync(new Emoji("👍"));
-                await x.AddReactionAsync(new Emoji("👎"));
+                finally
+                {
+                    await x.AddReactionAsync(new Emoji("👍"));
+                    await x.AddReactionAsync(new Emoji("👎"));
+                }
             }
 
             if (move)
