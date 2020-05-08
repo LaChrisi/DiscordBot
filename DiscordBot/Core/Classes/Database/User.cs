@@ -17,7 +17,7 @@ namespace DiscordBot.Core.Classes
 
         public static string header = "id | name | posts | upvotes | downvotes | privileg | karma";
 
-        public User(ulong id, string name, int privileg, int posts = 0, int upvotes = 0, int downvotes = 0, int karma = -1)
+        public User(ulong id, string name, int privileg, int posts = 0, int upvotes = 0, int downvotes = 0, int karma = 0)
         {
             this.id = id;
             this.name = name;
