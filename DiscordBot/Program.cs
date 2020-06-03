@@ -10,6 +10,7 @@ using Discord.WebSocket;
 using Discord.Commands;
 
 using DiscordBot.Core.Classes;
+using DiscordBot.Core.Commands.Moderation;
 
 namespace DiscordBot
 {
@@ -58,7 +59,7 @@ namespace DiscordBot
 
                             foreach (var what_item in what)
                             {
-                                if (Message.Content.Contains(what_item) && what_item != "" || what_item == "" && Context.Message.Attachments.Count > 0)
+                                if (Message.Content.Contains(what_item) && what_item != "" || what_item == "" && Context.Message.Attachments.Count == 1)
                                 {
                                     string[] how = vote.how.Split(';');
 
@@ -84,11 +85,14 @@ namespace DiscordBot
                                                 {
                                                     var message_list = Core.Classes.Message.GetAllByUserAndType(user.id, 'k');
 
-                                                    foreach (var message in message_list)
+                                                    if (message_list != null)
                                                     {
-                                                        var channel = Client.GetChannel(message.channel) as ISocketMessageChannel;
-                                                        await channel.DeleteMessageAsync(message.message);
-                                                        Core.Classes.Message.DeleteById(message.id);
+                                                        foreach (var message in message_list)
+                                                        {
+                                                            var channel = Client.GetChannel(message.channel) as ISocketMessageChannel;
+                                                            await channel.DeleteMessageAsync(message.message);
+                                                            Core.Classes.Message.DeleteById(message.id);
+                                                        }
                                                     }
                                                 }
 
@@ -104,6 +108,66 @@ namespace DiscordBot
                                             User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
                                         }
                                     }
+
+                                    break;
+                                }
+                                else if (Message.Content.Contains(what_item) && what_item != "" || what_item == "" && Context.Message.Attachments.Count > 1)
+                                {
+                                    string[] how = vote.how.Split(';');
+                                    List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+
+                                    foreach (var attachment in Context.Message.Attachments)
+                                    {
+                                        var new_message = await Context.Channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachment.ProxyUrl, footer: Message.Author.Id.ToString()));
+
+
+                                        foreach (var how_item in how)
+                                        {
+                                            await new_message.AddReactionAsync(new Emoji(how_item));
+                                        }
+
+                                        if (vote.id == 1)
+                                        {
+                                            User user = User.GetById(Message.Author.Id);
+
+                                            if (user != null)
+                                            {
+                                                user.posts++;
+
+                                                if (user.karma != -1)
+                                                {
+                                                    int karma_threshold_to_remind = Convert.ToInt32(Global.GetByName("karma_threshold_to_remind").value);
+                                                    int karma_per_post = Convert.ToInt32(Global.GetByName("karma_per_post").value);
+
+                                                    if (user.karma < karma_threshold_to_remind && user.karma + karma_per_post >= karma_threshold_to_remind)
+                                                    {
+                                                        var message_list = Core.Classes.Message.GetAllByUserAndType(user.id, 'k');
+
+                                                        if (message_list != null)
+                                                        {
+                                                            foreach (var message in message_list)
+                                                            {
+                                                                var channel = Client.GetChannel(message.channel) as ISocketMessageChannel;
+                                                                await channel.DeleteMessageAsync(message.message);
+                                                                Core.Classes.Message.DeleteById(message.id);
+                                                            }
+                                                        }
+                                                    }
+
+
+                                                    user.karma += karma_per_post;
+                                                }
+
+
+                                                User.Edit(user);
+                                            }
+                                            else
+                                            {
+                                                User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
+                                            }
+                                        }
+                                    }
+                                    await Context.Message.DeleteAsync();
 
                                     break;
                                 }
@@ -261,7 +325,19 @@ namespace DiscordBot
                                 {
                                     if (what_list[1] == "copy")
                                     {
-                                        Copy_Message(userMessage, (ulong)Convert.ToInt64(how[0]));
+                                        if (how[0] == "broadcast")
+                                        {
+                                            var channel_list = Core.Classes.Channel.GetAllByBroadcast(1);
+
+                                            foreach (var channel in channel_list)
+                                            {
+                                                Copy_Message(userMessage, channel.id);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Copy_Message(userMessage, (ulong)Convert.ToInt64(how[0]));
+                                        }
                                     }
                                     else if (what_list[1] == "move")
                                     {
@@ -616,7 +692,7 @@ namespace DiscordBot
                     }
 
                     if (!move)
-                        Core.Classes.Message.Add(new Message(Message.Author.Id, Message.Id, channel.Id, 'c'));
+                        Core.Classes.Message.Add(new Core.Classes.Message(Message.Author.Id, Message.Id, channel.Id, 'c'));
                 }
                 finally
                 {

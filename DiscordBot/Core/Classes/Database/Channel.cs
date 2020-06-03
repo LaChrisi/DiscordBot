@@ -10,19 +10,21 @@ namespace DiscordBot.Core.Classes
         public ulong id { get; set; }
         public string name { get; set; }
         public ulong server { get; set; }
+        public int broadcast { get; set; }
 
-        public static string header = "id | name | server";
+        public static string header = "id | name | server | broadcast";
 
-        public Channel(ulong id, string name, ulong server)
+        public Channel(ulong id, string name, ulong server, int broadcast = 0)
         {
             this.id = id;
             this.name = name;
             this.server = server;
+            this.broadcast = broadcast;
         }
 
         public override string ToString()
         {
-            return this.id + " | " + this.name + " | " + this.server;
+            return this.id + " | " + this.name + " | " + this.server + " | " + this.broadcast;
         }
 
         public static List<Channel> GetAll()
@@ -41,7 +43,7 @@ namespace DiscordBot.Core.Classes
 
             foreach (var item in dt.Rows)
             {
-                list.Add(new Channel((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToString(dt.Rows[i]["name"]), (ulong)Convert.ToInt64(dt.Rows[i]["server"])));
+                list.Add(new Channel((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToString(dt.Rows[i]["name"]), (ulong)Convert.ToInt64(dt.Rows[i]["server"]), Convert.ToInt16(dt.Rows[i]["broadcast"])));
                 i++;
             }
 
@@ -68,7 +70,34 @@ namespace DiscordBot.Core.Classes
 
             foreach (var item in dt.Rows)
             {
-                list.Add(new Channel((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToString(dt.Rows[i]["name"]), (ulong)Convert.ToInt64(dt.Rows[i]["server"])));
+                list.Add(new Channel((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToString(dt.Rows[i]["name"]), (ulong)Convert.ToInt64(dt.Rows[i]["server"]), Convert.ToInt16(dt.Rows[i]["broadcast"])));
+                i++;
+            }
+
+            return list;
+        }
+
+        public static List<Channel> GetAllByBroadcast(int broadcast)
+        {
+            var query = "SELECT * FROM channel WHERE broadcast = @broadcast";
+            var args = new Dictionary<string, object>
+            {
+                {"@broadcast", broadcast}
+            };
+
+            DataTable dt = Data.ExecuteRead(query, args);
+
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                return null;
+            }
+
+            List<Channel> list = new List<Channel>();
+            int i = 0;
+
+            foreach (var item in dt.Rows)
+            {
+                list.Add(new Channel((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToString(dt.Rows[i]["name"]), (ulong)Convert.ToInt64(dt.Rows[i]["server"]), Convert.ToInt16(dt.Rows[i]["broadcast"])));
                 i++;
             }
 
@@ -91,18 +120,19 @@ namespace DiscordBot.Core.Classes
                 return null;
             }
 
-            return new Channel((ulong)Convert.ToInt64(dt.Rows[0]["id"]), Convert.ToString(dt.Rows[0]["name"]), (ulong)Convert.ToInt64(dt.Rows[0]["server"]));
+            return new Channel((ulong)Convert.ToInt64(dt.Rows[0]["id"]), Convert.ToString(dt.Rows[0]["name"]), (ulong)Convert.ToInt64(dt.Rows[0]["server"]), Convert.ToInt16(dt.Rows[0]["broadcast"]));
         }
 
         public static int Add(Channel channel)
         {
-            const string query = "INSERT INTO channel(id, name, server) VALUES(@id, @name, @server)";
+            const string query = "INSERT INTO channel(id, name, server, broadcast) VALUES(@id, @name, @server, @broadcast)";
 
             var args = new Dictionary<string, object>
             {
                 {"@id", channel.id},
                 {"@name", channel.name},
-                {"@server", channel.server}
+                {"@server", channel.server},
+                {"@broadcast", channel.broadcast}
             };
 
             return Data.ExecuteWrite(query, args);
@@ -133,13 +163,14 @@ namespace DiscordBot.Core.Classes
 
         public static int Edit(Channel channel)
         {
-            const string query = "UPDATE channel SET name = @name, server = @server WHERE id = @id";
+            const string query = "UPDATE channel SET name = @name, server = @server, broadcast = @broadcast WHERE id = @id";
 
             var args = new Dictionary<string, object>
             {
                 {"@id", channel.id},
                 {"@name", channel.name},
-                {"@server", channel.server}
+                {"@server", channel.server},
+                {"@broadcast", channel.broadcast}
             };
 
             return Data.ExecuteWrite(query, args);
