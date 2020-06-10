@@ -10,7 +10,6 @@ using Discord.WebSocket;
 using Discord.Commands;
 
 using DiscordBot.Core.Classes;
-using DiscordBot.Core.Commands.Moderation;
 
 namespace DiscordBot
 {
