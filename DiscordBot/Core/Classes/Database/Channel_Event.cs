@@ -150,6 +150,7 @@ namespace DiscordBot.Core.Classes
             };
 
             return Data.ExecuteWrite(query, args);
+
         }
 
         public static int DeleteById(ulong id)

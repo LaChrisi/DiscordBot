@@ -78,7 +78,7 @@ namespace DiscordBot.Core.Classes
             }
 
             //renew leaderboard event
-
+            /*
             channel_event_list = Channel_Event.GetAllByType('r');
 
             foreach (var channel_event in channel_event_list)
@@ -117,7 +117,7 @@ namespace DiscordBot.Core.Classes
                     }
                 }
             }
-
+            */
 
             SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
         }

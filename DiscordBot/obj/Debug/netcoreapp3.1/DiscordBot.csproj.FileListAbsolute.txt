@@ -120,3 +120,5 @@ C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1
 C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Zstandard.Net.dll
 C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\obj\Debug\netcoreapp3.1\DiscordBot.csproj.CoreCompileInputs.cache
 C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\obj\Debug\netcoreapp3.1\DiscordBot.genruntimeconfig.cache
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll

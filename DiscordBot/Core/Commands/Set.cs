@@ -73,7 +73,14 @@ namespace DiscordBot.Core.Commands
 
                 var message = await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, fields, Colors.information, "top 5 memers", "ordered by karma and upvotes"));
 
-                Channel_Event.Add(new Channel_Event(1, Context.Channel.Id, 15, message.Id.ToString(), 'r'));
+                try
+                {
+                    Channel_Event.Add(new Channel_Event(1, Context.Channel.Id, 15, $"{message.Id}", 'r'));
+                }
+                catch (Exception e)
+                {
+                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
+                }
             }
         }
     }
