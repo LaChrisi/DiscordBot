@@ -326,13 +326,7 @@ namespace DiscordBot
                                     {
                                         if (how[0] == "broadcast")
                                         {
-                                            var channel_list = Core.Classes.Channel.GetAllByBroadcast(1);
-
-                                            foreach (var channel in channel_list)
-                                            {
-                                                Copy_Message(userMessage, channel.id);
-                                            }
-                                        }
+                                            Broadcast_Message(userMessage);                                        }
                                         else
                                         {
                                             Copy_Message(userMessage, (ulong)Convert.ToInt64(how[0]));
@@ -644,11 +638,11 @@ namespace DiscordBot
             {
                 try
                 {
-                    if (embeds.Count == 1 && Message.Author == Client.CurrentUser)
+                    if (embeds.Count == 1 && Message.Author.Id == Client.CurrentUser.Id)
                     {
                         x = await channel.SendMessageAsync(embed: embeds.FirstOrDefault().ToEmbedBuilder().Build());
                     }
-                    else if (embeds.Count == 1 && !(Message.Author == Client.CurrentUser))
+                    else if (embeds.Count == 1 && !(Message.Author.Id == Client.CurrentUser.Id))
                     {
                         if (embeds.FirstOrDefault().Image != null)
                         {
@@ -702,6 +696,80 @@ namespace DiscordBot
 
             if (move)
                 await Message.DeleteAsync();
+        }
+
+        public static async void Broadcast_Message(IUserMessage Message)
+        {
+            var broadcast_list = Channel.GetAllByBroadcast(1);
+
+            foreach (var broadcast in broadcast_list)
+            {
+                var channel = Client.GetChannel(broadcast.id) as ISocketMessageChannel;
+                var attachments = Message.Attachments;
+                var embeds = Message.Embeds;
+                List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+                var x = Message;
+
+                if (Core.Classes.Message.GetByMessageAndChannelAndType(Message.Id, channel.Id, 'b') == null)
+                {
+                    try
+                    {
+                        if (embeds.Count == 1 && Message.Author.Id == Client.CurrentUser.Id)
+                        {
+                            x = await channel.SendMessageAsync(embed: embeds.FirstOrDefault().ToEmbedBuilder().Build());
+                        }
+                        else if (embeds.Count == 1 && !(Message.Author.Id == Client.CurrentUser.Id))
+                        {
+                            if (embeds.FirstOrDefault().Image != null)
+                            {
+                                if (Message.Content != "")
+                                    fields.Add(Field.CreateFieldBuilder("message", Message.Content));
+
+                                x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Image.Value.Url, footer: Message.Author.Id.ToString()));
+                            }
+                            else if (embeds.FirstOrDefault().Thumbnail != null)
+                            {
+                                if (Message.Content != "")
+                                    fields.Add(Field.CreateFieldBuilder("message", Message.Content));
+
+                                x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Thumbnail.Value.Url, footer: Message.Author.Id.ToString()));
+                            }
+
+                        }
+                        else
+                        {
+                            if (attachments.Count == 1)
+                            {
+                                if (Message.Content != "")
+                                    fields.Add(Field.CreateFieldBuilder("message", Message.Content));
+
+                                x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachments.First().Url, footer: Message.Author.Id.ToString()));
+                            }
+                            else
+                            {
+                                if (Message.Content.EndsWith(".jpg") || Message.Content.EndsWith(".jpeg") || Message.Content.EndsWith(".png"))
+                                {
+                                    fields.Add(Field.CreateFieldBuilder("message", Message.Content));
+                                    x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: Message.Content, footer: Message.Author.Id.ToString()));
+                                }
+                                else
+                                {
+                                    fields.Add(Field.CreateFieldBuilder("message", Message.Content));
+                                    x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", footer: Message.Author.Id.ToString()));
+                                }
+                            }
+                        }
+
+                    }
+                    finally
+                    {
+                        await x.AddReactionAsync(new Emoji("👍"));
+                        await x.AddReactionAsync(new Emoji("👎"));
+                    }
+                }
+            }
+
+            Core.Classes.Message.Add(new Core.Classes.Message(Message.Author.Id, Message.Id, Message.Channel.Id, 'b'));
         }
     }
 }
