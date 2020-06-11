@@ -49,38 +49,10 @@ namespace DiscordBot.Core.Commands
                     }
                 }
 
-                List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+                var message = await Context.Channel.SendMessageAsync(embed: Classes.Embed.GetLeaderboard());
 
-                var user_list = User.GetTop5Karma();
-                int i = 1;
-
-                foreach (var user in user_list)
-                {
-                    string title = "";
-
-                    if (i == 1)
-                        title += "🥇" + " - ";
-                    else if (i == 2)
-                        title += "🥈" + " - ";
-                    else if (i == 3)
-                        title += "🥉" + " - ";
-
-                    title += user.name;
-
-                    fields.Add(Field.CreateFieldBuilder(title, $"👍 {user.upvotes}\n👎 {user.downvotes}\n🗒️ {user.posts}\n📊 {user.karma}"));
-                    i++;
-                }
-
-                var message = await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, fields, Colors.information, "top 5 memers", "ordered by karma and upvotes"));
-
-                try
-                {
-                    Channel_Event.Add(new Channel_Event(1, Context.Channel.Id, 15, $"{message.Id}", 'r'));
-                }
-                catch (Exception e)
-                {
-                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", e.Message), Colors.error));
-                }
+                Channel_Event.Add(new Channel_Event(1, Context.Channel.Id, 15, $"{message.Id}", 'r'));
+                
             }
         }
     }

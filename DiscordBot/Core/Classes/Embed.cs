@@ -68,6 +68,33 @@ namespace DiscordBot.Core.Classes
 
             return embed.Build();
         }
+
+        public static Discord.Embed GetLeaderboard()
+        {
+            List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+
+            var user_list = User.GetTop5Karma();
+            int i = 1;
+
+            foreach (var user in user_list)
+            {
+                string title = "";
+
+                if (i == 1)
+                    title += "🥇" + " - ";
+                else if (i == 2)
+                    title += "🥈" + " - ";
+                else if (i == 3)
+                    title += "🥉" + " - ";
+
+                title += user.name;
+
+                fields.Add(Field.CreateFieldBuilder(title, $"👍 {user.upvotes}\n👎 {user.downvotes}\n🗒️ {user.posts}\n📊 {user.karma}"));
+                i++;
+            }
+
+            return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "top 5 memers", "ordered by karma and upvotes");
+        }
     }
 
     class Colors

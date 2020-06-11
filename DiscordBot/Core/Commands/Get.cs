@@ -104,29 +104,7 @@ namespace DiscordBot.Core.Commands
             [Command("leaderboard"), Alias("lb"), Summary("get top 5 memers")]
             public async Task LeaderboardModule()
             {
-                List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
-
-                var user_list = User.GetTop5Karma();
-                int i = 1;
-
-                foreach (var user in user_list)
-                {
-                    string title = "";
-
-                    if (i == 1)
-                        title += "🥇" + " - ";
-                    else if (i == 2)
-                        title += "🥈" + " - ";
-                    else if (i == 3)
-                        title += "🥉" + " - ";
-
-                    title += user.name;
-
-                    fields.Add(Field.CreateFieldBuilder(title, $"👍 {user.upvotes}\n👎 {user.downvotes}\n🗒️ {user.posts}\n📊 {user.karma}"));
-                    i++;
-                }
-
-                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, fields, Colors.information, "top 5 memers", "ordered by karma and upvotes"));
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.GetLeaderboard());
             }
 
 

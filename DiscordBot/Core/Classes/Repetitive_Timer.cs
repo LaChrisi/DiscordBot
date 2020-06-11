@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Timers;
 using Discord;
 using Discord.WebSocket;
-using MySql.Data.MySqlClient.Memcached;
 
 namespace DiscordBot.Core.Classes
 {
@@ -78,7 +76,7 @@ namespace DiscordBot.Core.Classes
             }
 
             //renew leaderboard event
-            /*
+            
             channel_event_list = Channel_Event.GetAllByType('r');
 
             foreach (var channel_event in channel_event_list)
@@ -91,33 +89,18 @@ namespace DiscordBot.Core.Classes
                     if (e.how == "leaderboard")
                     {
                         var message = await channel.GetMessageAsync((ulong)Convert.ToInt64(channel_event.when)) as IUserMessage;
-                        List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
 
-                        var user_list = User.GetTop5Karma();
-                        int i = 1;
-
-                        foreach (var user in user_list)
+                        try
                         {
-                            string title = "";
-
-                            if (i == 1)
-                                title += "🥇" + " - ";
-                            else if (i == 2)
-                                title += "🥈" + " - ";
-                            else if (i == 3)
-                                title += "🥉" + " - ";
-
-                            title += user.name;
-
-                            fields.Add(Field.CreateFieldBuilder(title, $"👍 {user.upvotes}\n👎 {user.downvotes}\n🗒️ {user.posts}\n📊 {user.karma}"));
-                            i++;
+                            await message.ModifyAsync(x => { x.Embed = Embed.GetLeaderboard(); });
                         }
-
-                        await message.ModifyAsync(x => { x.Embed = Embed.New(x.Embed.Value.Author.Value, fields, Colors.information, "top 5 memers", "ordered by karma and upvotes"); });
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
                     }
                 }
             }
-            */
 
             SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
         }
