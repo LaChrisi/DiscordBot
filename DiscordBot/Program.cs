@@ -221,9 +221,16 @@ namespace DiscordBot
                                 {
                                     if (e.what == "copy")
                                     {
-                                        var channel = Client.GetChannel((ulong)Convert.ToInt64(e.how)) as ISocketMessageChannel;
+                                        if (e.how == "broadcast")
+                                        {
+                                            Broadcast_Message(Message);
+                                        }
+                                        else
+                                        {
+                                            var channel = Client.GetChannel((ulong)Convert.ToInt64(e.how)) as ISocketMessageChannel;
 
-                                        Copy_Message(Message, channel.Id);
+                                            Copy_Message(Message, channel.Id);
+                                        }
                                     }
 
                                     break;
@@ -326,7 +333,8 @@ namespace DiscordBot
                                     {
                                         if (how[0] == "broadcast")
                                         {
-                                            Broadcast_Message(userMessage);                                        }
+                                            Broadcast_Message(userMessage);                                        
+                                        }
                                         else
                                         {
                                             Copy_Message(userMessage, (ulong)Convert.ToInt64(how[0]));
