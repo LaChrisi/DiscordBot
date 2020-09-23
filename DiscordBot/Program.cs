@@ -44,6 +44,7 @@ namespace DiscordBot
             }
 
             //vote handler
+            try
             {
                 var vote_channel_list = Vote_Channel.GetAllByChannelId(Message.Channel.Id);
 
@@ -95,9 +96,11 @@ namespace DiscordBot
                                                     }
                                                 }
 
+                                                
                                                 user.karma += karma_per_post;
                                             }
                                                
+
                                             User.Edit(user);
                                         }
                                         else
@@ -113,64 +116,65 @@ namespace DiscordBot
                                     string[] how = vote.how.Split(';');
                                     List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
 
-                                    foreach (var attachment in Context.Message.Attachments)
+                                    try
                                     {
-                                        try
+                                        foreach (var attachment in Context.Message.Attachments)
                                         {
                                             var new_message = await Context.Channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachment.ProxyUrl, footer: Message.Author.Id.ToString()));
+
 
                                             foreach (var how_item in how)
                                             {
                                                 await new_message.AddReactionAsync(new Emoji(how_item));
                                             }
-                                        }
-                                        catch (Exception)
-                                        {
 
-                                        }
-
-                                        if (vote.id == 1)
-                                        {
-                                            User user = User.GetById(Message.Author.Id);
-
-                                            if (user != null)
+                                            if (vote.id == 1)
                                             {
-                                                user.posts++;
+                                                User user = User.GetById(Message.Author.Id);
 
-                                                if (user.karma != -1)
+                                                if (user != null)
                                                 {
-                                                    int karma_threshold_to_remind = Convert.ToInt32(Global.GetByName("karma_threshold_to_remind").value);
-                                                    int karma_per_post = Convert.ToInt32(Global.GetByName("karma_per_post").value);
+                                                    user.posts++;
 
-                                                    if (user.karma < karma_threshold_to_remind && user.karma + karma_per_post >= karma_threshold_to_remind)
+                                                    if (user.karma != -1)
                                                     {
-                                                        var message_list = Core.Classes.Message.GetAllByUserAndType(user.id, 'k');
+                                                        int karma_threshold_to_remind = Convert.ToInt32(Global.GetByName("karma_threshold_to_remind").value);
+                                                        int karma_per_post = Convert.ToInt32(Global.GetByName("karma_per_post").value);
 
-                                                        if (message_list != null)
+                                                        if (user.karma < karma_threshold_to_remind && user.karma + karma_per_post >= karma_threshold_to_remind)
                                                         {
-                                                            foreach (var message in message_list)
+                                                            var message_list = Core.Classes.Message.GetAllByUserAndType(user.id, 'k');
+
+                                                            if (message_list != null)
                                                             {
-                                                                var channel = Client.GetChannel(message.channel) as ISocketMessageChannel;
-                                                                await channel.DeleteMessageAsync(message.message);
-                                                                Core.Classes.Message.DeleteById(message.id);
+                                                                foreach (var message in message_list)
+                                                                {
+                                                                    var channel = Client.GetChannel(message.channel) as ISocketMessageChannel;
+                                                                    await channel.DeleteMessageAsync(message.message);
+                                                                    Core.Classes.Message.DeleteById(message.id);
+                                                                }
                                                             }
                                                         }
+
+
+                                                        user.karma += karma_per_post;
                                                     }
 
-                                                    user.karma += karma_per_post;
-                                                }
 
-                                                User.Edit(user);
-                                            }
-                                            else
-                                            {
-                                                User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
+                                                    User.Edit(user);
+                                                }
+                                                else
+                                                {
+                                                    User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
+                                                }
                                             }
                                         }
+                                        await Context.Message.DeleteAsync();
                                     }
+                                    catch (Exception)
+                                    {
 
-                                    await Context.Message.DeleteAsync();
-
+                                    }
                                     break;
                                 }
                             }
@@ -178,8 +182,13 @@ namespace DiscordBot
                     }
                 }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine("ERROR] " + e.Message);
+            }
 
             //channel_event handler
+            try
             {
                 var channel_event_list = Channel_Event.GetAllByChannelId(Context.Channel.Id);
 
@@ -274,6 +283,10 @@ namespace DiscordBot
 
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("ERROR] " + e.Message);
             }
             
         }
