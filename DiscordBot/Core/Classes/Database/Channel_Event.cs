@@ -56,7 +56,7 @@ namespace DiscordBot.Core.Classes
 
             foreach (var item in dt.Rows)
             {
-                list.Add(new Channel_Event((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToInt16(dt.Rows[i]["aktiv"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), (ulong)Convert.ToInt64(dt.Rows[i]["event"]), Convert.ToString(dt.Rows[i]["when"]), Convert.ToChar(dt.Rows[i]["type"])));
+                list.Add(new Channel_Event((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToInt32(dt.Rows[i]["aktiv"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), (ulong)Convert.ToInt64(dt.Rows[i]["event"]), Convert.ToString(dt.Rows[i]["when"]), Convert.ToChar(dt.Rows[i]["type"])));
                 i++;
             }
 
@@ -83,7 +83,7 @@ namespace DiscordBot.Core.Classes
 
             foreach (var item in dt.Rows)
             {
-                list.Add(new Channel_Event((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToInt16(dt.Rows[i]["aktiv"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), (ulong)Convert.ToInt64(dt.Rows[i]["event"]), Convert.ToString(dt.Rows[i]["when"]), Convert.ToChar(dt.Rows[i]["type"])));
+                list.Add(new Channel_Event((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToInt32(dt.Rows[i]["aktiv"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), (ulong)Convert.ToInt64(dt.Rows[i]["event"]), Convert.ToString(dt.Rows[i]["when"]), Convert.ToChar(dt.Rows[i]["type"])));
                 i++;
             }
 
@@ -110,7 +110,7 @@ namespace DiscordBot.Core.Classes
 
             foreach (var item in dt.Rows)
             {
-                list.Add(new Channel_Event((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToInt16(dt.Rows[i]["aktiv"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), (ulong)Convert.ToInt64(dt.Rows[i]["event"]), Convert.ToString(dt.Rows[i]["when"]), Convert.ToChar(dt.Rows[i]["type"])));
+                list.Add(new Channel_Event((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToInt32(dt.Rows[i]["aktiv"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), (ulong)Convert.ToInt64(dt.Rows[i]["event"]), Convert.ToString(dt.Rows[i]["when"]), Convert.ToChar(dt.Rows[i]["type"])));
                 i++;
             }
 
@@ -133,7 +133,7 @@ namespace DiscordBot.Core.Classes
                 return null;
             }
 
-            return new Channel_Event((ulong)Convert.ToInt64(dt.Rows[0]["id"]), Convert.ToInt16(dt.Rows[0]["aktiv"]), (ulong)Convert.ToInt64(dt.Rows[0]["channel"]), (ulong)Convert.ToInt64(dt.Rows[0]["event"]), Convert.ToString(dt.Rows[0]["when"]), Convert.ToChar(dt.Rows[0]["type"]));
+            return new Channel_Event((ulong)Convert.ToInt64(dt.Rows[0]["id"]), Convert.ToInt32(dt.Rows[0]["aktiv"]), (ulong)Convert.ToInt64(dt.Rows[0]["channel"]), (ulong)Convert.ToInt64(dt.Rows[0]["event"]), Convert.ToString(dt.Rows[0]["when"]), Convert.ToChar(dt.Rows[0]["type"]));
         }
 
         public static int Add(Channel_Event channel_event)
@@ -150,7 +150,6 @@ namespace DiscordBot.Core.Classes
             };
 
             return Data.ExecuteWrite(query, args);
-
         }
 
         public static int DeleteById(ulong id)
@@ -214,7 +213,7 @@ namespace DiscordBot.Core.Classes
 
             foreach (var item in dt.Rows)
             {
-                list.Add(new Channel_Event((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToInt16(dt.Rows[i]["aktiv"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), (ulong)Convert.ToInt64(dt.Rows[i]["event"]), Convert.ToString(dt.Rows[i]["when"]), Convert.ToChar(dt.Rows[i]["type"])));
+                list.Add(new Channel_Event((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToInt32(dt.Rows[i]["aktiv"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), (ulong)Convert.ToInt64(dt.Rows[i]["event"]), Convert.ToString(dt.Rows[i]["when"]), Convert.ToChar(dt.Rows[i]["type"])));
                 i++;
             }
 
@@ -241,7 +240,7 @@ namespace DiscordBot.Core.Classes
 
             foreach (var item in dt.Rows)
             {
-                list.Add(new Channel_Event((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToInt16(dt.Rows[i]["aktiv"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), (ulong)Convert.ToInt64(dt.Rows[i]["event"]), Convert.ToString(dt.Rows[i]["when"]), Convert.ToChar(dt.Rows[i]["type"])));
+                list.Add(new Channel_Event((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToInt32(dt.Rows[i]["aktiv"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), (ulong)Convert.ToInt64(dt.Rows[i]["event"]), Convert.ToString(dt.Rows[i]["when"]), Convert.ToChar(dt.Rows[i]["type"])));
                 i++;
             }
 

@@ -13,117 +13,145 @@ namespace DiscordBot.Core.Classes
 
         public static void SetUpDailyTimer(TimeSpan alertTime)
         {
-            DateTime current = DateTime.Now;
-            TimeSpan timeToGo = alertTime - current.TimeOfDay;
-
-            if (timeToGo < TimeSpan.Zero)
+            try
             {
-                timeToGo = new TimeSpan(24, 0, 0) + timeToGo;
+                DateTime current = DateTime.Now;
+                TimeSpan timeToGo = alertTime - current.TimeOfDay;
+
+                if (timeToGo < TimeSpan.Zero)
+                {
+                    timeToGo = new TimeSpan(24, 0, 0) + timeToGo;
+                }
+
+                daily_timer = new Timer
+                {
+                    AutoReset = false,
+                    Interval = timeToGo.TotalMilliseconds
+                };
+                daily_timer.Elapsed += Daily_timer_Elapsed;
+
+                daily_timer.Start();
             }
-
-            daily_timer = new Timer
+            catch
             {
-                AutoReset = false,
-                Interval = timeToGo.TotalMilliseconds
-            };
-            daily_timer.Elapsed += Daily_timer_Elapsed;
 
-            daily_timer.Start();
+            }
         }
 
         public static void SetUpHourlyTimer(TimeSpan alertTime)
         {
-            DateTime current = DateTime.Now;
-            TimeSpan timeToGo = alertTime - current.TimeOfDay;
-
-            hourly_timer = new Timer
+            try
             {
-                AutoReset = false,
-                Interval = timeToGo.TotalMilliseconds
-            };
-            hourly_timer.Elapsed += Hourly_timer_Elapsed;
+                DateTime current = DateTime.Now;
+                TimeSpan timeToGo = alertTime - current.TimeOfDay;
 
-            hourly_timer.Start();
+                hourly_timer = new Timer
+                {
+                    AutoReset = false,
+                    Interval = timeToGo.TotalMilliseconds
+                };
+                hourly_timer.Elapsed += Hourly_timer_Elapsed;
+
+                hourly_timer.Start();
+            }
+            catch
+            {
+
+            }
         }
 
         //hourly_timer event
         private static async void Hourly_timer_Elapsed(object sender, ElapsedEventArgs eArgs)
         {
-            Console.WriteLine(DateTime.Now.TimeOfDay + "hourly_timer event");
-
-            //karma reminder event
-
-            var channel_event_list = Channel_Event.GetAllByType('k');
-
-            foreach (var channel_event in channel_event_list)
+            try
             {
-                var user = User.GetById((ulong)Convert.ToInt64(channel_event.when));
-                var e = Event.GetById(channel_event.Event);
+                Console.WriteLine(DateTime.Now.TimeOfDay + "hourly_timer event");
 
-                if (e.what == "say")
+                //karma reminder event
+
+                var channel_event_list = Channel_Event.GetAllByType('k');
+
+                foreach (var channel_event in channel_event_list)
                 {
-                    if (e.how == "remind")
+                    var user = User.GetById((ulong)Convert.ToInt64(channel_event.when));
+                    var e = Event.GetById(channel_event.Event);
+
+                    if (e.what == "say")
                     {
-                        if (user.karma < Convert.ToInt32(Global.GetByName("karma_threshold_to_remind").value))
+                        if (e.how == "remind")
                         {
-                            var message = Event.GetRandomByWhat("reminder");
-                            var channel = Program.Client.GetChannel(channel_event.channel) as ISocketMessageChannel;
-                            var reminder = await channel.SendMessageAsync(embed: Embed.New(Program.Client.GetUser(user.id), Field.CreateFieldBuilder("warning", $"Your karma is {user.karma}.\n{message.how}"), Colors.warning, "friendly reminder"));
-                            Message.Add(new Message(user.id, reminder.Id, channel.Id, 'k'));
+                            if (user.karma < Convert.ToInt32(Global.GetByName("karma_threshold_to_remind").value))
+                            {
+                                var message = Event.GetRandomByWhat("reminder");
+                                var channel = Program.Client.GetChannel(channel_event.channel) as ISocketMessageChannel;
+                                var reminder = await channel.SendMessageAsync(embed: Embed.New(Program.Client.GetUser(user.id), Field.CreateFieldBuilder("warning", $"Your karma is {user.karma}.\n{message.how}"), Colors.warning, "friendly reminder"));
+                                Message.Add(new Message(user.id, reminder.Id, channel.Id, 'k'));
+                            }
                         }
                     }
                 }
-            }
 
-            //renew leaderboard event
-            
-            channel_event_list = Channel_Event.GetAllByType('r');
+                //renew leaderboard event
 
-            foreach (var channel_event in channel_event_list)
-            {
-                var channel = Program.Client.GetChannel(channel_event.channel) as ISocketMessageChannel;
-                var e = Event.GetById(channel_event.Event);
+                channel_event_list = Channel_Event.GetAllByType('r');
 
-                if (e.what == "renew")
+                foreach (var channel_event in channel_event_list)
                 {
-                    if (e.how == "leaderboard")
-                    {
-                        var message = await channel.GetMessageAsync((ulong)Convert.ToInt64(channel_event.when)) as IUserMessage;
+                    var channel = Program.Client.GetChannel(channel_event.channel) as ISocketMessageChannel;
+                    var e = Event.GetById(channel_event.Event);
 
-                        try
+                    if (e.what == "renew")
+                    {
+                        if (e.how == "leaderboard")
                         {
-                            await message.ModifyAsync(x => { x.Embed = Embed.GetLeaderboard(); });
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex.Message);
+                            var message = await channel.GetMessageAsync((ulong)Convert.ToInt64(channel_event.when)) as IUserMessage;
+
+                            try
+                            {
+                                await message.ModifyAsync(x => { x.Embed = Embed.GetLeaderboard(); });
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
                         }
                     }
                 }
-            }
 
-            SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
+                SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
+            }
+            catch
+            {
+
+            }
         }
 
         //daily_timer event
         private static void Daily_timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Console.WriteLine(DateTime.Now.TimeOfDay + "daily_timer event");
-
-            var user_list = User.GetAllWithKarma();
-
-            foreach (var user in user_list)
+            try
             {
-                user.karma -= Convert.ToInt32(Global.GetByName("karma_daily_loss").value);
-                int karma_minimum = Convert.ToInt32(Global.GetByName("karma_minimum").value);
+                Console.WriteLine(DateTime.Now.TimeOfDay + "daily_timer event");
 
-                if (user.karma < karma_minimum)
-                    user.karma = karma_minimum;
+                var user_list = User.GetAllWithKarma();
 
-                User.Edit(user);
+                foreach (var user in user_list)
+                {
+                    user.karma -= Convert.ToInt32(Global.GetByName("karma_daily_loss").value);
+                    int karma_minimum = Convert.ToInt32(Global.GetByName("karma_minimum").value);
+
+                    if (user.karma < karma_minimum)
+                        user.karma = karma_minimum;
+
+                    User.Edit(user);
+                }
+
+                SetUpDailyTimer(new TimeSpan(Convert.ToInt32(Global.GetByName("daily_timer_hour").value), 0, 0));
             }
+            catch
+            {
 
-            SetUpDailyTimer(new TimeSpan(Convert.ToInt32(Global.GetByName("daily_timer_hour").value), 0, 0));
+            }
         }
     }
 }

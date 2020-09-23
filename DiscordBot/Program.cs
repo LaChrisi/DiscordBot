@@ -327,6 +327,14 @@ namespace DiscordBot
                                     {
                                         await userMessage.PinAsync();
                                     }
+                                    else if (how[0] == "present")
+                                    {
+                                        var x = await Channel.SendMessageAsync(embed: Core.Classes.Embed.GetLeaderboard());
+
+                                        Channel_Event.Add(new Channel_Event(1, Channel.Id, 24, $"{Message.Id };{x.Id}", 'u')); //??????????????????????
+                                    }
+
+
                                 }
                                 else if (how.Length == 2)
                                 {
@@ -362,6 +370,34 @@ namespace DiscordBot
                                     }
                                 }
                             }
+
+                            /*
+
+                            else if (what_list[0] == "update")
+                            {
+                                if (what_list[1] == "✅")
+                                {
+
+
+
+
+                                    var message = await Channel.GetMessageAsync(Core.Classes.Message.GetLastByChannelAndType(Channel.Id, 'u').id) as IUserMessage;
+
+                                    try
+                                    {
+                                        //await message.ModifyAsync(x => { x.Embed = Embed.GetLeaderboard(); });
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine(ex.Message);
+                                    }
+
+
+                                }
+                            }
+
+                            */
+
                         }
                     }
                 }
