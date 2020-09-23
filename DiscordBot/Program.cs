@@ -95,11 +95,9 @@ namespace DiscordBot
                                                     }
                                                 }
 
-                                                
                                                 user.karma += karma_per_post;
                                             }
                                                
-
                                             User.Edit(user);
                                         }
                                         else
@@ -117,12 +115,18 @@ namespace DiscordBot
 
                                     foreach (var attachment in Context.Message.Attachments)
                                     {
-                                        var new_message = await Context.Channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachment.ProxyUrl, footer: Message.Author.Id.ToString()));
-
-
-                                        foreach (var how_item in how)
+                                        try
                                         {
-                                            await new_message.AddReactionAsync(new Emoji(how_item));
+                                            var new_message = await Context.Channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachment.ProxyUrl, footer: Message.Author.Id.ToString()));
+
+                                            foreach (var how_item in how)
+                                            {
+                                                await new_message.AddReactionAsync(new Emoji(how_item));
+                                            }
+                                        }
+                                        catch (Exception)
+                                        {
+
                                         }
 
                                         if (vote.id == 1)
@@ -153,10 +157,8 @@ namespace DiscordBot
                                                         }
                                                     }
 
-
                                                     user.karma += karma_per_post;
                                                 }
-
 
                                                 User.Edit(user);
                                             }
@@ -166,6 +168,7 @@ namespace DiscordBot
                                             }
                                         }
                                     }
+
                                     await Context.Message.DeleteAsync();
 
                                     break;
