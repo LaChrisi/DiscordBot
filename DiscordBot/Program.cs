@@ -469,6 +469,57 @@ namespace DiscordBot
                 return;
 
             var userMessage = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
+            var Reactions = userMessage.Reactions;
+
+            var channel_event_list = Channel_Event.GetAllByChannelIdAndType(Channel.Id, 'e');
+
+            if (channel_event_list != null)
+            {
+                foreach (var channel_event in channel_event_list)
+                {
+                    if (channel_event.aktiv != 1)
+                        continue;
+
+                    var e = Event.GetById(channel_event.Event);
+
+
+                    foreach (var reaction in Reactions)
+                    {
+                        string[] what_list = e.what.Split(";");
+
+                        if (what_list.Length == 1)
+                        {
+                            if (Reaction.Emote.Name == e.what)
+                            {
+                                string[] how = e.how.Split(";");
+
+                                if (how.Length == 1)
+                                {
+                                    if (how[0] == "present")
+                                    {
+                                        var message = Core.Classes.Message.GetByMessageAndChannelAndType(userMessage.Id, Channel.Id, 'u');
+
+                                        if (message != null)
+                                        {
+                                            message = Core.Classes.Message.GetById((ulong)Convert.ToInt64(message.reference));
+                                            var embed_message = await Channel.GetMessageAsync(message.message) as IUserMessage;
+
+                                            try
+                                            {
+                                                await embed_message.ModifyAsync(x => { x.Embed = Core.Classes.Embed.UpdatePresent(embed_message, Reaction, true); });
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Console.WriteLine(ex.Message);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             if (Reaction.Emote.Name == "👍")
             {

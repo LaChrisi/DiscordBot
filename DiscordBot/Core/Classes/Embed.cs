@@ -108,15 +108,38 @@ namespace DiscordBot.Core.Classes
 
         public static Discord.Embed UpdatePresent(IUserMessage message, SocketReaction reaction, bool remove = false)
         {
-            List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
-
-            foreach (var embed in message.Embeds)
+            if (remove)
             {
-                fields.Add(embed.Fields.);//????????????????????????????????????????
+                List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
 
-                fields.Add(Field.CreateFieldBuilder(reaction.User.Value.Username, $"{DateTime.Now.ToString("dd.M. - HH:mm:ss")}"));
+                foreach (var embed in message.Embeds)
+                {
+                    foreach (var field in embed.Fields)
+                    {
+                        if (field.Name != reaction.User.Value.Username)
+                        {
+                            fields.Add(Field.CreateFieldBuilder(field));
+                        }
+                    }
+                }
+
+                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members");
             }
-            return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members");
+            else
+            {
+                List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+
+                foreach (var embed in message.Embeds)
+                {
+                    foreach (var field in embed.Fields)
+                    {
+                        fields.Add(Field.CreateFieldBuilder(field));
+                    }
+
+                    fields.Add(Field.CreateFieldBuilder(reaction.User.Value.Username, $"{DateTime.Now.ToString("dd.M. - HH:mm:ss")}"));
+                }
+                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members");
+            }
         }
     }
 
@@ -130,6 +153,17 @@ namespace DiscordBot.Core.Classes
 
     class Field
     {
+        public static EmbedFieldBuilder CreateFieldBuilder(EmbedField embedField)
+        {
+            EmbedFieldBuilder builder = new EmbedFieldBuilder();
+            
+            builder.Name = embedField.Name;
+
+            builder.Value = embedField.Value;
+
+            return builder;
+        }
+
         public static EmbedFieldBuilder CreateFieldBuilder(string header, string[] content)
         {
             EmbedFieldBuilder builder = new EmbedFieldBuilder();
