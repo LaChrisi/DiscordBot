@@ -73,7 +73,7 @@ namespace DiscordBot.Core.Classes
         {
             List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
 
-            var user_list = User.GetTop5Karma();
+            var user_list = User.GetTop5();
             int i = 1;
 
             foreach (var user in user_list)
@@ -89,11 +89,34 @@ namespace DiscordBot.Core.Classes
 
                 title += user.name;
 
-                fields.Add(Field.CreateFieldBuilder(title, $"👍 {user.upvotes}\n👎 {user.downvotes}\n🗒️ {user.posts}\n📊 {user.karma}"));
+                //fields.Add(Field.CreateFieldBuilder(title, $"👍 {user.upvotes}\n👎 {user.downvotes}\n🗒️ {user.posts}\n📊 {user.karma}"));
+                fields.Add(Field.CreateFieldBuilder(title, $"👍 {user.upvotes}\n👎 {user.downvotes}\n🗒️ {user.posts}"));
                 i++;
             }
 
-            return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "top 5 memers", "ordered by karma and upvotes");
+            return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "top 5 memers", "ordered by upvotes");
+        }
+
+        public static Discord.Embed CreatePresent(SocketReaction reaction)
+        {
+            List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+
+            fields.Add(Field.CreateFieldBuilder(reaction.User.Value.Username, $"{DateTime.Now.ToString("dd.M. - HH:mm:ss")}"));
+
+            return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members");
+        }
+
+        public static Discord.Embed UpdatePresent(IUserMessage message, SocketReaction reaction, bool remove = false)
+        {
+            List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+
+            foreach (var embed in message.Embeds)
+            {
+                fields.Add(embed.Fields.);//????????????????????????????????????????
+
+                fields.Add(Field.CreateFieldBuilder(reaction.User.Value.Username, $"{DateTime.Now.ToString("dd.M. - HH:mm:ss")}"));
+            }
+            return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members");
         }
     }
 

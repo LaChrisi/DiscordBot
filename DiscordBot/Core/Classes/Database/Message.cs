@@ -12,29 +12,32 @@ namespace DiscordBot.Core.Classes
         public ulong message { get; set; }
         public ulong channel { get; set; }
         public char type { get; set; }
+        public ulong reference { get; set; }
 
-        public static string header = "id | user | message | channel | type";
+        public static string header = "id | user | message | channel | type | reference";
 
         public override string ToString()
         {
-            return this.id + " | " + this.user + " | " + this.message + " | " + this.channel + " | " + this.type;
+            return this.id + " | " + this.user + " | " + this.message + " | " + this.channel + " | " + this.type + " | " + this.reference;
         }
 
-        public Message(ulong id, ulong user, ulong message, ulong channel, char type)
+        public Message(ulong id, ulong user, ulong message, ulong channel, char type, ulong reference = 0)
         {
             this.id = id;
             this.user = user;
             this.message = message;
             this.channel = channel;
             this.type = type;
+            this.reference = reference;
         }
 
-        public Message(ulong user, ulong message, ulong channel, char type)
+        public Message(ulong user, ulong message, ulong channel, char type, ulong reference = 0)
         {
             this.user = user;
             this.message = message;
             this.channel = channel;
             this.type = type;
+            this.reference = reference;
         }
 
         public static List<Message> GetAll()
@@ -53,7 +56,7 @@ namespace DiscordBot.Core.Classes
 
             foreach (var item in dt.Rows)
             {
-                list.Add(new Message((ulong)Convert.ToInt64(dt.Rows[i]["id"]), (ulong)Convert.ToInt64(dt.Rows[i]["user"]), (ulong)Convert.ToInt64(dt.Rows[i]["message"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), Convert.ToChar(dt.Rows[i]["type"])));
+                list.Add(new Message((ulong)Convert.ToInt64(dt.Rows[i]["id"]), (ulong)Convert.ToInt64(dt.Rows[i]["user"]), (ulong)Convert.ToInt64(dt.Rows[i]["message"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), Convert.ToChar(dt.Rows[i]["type"]), (ulong)Convert.ToInt64(dt.Rows[i]["reference"])));
                 i++;
             }
 
@@ -80,7 +83,7 @@ namespace DiscordBot.Core.Classes
 
             foreach (var item in dt.Rows)
             {
-                list.Add(new Message((ulong)Convert.ToInt64(dt.Rows[i]["id"]), (ulong)Convert.ToInt64(dt.Rows[i]["user"]), (ulong)Convert.ToInt64(dt.Rows[i]["message"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), Convert.ToChar(dt.Rows[i]["type"])));
+                list.Add(new Message((ulong)Convert.ToInt64(dt.Rows[i]["id"]), (ulong)Convert.ToInt64(dt.Rows[i]["user"]), (ulong)Convert.ToInt64(dt.Rows[i]["message"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), Convert.ToChar(dt.Rows[i]["type"]), (ulong)Convert.ToInt64(dt.Rows[i]["reference"])));
                 i++;
             }
 
@@ -103,7 +106,7 @@ namespace DiscordBot.Core.Classes
                 return null;
             }
 
-            return new Message((ulong)Convert.ToInt64(dt.Rows[0]["id"]), (ulong)Convert.ToInt64(dt.Rows[0]["user"]), (ulong)Convert.ToInt64(dt.Rows[0]["message"]), (ulong)Convert.ToInt64(dt.Rows[0]["channel"]), Convert.ToChar(dt.Rows[0]["type"]));
+            return new Message((ulong)Convert.ToInt64(dt.Rows[0]["id"]), (ulong)Convert.ToInt64(dt.Rows[0]["user"]), (ulong)Convert.ToInt64(dt.Rows[0]["message"]), (ulong)Convert.ToInt64(dt.Rows[0]["channel"]), Convert.ToChar(dt.Rows[0]["type"]), (ulong)Convert.ToInt64(dt.Rows[0]["reference"]));
         }
 
         public static Message GetByMessageAndChannelAndType(ulong message, ulong channel, char type)
@@ -124,7 +127,7 @@ namespace DiscordBot.Core.Classes
                 return null;
             }
 
-            return new Message((ulong)Convert.ToInt64(dt.Rows[0]["id"]), (ulong)Convert.ToInt64(dt.Rows[0]["user"]), (ulong)Convert.ToInt64(dt.Rows[0]["message"]), (ulong)Convert.ToInt64(dt.Rows[0]["channel"]), Convert.ToChar(dt.Rows[0]["type"]));
+            return new Message((ulong)Convert.ToInt64(dt.Rows[0]["id"]), (ulong)Convert.ToInt64(dt.Rows[0]["user"]), (ulong)Convert.ToInt64(dt.Rows[0]["message"]), (ulong)Convert.ToInt64(dt.Rows[0]["channel"]), Convert.ToChar(dt.Rows[0]["type"]), (ulong)Convert.ToInt64(dt.Rows[0]["reference"]));
         }
 
         public static Message GetLastByChannelAndType(ulong channel, char type)
@@ -144,19 +147,20 @@ namespace DiscordBot.Core.Classes
                 return null;
             }
 
-            return new Message((ulong)Convert.ToInt64(dt.Rows[0]["id"]), (ulong)Convert.ToInt64(dt.Rows[0]["user"]), (ulong)Convert.ToInt64(dt.Rows[0]["message"]), (ulong)Convert.ToInt64(dt.Rows[0]["channel"]), Convert.ToChar(dt.Rows[0]["type"]));
+            return new Message((ulong)Convert.ToInt64(dt.Rows[0]["id"]), (ulong)Convert.ToInt64(dt.Rows[0]["user"]), (ulong)Convert.ToInt64(dt.Rows[0]["message"]), (ulong)Convert.ToInt64(dt.Rows[0]["channel"]), Convert.ToChar(dt.Rows[0]["type"]), (ulong)Convert.ToInt64(dt.Rows[0]["reference"]));
         }
 
         public static int Add(Message message)
         {
-            const string query = "INSERT INTO message(user, message, channel, type) VALUES(@user, @message, @channel, @type)";
+            const string query = "INSERT INTO message(user, message, channel, type, reference) VALUES(@user, @message, @channel, @type, @reference)";
 
             var args = new Dictionary<string, object>
             {
                 {"@user", message.user},
                 {"@message", message.message},
                 {"@channel", message.channel},
-                {"@type", message.type}
+                {"@type", message.type},
+                {"@reference", message.reference}
             };
 
             return Data.ExecuteWrite(query, args);
@@ -188,7 +192,7 @@ namespace DiscordBot.Core.Classes
 
         public static int Edit(Message message)
         {
-            const string query = "UPDATE message SET user = @user, message = @message, channel = @channel, type = @type WHERE id = @id";
+            const string query = "UPDATE message SET user = @user, message = @message, channel = @channel, type = @type, reference = @reference WHERE id = @id";
 
             var args = new Dictionary<string, object>
             {
@@ -196,7 +200,8 @@ namespace DiscordBot.Core.Classes
                 {"@user", message.user},
                 {"@message", message.message},
                 {"@channel", message.channel},
-                {"@type", message.type}
+                {"@type", message.type},
+                {"@reference", message.reference}
             };
 
             return Data.ExecuteWrite(query, args);

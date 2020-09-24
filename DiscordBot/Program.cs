@@ -329,18 +329,41 @@ namespace DiscordBot
                                     }
                                     else if (how[0] == "present")
                                     {
-                                        var x = await Channel.SendMessageAsync(embed: Core.Classes.Embed.GetLeaderboard());
+                                        var message = Core.Classes.Message.GetByMessageAndChannelAndType(userMessage.Id, Channel.Id, 'u');
 
-                                        Channel_Event.Add(new Channel_Event(1, Channel.Id, 24, $"{Message.Id };{x.Id}", 'u')); //??????????????????????
+                                        if (message != null)
+                                        {
+                                            message = Core.Classes.Message.GetById((ulong)Convert.ToInt64(message.reference));
+                                            var embed_message = await Channel.GetMessageAsync(message.message) as IUserMessage;
+
+                                            try
+                                            {
+                                                await embed_message.ModifyAsync(x => { x.Embed = Core.Classes.Embed.UpdatePresent(embed_message, Reaction); });
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Console.WriteLine(ex.Message);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var x = await Channel.SendMessageAsync(embed: Core.Classes.Embed.CreatePresent(Reaction));
+                                            Core.Classes.Message.Add(new Core.Classes.Message(x.Author.Id, x.Id, Channel.Id, 'u'));
+                                            message = Core.Classes.Message.GetByMessageAndChannelAndType(x.Id, Channel.Id, 'u');
+                                            Core.Classes.Message.Add(new Core.Classes.Message(userMessage.Author.Id, userMessage.Id, Channel.Id, 'u', message.id));
+                                        }
                                     }
-
-
                                 }
-                                else if (how.Length == 2)
+                                else if (how.Length >= 2)
                                 {
                                     if (how[0] == "emote")
                                     {
-                                        await userMessage.AddReactionAsync(new Emoji(how[1]));
+                                        string[] emote_list = how.Skip(1).ToArray();
+
+                                        foreach (var emote in emote_list)
+                                        {
+                                            await userMessage.AddReactionAsync(new Emoji(emote));
+                                        }
                                     }
                                 }
                             }
@@ -370,34 +393,6 @@ namespace DiscordBot
                                     }
                                 }
                             }
-
-                            /*
-
-                            else if (what_list[0] == "update")
-                            {
-                                if (what_list[1] == "✅")
-                                {
-
-
-
-
-                                    var message = await Channel.GetMessageAsync(Core.Classes.Message.GetLastByChannelAndType(Channel.Id, 'u').id) as IUserMessage;
-
-                                    try
-                                    {
-                                        //await message.ModifyAsync(x => { x.Embed = Embed.GetLeaderboard(); });
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Console.WriteLine(ex.Message);
-                                    }
-
-
-                                }
-                            }
-
-                            */
-
                         }
                     }
                 }

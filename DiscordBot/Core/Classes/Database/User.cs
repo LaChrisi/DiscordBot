@@ -17,7 +17,7 @@ namespace DiscordBot.Core.Classes
 
         public static string header = "id | name | posts | upvotes | downvotes | privileg | karma";
 
-        public User(ulong id, string name, int privileg, int posts = 0, int upvotes = 0, int downvotes = 0, int karma = 0)
+        public User(ulong id, string name, int privileg, int posts = 0, int upvotes = 0, int downvotes = 0, int karma = -1)
         {
             this.id = id;
             this.name = name;
@@ -168,7 +168,30 @@ namespace DiscordBot.Core.Classes
 
             return list;
         }
-        
+
+        public static List<User> GetTop5()
+        {
+            var query = "SELECT * FROM user ORDER BY upvotes DESC LIMIT 5";
+            var args = new Dictionary<string, object>();
+            DataTable dt = Data.ExecuteRead(query, args);
+
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                return null;
+            }
+
+            List<User> list = new List<User>();
+            int i = 0;
+
+            foreach (var item in dt.Rows)
+            {
+                list.Add(new User((ulong)Convert.ToInt64(dt.Rows[i]["id"]), Convert.ToString(dt.Rows[i]["name"]), Convert.ToInt16(dt.Rows[i]["privileg"]), Convert.ToInt32(dt.Rows[i]["posts"]), Convert.ToInt32(dt.Rows[i]["upvotes"]), Convert.ToInt32(dt.Rows[i]["downvotes"]), Convert.ToInt32(dt.Rows[i]["karma"])));
+                i++;
+            }
+
+            return list;
+        }
+
 
     }
 }
