@@ -309,60 +309,66 @@ namespace DiscordBot
                         continue;
 
                     var e = Event.GetById(channel_event.Event);
+                    string[] what_list = e.what.Split(";");
+                    string[] how = e.how.Split(";");
 
+                    //reaction update event
+                    if (Reaction.Emote.Name == e.what)
+                    {
+                        if (how[0] == "present")
+                        {
+                            var message = Core.Classes.Message.GetByMessageAndChannelAndType(userMessage.Id, Channel.Id, 'u');
 
+                            if (message != null)
+                            {
+                                message = Core.Classes.Message.GetById((ulong)Convert.ToInt64(message.reference));
+                                var embed_message = await Channel.GetMessageAsync(message.message) as IUserMessage;
+
+                                try
+                                {
+                                    await embed_message.ModifyAsync(x => { x.Embed = Core.Classes.Embed.UpdatePresent(embed_message, Reaction); });
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message);
+                                }
+                            }
+                            else
+                            {
+                                var x = await Channel.SendMessageAsync(embed: Core.Classes.Embed.CreatePresent(Reaction));
+                                Core.Classes.Message.Add(new Core.Classes.Message(x.Author.Id, x.Id, Channel.Id, 'u'));
+                                message = Core.Classes.Message.GetByMessageAndChannelAndType(x.Id, Channel.Id, 'u');
+                                Core.Classes.Message.Add(new Core.Classes.Message(userMessage.Author.Id, userMessage.Id, Channel.Id, 'u', message.id));
+                            }
+                        }
+                    }
+
+                    //reaction at count event
                     foreach (var reaction in Reactions)
                     {
-                        string[] what_list = e.what.Split(";");
-
                         if (what_list.Length == 1)
                         {
-                            if (reaction.Key.Name == e.what && reaction.Value.ReactionCount >= Convert.ToInt32(channel_event.when) + 1)
+                            if (reaction.Key.Name == Reaction.Emote.Name)
                             {
-                                string[] how = e.how.Split(";");
-
-                                if (how.Length == 1)
+                                if (reaction.Key.Name == e.what && reaction.Value.ReactionCount == Convert.ToInt32(channel_event.when) + 1)
                                 {
-                                    if (how[0] == "pin")
+                                    if (how.Length == 1)
                                     {
-                                        await userMessage.PinAsync();
-                                    }
-                                    else if (how[0] == "present")
-                                    {
-                                        var message = Core.Classes.Message.GetByMessageAndChannelAndType(userMessage.Id, Channel.Id, 'u');
-
-                                        if (message != null)
+                                        if (how[0] == "pin")
                                         {
-                                            message = Core.Classes.Message.GetById((ulong)Convert.ToInt64(message.reference));
-                                            var embed_message = await Channel.GetMessageAsync(message.message) as IUserMessage;
-
-                                            try
-                                            {
-                                                await embed_message.ModifyAsync(x => { x.Embed = Core.Classes.Embed.UpdatePresent(embed_message, Reaction); });
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                Console.WriteLine(ex.Message);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            var x = await Channel.SendMessageAsync(embed: Core.Classes.Embed.CreatePresent(Reaction));
-                                            Core.Classes.Message.Add(new Core.Classes.Message(x.Author.Id, x.Id, Channel.Id, 'u'));
-                                            message = Core.Classes.Message.GetByMessageAndChannelAndType(x.Id, Channel.Id, 'u');
-                                            Core.Classes.Message.Add(new Core.Classes.Message(userMessage.Author.Id, userMessage.Id, Channel.Id, 'u', message.id));
+                                            await userMessage.PinAsync();
                                         }
                                     }
-                                }
-                                else if (how.Length >= 2)
-                                {
-                                    if (how[0] == "emote")
+                                    else if (how.Length >= 2)
                                     {
-                                        string[] emote_list = how.Skip(1).ToArray();
-
-                                        foreach (var emote in emote_list)
+                                        if (how[0] == "emote")
                                         {
-                                            await userMessage.AddReactionAsync(new Emoji(emote));
+                                            string[] emote_list = how.Skip(1).ToArray();
+
+                                            foreach (var emote in emote_list)
+                                            {
+                                                await userMessage.AddReactionAsync(new Emoji(emote));
+                                            }
                                         }
                                     }
                                 }
@@ -370,26 +376,27 @@ namespace DiscordBot
                         }
                         else if (what_list.Length == 2)
                         {
-                            if (reaction.Key.Name == what_list[0] && reaction.Value.ReactionCount == Convert.ToInt32(channel_event.when) + 1)
+                            if (reaction.Key.Name == Reaction.Emote.Name)
                             {
-                                string[] how = e.how.Split(";");
-
-                                if (how.Length == 1)
+                                if (reaction.Key.Name == what_list[0] && reaction.Value.ReactionCount == Convert.ToInt32(channel_event.when) + 1)
                                 {
-                                    if (what_list[1] == "copy")
+                                    if (how.Length == 1)
                                     {
-                                        if (how[0] == "broadcast")
+                                        if (what_list[1] == "copy")
                                         {
-                                            Broadcast_Message(userMessage);                                        
+                                            if (how[0] == "broadcast")
+                                            {
+                                                Broadcast_Message(userMessage);
+                                            }
+                                            else
+                                            {
+                                                Copy_Message(userMessage, (ulong)Convert.ToInt64(how[0]));
+                                            }
                                         }
-                                        else
+                                        else if (what_list[1] == "move")
                                         {
-                                            Copy_Message(userMessage, (ulong)Convert.ToInt64(how[0]));
+                                            Copy_Message(userMessage, (ulong)Convert.ToInt64(how[0]), true);
                                         }
-                                    }
-                                    else if (what_list[1] == "move")
-                                    {
-                                        Copy_Message(userMessage, (ulong)Convert.ToInt64(how[0]), true);
                                     }
                                 }
                             }
@@ -481,39 +488,28 @@ namespace DiscordBot
                         continue;
 
                     var e = Event.GetById(channel_event.Event);
+                    string[] what_list = e.what.Split(";");
+                    string[] how = e.how.Split(";");
 
-
-                    foreach (var reaction in Reactions)
+                    //reaction update event
+                    if (Reaction.Emote.Name == e.what)
                     {
-                        string[] what_list = e.what.Split(";");
-
-                        if (what_list.Length == 1)
+                        if (how[0] == "present")
                         {
-                            if (Reaction.Emote.Name == e.what)
+                            var message = Core.Classes.Message.GetByMessageAndChannelAndType(userMessage.Id, Channel.Id, 'u');
+
+                            if (message != null)
                             {
-                                string[] how = e.how.Split(";");
+                                message = Core.Classes.Message.GetById((ulong)Convert.ToInt64(message.reference));
+                                var embed_message = await Channel.GetMessageAsync(message.message) as IUserMessage;
 
-                                if (how.Length == 1)
+                                try
                                 {
-                                    if (how[0] == "present")
-                                    {
-                                        var message = Core.Classes.Message.GetByMessageAndChannelAndType(userMessage.Id, Channel.Id, 'u');
-
-                                        if (message != null)
-                                        {
-                                            message = Core.Classes.Message.GetById((ulong)Convert.ToInt64(message.reference));
-                                            var embed_message = await Channel.GetMessageAsync(message.message) as IUserMessage;
-
-                                            try
-                                            {
-                                                await embed_message.ModifyAsync(x => { x.Embed = Core.Classes.Embed.UpdatePresent(embed_message, Reaction, true); });
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                Console.WriteLine(ex.Message);
-                                            }
-                                        }
-                                    }
+                                    await embed_message.ModifyAsync(x => { x.Embed = Core.Classes.Embed.UpdatePresent(embed_message, Reaction, true); });
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message);
                                 }
                             }
                         }

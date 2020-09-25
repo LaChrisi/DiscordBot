@@ -32,9 +32,9 @@ namespace DiscordBot.Core.Classes
 
                 daily_timer.Start();
             }
-            catch
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -54,9 +54,9 @@ namespace DiscordBot.Core.Classes
 
                 hourly_timer.Start();
             }
-            catch
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -68,51 +68,55 @@ namespace DiscordBot.Core.Classes
                 Console.WriteLine(DateTime.Now.TimeOfDay + "hourly_timer event");
 
                 //karma reminder event
-
                 var channel_event_list = Channel_Event.GetAllByType('k');
 
                 foreach (var channel_event in channel_event_list)
                 {
-                    var user = User.GetById((ulong)Convert.ToInt64(channel_event.when));
-                    var e = Event.GetById(channel_event.Event);
-
-                    if (e.what == "say")
+                    if (channel_event.aktiv == 1)
                     {
-                        if (e.how == "remind")
+                        var user = User.GetById((ulong)Convert.ToInt64(channel_event.when));
+                        var e = Event.GetById(channel_event.Event);
+
+                        if (e.what == "say")
                         {
-                            if (user.karma < Convert.ToInt32(Global.GetByName("karma_threshold_to_remind").value))
+                            if (e.how == "remind")
                             {
-                                var message = Event.GetRandomByWhat("reminder");
-                                var channel = Program.Client.GetChannel(channel_event.channel) as ISocketMessageChannel;
-                                var reminder = await channel.SendMessageAsync(embed: Embed.New(Program.Client.GetUser(user.id), Field.CreateFieldBuilder("warning", $"Your karma is {user.karma}.\n{message.how}"), Colors.warning, "friendly reminder"));
-                                Message.Add(new Message(user.id, reminder.Id, channel.Id, 'k'));
+                                if (user.karma < Convert.ToInt32(Global.GetByName("karma_threshold_to_remind").value))
+                                {
+                                    var message = Event.GetRandomByWhat("reminder");
+                                    var channel = Program.Client.GetChannel(channel_event.channel) as ISocketMessageChannel;
+                                    var reminder = await channel.SendMessageAsync(embed: Embed.New(Program.Client.GetUser(user.id), Field.CreateFieldBuilder("warning", $"Your karma is {user.karma}.\n{message.how}"), Colors.warning, "friendly reminder"));
+                                    Message.Add(new Message(user.id, reminder.Id, channel.Id, 'k'));
+                                }
                             }
                         }
                     }
                 }
 
                 //renew leaderboard event
-
                 channel_event_list = Channel_Event.GetAllByType('r');
 
                 foreach (var channel_event in channel_event_list)
                 {
-                    var channel = Program.Client.GetChannel(channel_event.channel) as ISocketMessageChannel;
-                    var e = Event.GetById(channel_event.Event);
-
-                    if (e.what == "renew")
+                    if (channel_event.aktiv == 1)
                     {
-                        if (e.how == "leaderboard")
-                        {
-                            var message = await channel.GetMessageAsync((ulong)Convert.ToInt64(channel_event.when)) as IUserMessage;
+                        var channel = Program.Client.GetChannel(channel_event.channel) as ISocketMessageChannel;
+                        var e = Event.GetById(channel_event.Event);
 
-                            try
+                        if (e.what == "renew")
+                        {
+                            if (e.how == "leaderboard")
                             {
-                                await message.ModifyAsync(x => { x.Embed = Embed.GetLeaderboard(); });
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine(ex.Message);
+                                var message = await channel.GetMessageAsync((ulong)Convert.ToInt64(channel_event.when)) as IUserMessage;
+
+                                try
+                                {
+                                    await message.ModifyAsync(x => { x.Embed = Embed.GetLeaderboard(); });
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message);
+                                }
                             }
                         }
                     }
@@ -120,9 +124,9 @@ namespace DiscordBot.Core.Classes
 
                 SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
             }
-            catch
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -148,9 +152,9 @@ namespace DiscordBot.Core.Classes
 
                 SetUpDailyTimer(new TimeSpan(Convert.ToInt32(Global.GetByName("daily_timer_hour").value), 0, 0));
             }
-            catch
+            catch(Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
         }
     }
