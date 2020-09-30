@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "jKhAkLnI7wpB+GX6vieeNggqH2Rm8xmrMFM2W/IsRcK3yMPi6BffgsFIn66Te1mZDt/nS8L+vwk/xqUoXHGa6A==",
+  "dgSpecHash": "++vojCvhX+yAknGMAKZYYRzCJLKc/pu0YEEJHQs8KDSUU1p2HTFK9UeI01n0O9VKfirS1k8ko7fQEpsSGNiWTQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Chris\\Desktop\\GitHub\\DiscordBot\\DiscordBot\\DiscordBot.csproj",
   "expectedPackageFiles": [
@@ -162,9 +162,9 @@
     "C:\\Users\\Chris\\.nuget\\packages\\system.xml.xmldocument\\4.0.1\\system.xml.xmldocument.4.0.1.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\system.xml.xpath\\4.0.1\\system.xml.xpath.4.0.1.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\system.xml.xpath.xmldocument\\4.0.1\\system.xml.xpath.xmldocument.4.0.1.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-x64\\3.1.5\\microsoft.netcore.app.runtime.linux-x64.3.1.5.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\3.1.5\\microsoft.netcore.app.host.linux-x64.3.1.5.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-x64\\3.1.5\\microsoft.aspnetcore.app.runtime.linux-x64.3.1.5.nupkg.sha512"
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-x64\\3.1.8\\microsoft.netcore.app.runtime.linux-x64.3.1.8.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\3.1.8\\microsoft.netcore.app.host.linux-x64.3.1.8.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-x64\\3.1.8\\microsoft.aspnetcore.app.runtime.linux-x64.3.1.8.nupkg.sha512"
   ],
   "logs": []
 }

@@ -341,6 +341,25 @@ namespace DiscordBot
                                 Core.Classes.Message.Add(new Core.Classes.Message(userMessage.Author.Id, userMessage.Id, Channel.Id, 'u', message.id));
                             }
                         }
+                        else if (how[0] == "present_time")
+                        {
+                            var message = Core.Classes.Message.GetByMessageAndChannelAndType(userMessage.Id, Channel.Id, 'u');
+
+                            if (message != null)
+                            {
+                                message = Core.Classes.Message.GetById((ulong)Convert.ToInt64(message.reference));
+                                var embed_message = await Channel.GetMessageAsync(message.message) as IUserMessage;
+
+                                try
+                                {
+                                    await embed_message.ModifyAsync(x => { x.Embed = Core.Classes.Embed.UpdatePresentTime(embed_message, Reaction); });
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message);
+                                }
+                            }
+                        }
                     }
 
                     //reaction at count event
@@ -506,6 +525,25 @@ namespace DiscordBot
                                 try
                                 {
                                     await embed_message.ModifyAsync(x => { x.Embed = Core.Classes.Embed.UpdatePresent(embed_message, Reaction, true); });
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message);
+                                }
+                            }
+                        }
+                        else if (how[0] == "present_time")
+                        {
+                            var message = Core.Classes.Message.GetByMessageAndChannelAndType(userMessage.Id, Channel.Id, 'u');
+
+                            if (message != null)
+                            {
+                                message = Core.Classes.Message.GetById((ulong)Convert.ToInt64(message.reference));
+                                var embed_message = await Channel.GetMessageAsync(message.message) as IUserMessage;
+
+                                try
+                                {
+                                    await embed_message.ModifyAsync(x => { x.Embed = Core.Classes.Embed.UpdatePresentTime(embed_message, Reaction, true); });
                                 }
                                 catch (Exception ex)
                                 {

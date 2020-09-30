@@ -141,6 +141,124 @@ namespace DiscordBot.Core.Classes
                 return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members");
             }
         }
+
+        public static Discord.Embed UpdatePresentTime(IUserMessage message, SocketReaction reaction, bool remove = false)
+        {
+            if (remove)
+            {
+                List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+
+                foreach (var embed in message.Embeds)
+                {
+                    foreach (var field in embed.Fields)
+                    {
+                        if (field.Name == reaction.User.Value.Username)
+                        {
+                            fields.Add(Field.CreateFieldBuilder(field.Name, PresentTime(field.Value, reaction.Emote.Name, true)));
+                        }
+                        else
+                        {
+                            fields.Add(Field.CreateFieldBuilder(field));
+                        }
+                    }
+                }
+
+                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members");
+            }
+            else
+            {
+                List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+
+                foreach (var embed in message.Embeds)
+                {
+                    foreach (var field in embed.Fields)
+                    {
+                        if (field.Name == reaction.User.Value.Username)
+                        {
+                            fields.Add(Field.CreateFieldBuilder(field.Name, PresentTime(field.Value, reaction.Emote.Name)));
+                        }
+                        else
+                        {
+                            fields.Add(Field.CreateFieldBuilder(field));
+                        }
+                    }
+                }
+
+                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members");
+            }
+        }
+
+        private static string PresentTime(string fieldValue, string emote, bool remove = false)
+        {
+            string[] parts = fieldValue.Split("\n");
+            string output = "";
+
+            if (remove)
+            {
+                if (parts.Length == 2)
+                {
+                    string time = GetTime(emote);
+
+                    string[] times = parts[1].Split(", ");
+
+                    foreach (var item in times)
+                    {
+                        if (item != time)
+                        {
+                            if (output != "")
+                                output += ", " + item;
+                            else
+                                output = item;
+                        }
+                    }
+                }
+
+                return parts[0] + "\n" + output;
+            }
+            else
+            {
+                string time = "";
+
+                if (parts.Length == 1)
+                {
+                    time = GetTime(emote);
+                }
+                else if (parts.Length == 2)
+                {
+                    time = parts[1] + ", " + GetTime(emote);
+                }
+
+                return parts[0] + "\n" + time;
+            }
+        }
+
+        private static string GetTime(string emote)
+        {
+            string time = "";
+
+            switch (emote)
+            {
+                case "4️⃣":
+                    time = "16";
+                    break;
+                case "5️⃣":
+                    time = "17";
+                    break;
+                case "6️⃣":
+                    time = "18";
+                    break;
+                case "7️⃣":
+                    time = "19";
+                    break;
+                case "8️⃣":
+                    time = "20";
+                    break;
+                default:
+                    break;
+            }
+
+            return time;
+        }
     }
 
     class Colors
