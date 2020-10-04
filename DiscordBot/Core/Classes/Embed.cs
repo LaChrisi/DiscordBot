@@ -253,6 +253,9 @@ namespace DiscordBot.Core.Classes
                 case "8️⃣":
                     time = "20";
                     break;
+                case "9️⃣":
+                    time = "21";
+                    break;
                 default:
                     break;
             }
