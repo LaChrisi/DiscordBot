@@ -103,15 +103,16 @@ namespace DiscordBot.Core.Classes
 
             fields.Add(Field.CreateFieldBuilder(reaction.User.Value.Username, $"{DateTime.Now.ToString("dd.M. - HH:mm:ss")}"));
 
-            return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members");
+            return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members", "current: 1");
         }
 
         public static Discord.Embed UpdatePresent(IUserMessage message, SocketReaction reaction, bool remove = false)
         {
+            List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+            int current = 0;
+
             if (remove)
             {
-                List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
-
                 foreach (var embed in message.Embeds)
                 {
                     foreach (var field in embed.Fields)
@@ -119,35 +120,37 @@ namespace DiscordBot.Core.Classes
                         if (field.Name != reaction.User.Value.Username)
                         {
                             fields.Add(Field.CreateFieldBuilder(field));
+                            current++;
                         }
                     }
                 }
 
-                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members");
+                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members", "current: " + current);
             }
             else
             {
-                List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
-
                 foreach (var embed in message.Embeds)
                 {
                     foreach (var field in embed.Fields)
                     {
                         fields.Add(Field.CreateFieldBuilder(field));
+                        current++;
                     }
 
                     fields.Add(Field.CreateFieldBuilder(reaction.User.Value.Username, $"{DateTime.Now.ToString("dd.M. - HH:mm:ss")}"));
+                    current++;
                 }
-                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members");
+                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members", "current: " + current);
             }
         }
 
         public static Discord.Embed UpdatePresentTime(IUserMessage message, SocketReaction reaction, bool remove = false)
         {
+            List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+            int current = 0;
+
             if (remove)
             {
-                List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
-
                 foreach (var embed in message.Embeds)
                 {
                     foreach (var field in embed.Fields)
@@ -155,20 +158,20 @@ namespace DiscordBot.Core.Classes
                         if (field.Name == reaction.User.Value.Username)
                         {
                             fields.Add(Field.CreateFieldBuilder(field.Name, PresentTime(field.Value, reaction.Emote.Name, true)));
+                            current++;
                         }
                         else
                         {
                             fields.Add(Field.CreateFieldBuilder(field));
+                            current++;
                         }
                     }
                 }
 
-                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members");
+                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members", "current: " + current);
             }
             else
             {
-                List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
-
                 foreach (var embed in message.Embeds)
                 {
                     foreach (var field in embed.Fields)
@@ -176,21 +179,24 @@ namespace DiscordBot.Core.Classes
                         if (field.Name == reaction.User.Value.Username)
                         {
                             fields.Add(Field.CreateFieldBuilder(field.Name, PresentTime(field.Value, reaction.Emote.Name)));
+                            current++;
                         }
                         else
                         {
                             fields.Add(Field.CreateFieldBuilder(field));
+                            current++;
                         }
                     }
                 }
 
-                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members");
+                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members", "current: " + current);
             }
         }
 
         private static string PresentTime(string fieldValue, string emote, bool remove = false)
         {
             string[] parts = fieldValue.Split("\n");
+            string partTime = "";
             string output = "";
 
             if (remove)
@@ -198,8 +204,9 @@ namespace DiscordBot.Core.Classes
                 if (parts.Length == 2)
                 {
                     string time = GetTime(emote);
+                    partTime = parts[1].Substring(5);
 
-                    string[] times = parts[1].Split(", ");
+                    string[] times = partTime.Split(", ");
 
                     foreach (var item in times)
                     {
@@ -213,22 +220,24 @@ namespace DiscordBot.Core.Classes
                     }
                 }
 
-                return parts[0] + "\n" + output;
+                if (output == "")
+                    return parts[0];
+                else
+                    return parts[0] + "\nfrom " + output;
             }
             else
             {
-                string time = "";
-
                 if (parts.Length == 1)
                 {
-                    time = GetTime(emote);
+                    output = GetTime(emote);
                 }
                 else if (parts.Length == 2)
                 {
-                    time = parts[1] + ", " + GetTime(emote);
+                    partTime = parts[1].Substring(5);
+                    output = partTime + ", " + GetTime(emote);
                 }
 
-                return parts[0] + "\n" + time;
+                return parts[0] + "\nfrom " + output;
             }
         }
 
@@ -317,41 +326,41 @@ namespace DiscordBot.Core.Classes
         public static EmbedFieldBuilder CreatMarkdowneTable(string header, string[] content, string title = "")
         {
             EmbedFieldBuilder builder = new EmbedFieldBuilder();
-            string zwischenspeicher = "|";
+            string cache = "|";
 
             string[] header_list = header.Split(" | ");
 
             foreach (string item in header_list)
             {
-                zwischenspeicher += "**" + item + "**|";
+                cache += "**" + item + "**|";
             }
 
-            zwischenspeicher += "\n";
+            cache += "\n";
 
             for (int i = 0; i < header_list.Length; i++)
             {
-                zwischenspeicher += "|---";
+                cache += "|---";
             }
 
-            zwischenspeicher += "|\n";
+            cache += "|\n";
 
             foreach (string content_list in content)
             {
                 string[] content_list_list = content_list.Split(" | ");
 
-                zwischenspeicher += "|";
+                cache += "|";
 
                 foreach (string item in content_list_list)
                 {
-                    zwischenspeicher += item + "|";
+                    cache += item + "|";
                 }
 
-                zwischenspeicher += "\n";
+                cache += "\n";
             }
 
             builder.Name = title;
 
-            builder.Value = zwischenspeicher;
+            builder.Value = cache;
 
             return builder;
         }
@@ -359,38 +368,38 @@ namespace DiscordBot.Core.Classes
         public static EmbedFieldBuilder CreateMarkdownTable(string title, string header, string content)
         {
             EmbedFieldBuilder builder = new EmbedFieldBuilder();
-            string zwischenspeicher = "|";
+            string cache = "|";
 
             string[] header_list = header.Split(" | ");
 
             foreach (string item in header_list)
             {
-                zwischenspeicher += "**" + item + "**|";
+                cache += "**" + item + "**|";
             }
 
-            zwischenspeicher += "\n";
+            cache += "\n";
 
             for (int i = 0; i < header_list.Length; i++)
             {
-                zwischenspeicher += "|---";
+                cache += "|---";
             }
 
-            zwischenspeicher += "|\n";
+            cache += "|\n";
 
             string[] content_list = content.Split(" | ");
 
-            zwischenspeicher += "|";
+            cache += "|";
 
             foreach (string item in content_list)
             {
-                zwischenspeicher += item + "|";
+                cache += item + "|";
             }
 
-            zwischenspeicher += "\n";
+            cache += "\n";
 
             builder.Name = title;
 
-            builder.Value = zwischenspeicher;
+            builder.Value = cache;
 
             return builder;
         }
