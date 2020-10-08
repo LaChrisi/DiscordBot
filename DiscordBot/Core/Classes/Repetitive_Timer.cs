@@ -66,6 +66,7 @@ namespace DiscordBot.Core.Classes
             try
             {
                 Console.WriteLine(DateTime.Now.TimeOfDay + "hourly_timer event");
+                Log.Information("system - hourly_timer event - start");
 
                 //karma reminder event
                 var channel_event_list = Channel_Event.GetAllByType('k');
@@ -127,6 +128,7 @@ namespace DiscordBot.Core.Classes
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                Log.Error($"system - hourly_timer event - error:{ex.Message}");
             }
         }
 
@@ -136,6 +138,7 @@ namespace DiscordBot.Core.Classes
             try
             {
                 Console.WriteLine(DateTime.Now.TimeOfDay + "daily_timer event");
+                Log.Information("system - daily_timer event - start");
 
                 var user_list = User.GetAllWithKarma();
 
@@ -155,6 +158,7 @@ namespace DiscordBot.Core.Classes
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                Log.Error($"system - daily_timer event - error:{ex.Message}");
             }
         }
     }

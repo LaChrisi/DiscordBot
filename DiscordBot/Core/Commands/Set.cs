@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Discord;
-using Discord.Commands;
+﻿using Discord.Commands;
 using DiscordBot.Core.Classes;
-using MySql.Data.MySqlClient.Memcached;
+using System;
+using System.Threading.Tasks;
 
 namespace DiscordBot.Core.Commands
 {
@@ -19,40 +13,59 @@ namespace DiscordBot.Core.Commands
             [Command("broadcast"), Alias("b"), Summary("sets current channel for broadcast")]
             public async Task SetBroadcastModule(int broadcast = 0)
             {
-                if (!Privileg.CheckById(Context.User.Id, Privileg.admin))
+                try
                 {
-                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
-                    return;
-                }
+                    if (!Privileg.CheckById(Context.User.Id, Privileg.admin))
+                    {
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
+                        Log.Warning($"command - set broadcast - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                        return;
+                    }
 
-                var channel = Channel.GetById(Context.Channel.Id);
-                channel.broadcast = broadcast;
-                Channel.Edit(channel);
+                    Log.Information($"command - set broadcast - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
+
+                    var channel = Channel.GetById(Context.Channel.Id);
+                    channel.broadcast = broadcast;
+                    Channel.Edit(channel);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"command - set broadcast - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+                }
             }
 
             [Command("leaderboard"), Alias("lb"), Summary("adds the current channel a renewing leaderboard")]
             public async Task SetLeaderboardModule()
             {
-                if (!Privileg.CheckById(Context.User.Id, Privileg.moderator))
+                try
                 {
-                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least moderator to use this command!"), Colors.warning));
-                    return;
-                }
-
-                var channel_event_list = Channel_Event.GetAllByChannelIdAndType(Context.Channel.Id, 'r');
-
-                if (channel_event_list != null)
-                {
-                    foreach (var channel_event in channel_event_list)
+                    if (!Privileg.CheckById(Context.User.Id, Privileg.moderator))
                     {
-                        Channel_Event.DeleteById(channel_event.id);
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least moderator to use this command!"), Colors.warning));
+                        Log.Warning($"command - set leaderboard - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                        return;
                     }
+
+                    Log.Information($"command - set leaderboard - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
+
+                    var channel_event_list = Channel_Event.GetAllByChannelIdAndType(Context.Channel.Id, 'r');
+
+                    if (channel_event_list != null)
+                    {
+                        foreach (var channel_event in channel_event_list)
+                        {
+                            Channel_Event.DeleteById(channel_event.id);
+                        }
+                    }
+
+                    var message = await Context.Channel.SendMessageAsync(embed: Classes.Embed.GetLeaderboard());
+
+                    Channel_Event.Add(new Channel_Event(1, Context.Channel.Id, 15, $"{message.Id}", 'r'));
                 }
-
-                var message = await Context.Channel.SendMessageAsync(embed: Classes.Embed.GetLeaderboard());
-
-                Channel_Event.Add(new Channel_Event(1, Context.Channel.Id, 15, $"{message.Id}", 'r'));
-                
+                catch (Exception ex)
+                {
+                    Log.Error($"command - set leaderboard - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+                }
             }
         }
     }

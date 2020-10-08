@@ -10,45 +10,39 @@ namespace DiscordBot.Core.Classes
 {
     class Log
     {
-        public async void Information(string text, string title = "", string description = "", SocketCommandContext context = null)
+        public static void Information(string text)
         {
-            if (context != null)
+            try
             {
-                Database.Log.Add(new Database.Log(context.Channel.Id, 'i', text));
-
-                await context.Channel.SendMessageAsync(embed: Embed.New(context.Message.Author, Field.CreateFieldBuilder("information", text), Colors.information, title, description));
+                Database.Log.Add(new Database.Log(DateTime.Now, 'i', text));
             }
-            else
+            catch (Exception ex)
             {
-                Database.Log.Add(new Database.Log('i', text));
+                Console.WriteLine(ex.Message);
             }
         }
 
-        public async void Warning(string text, string title = "", string description = "", SocketCommandContext context = null)
+        public static void Warning(string text)
         {
-            if (context != null)
+            try
             {
-                Database.Log.Add(new Database.Log(context.Channel.Id, 'w', text));
-
-                await context.Channel.SendMessageAsync(embed: Embed.New(context.Message.Author, Field.CreateFieldBuilder("warning", text), Colors.warning, title, description));
+            Database.Log.Add(new Database.Log(DateTime.Now, 'w', text));
             }
-            else
+            catch (Exception ex)
             {
-                Database.Log.Add(new Database.Log('w', text));
+                Console.WriteLine(ex.Message);
             }
         }
 
-        public async void Error(string text, string title = "", string description = "", SocketCommandContext context = null)
+        public static void Error(string text)
         {
-            if (context != null)
+            try
             {
-                Database.Log.Add(new Database.Log(context.Channel.Id, 'e', text));
-
-                await context.Channel.SendMessageAsync(embed: Embed.New(context.Message.Author, Field.CreateFieldBuilder("error", text), Colors.error, title, description));
+            Database.Log.Add(new Database.Log(DateTime.Now, 'e', text));
             }
-            else
+            catch (Exception ex)
             {
-                Database.Log.Add(new Database.Log('e', text));
+                Console.WriteLine(ex.Message);
             }
         }
     }

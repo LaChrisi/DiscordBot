@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Discord;
+﻿using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
+using System;
+using System.Threading.Tasks;
 
 namespace DiscordBot.Core.Commands.Moderation
 {
@@ -15,27 +10,38 @@ namespace DiscordBot.Core.Commands.Moderation
         [Command("move"), Alias("m"), Summary("moves the message")]
         public async Task MoveModule(ulong messageID = 0, ulong channelID = 0)
         {
-            if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.admin))
-            {
-                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Classes.Colors.warning));
-                return;
-            }
-
-            if (messageID == 0 || channelID == 0)
-            {
-                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("try", "!move **<MessageID>** **<ChannelID>**"), Classes.Colors.error, "error"));
-                return;
-            }
-
             try
             {
-                var message = await Context.Channel.GetMessageAsync(messageID) as IUserMessage;
+                if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.admin))
+                {
+                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Classes.Colors.warning));
+                    Classes.Log.Warning($"command - move - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                    return;
+                }
 
-                Program.Copy_Message(message, channelID, true);
+                Classes.Log.Information($"command - move - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
+
+                if (messageID == 0 || channelID == 0)
+                {
+                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("try", "!move **<MessageID>** **<ChannelID>**"), Classes.Colors.error, "error"));
+                    return;
+                }
+
+                try
+                {
+                    var message = await Context.Channel.GetMessageAsync(messageID) as IUserMessage;
+
+                    Program.Copy_Message(message, channelID, true);
+                }
+                catch (Exception e)
+                {
+                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("error", e.Message), Classes.Colors.error));
+                    throw e;
+                }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("error", e.Message), Classes.Colors.error));
+                Classes.Log.Error($"command - move - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
             }
         }
     }

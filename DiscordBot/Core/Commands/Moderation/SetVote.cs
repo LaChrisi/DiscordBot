@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using DiscordBot.Core.Classes;
 
 namespace DiscordBot.Core.Commands.Moderation
 {
@@ -14,20 +15,25 @@ namespace DiscordBot.Core.Commands.Moderation
         [Command("setvote"), SummaryAttribute("UP/DOWN Vote Reaction for x Messages in the channel")]
         public async Task SetVoteModule(int numberUP = 0, ulong channelID = 0, ulong messageID = 0)
         {
-            if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.admin))
+            try
             {
-                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Classes.Colors.warning));
-                return;
-            }
+                if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.admin))
+                {
+                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Classes.Colors.warning));
+                    Log.Warning($"command - setvote - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                    return;
+                }
 
-            if (numberUP <= 0)
-                numberUP = 1;
+                Log.Information($"command - setvote - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
 
-            var pruneMessage = await Context.Channel.SendMessageAsync("in progress, give me a moment...");
+                if (numberUP <= 0)
+                    numberUP = 1;
+
+                var pruneMessage = await Context.Channel.SendMessageAsync("in progress, give me a moment...");
 
                 try
                 {
-                //ohne serverID und channelID
+                    //ohne serverID und channelID
                     if (channelID == 0 && messageID == 0)
                     {
                         var messages = await Context.Channel.GetMessagesAsync(Context.Message, Direction.Before, numberUP).FlattenAsync();
@@ -53,7 +59,7 @@ namespace DiscordBot.Core.Commands.Moderation
 
                         foreach (var message in messages)
                         {
-                            var x = (IUserMessage) await channel.GetMessageAsync(message.Id);
+                            var x = (IUserMessage)await channel.GetMessageAsync(message.Id);
 
                             if (!(x.Content.ToString() == "" || x.Content.Contains("https://") || x.Content.Contains("http://")))
                             {
@@ -67,7 +73,7 @@ namespace DiscordBot.Core.Commands.Moderation
                     //falsche Argumente
                     else
                     {
-                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("try", "!setvote **<Number>** **[<ChannelID>** **<MessageID>]**"), Classes.Colors.error, "error"));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("try", "!setvote **<Number>** **[<ChannelID>** **<MessageID>]**"), Classes.Colors.error, "error"));
                     }
                 }
                 finally
@@ -79,121 +85,137 @@ namespace DiscordBot.Core.Commands.Moderation
                         await pruneMessage.DeleteAsync();
                     });
                 }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"command - setvote - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+            }
         }
 
         [Command("setvoteall"), SummaryAttribute("UP/DOWN Vote Button for all Messages in the channel")]
         public async Task SetVoteAllModule(ulong ChannelID = 0, ulong MessageID = 0)
         {
-            if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.admin))
+            try
             {
-                await Context.Channel.SendMessageAsync(":x: You need to be at least admin to use this command!");
-                return;
-            }
-
-            //ohne Argumente
-            if (ChannelID == 0 && MessageID == 0)
-            {
-                var pruneMessage = await Context.Channel.SendMessageAsync("in progress, give me a moment...");
-
-                try
+                if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.admin))
                 {
-                    var startMessage = (IUserMessage)Context.Message;
+                    await Context.Channel.SendMessageAsync(":x: You need to be at least admin to use this command!");
+                    Log.Warning($"command - setvoteall - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                    return;
+                }
 
-                    var oldMessages = await Context.Channel.GetMessagesAsync(pruneMessage, Direction.Before, 1).FlattenAsync();
+                Log.Information($"command - servoteall - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
 
-                    while (true)
+                //ohne Argumente
+                if (ChannelID == 0 && MessageID == 0)
+                {
+                    var pruneMessage = await Context.Channel.SendMessageAsync("in progress, give me a moment...");
+
+                    try
                     {
-                        var messages = await Context.Channel.GetMessagesAsync(startMessage, Direction.Before, 1).FlattenAsync();
+                        var startMessage = (IUserMessage)Context.Message;
 
-                        if (!messages.Equals(oldMessages))
+                        var oldMessages = await Context.Channel.GetMessagesAsync(pruneMessage, Direction.Before, 1).FlattenAsync();
+
+                        while (true)
                         {
-                            oldMessages = messages;
-                        }
-                        else
-                            break;
+                            var messages = await Context.Channel.GetMessagesAsync(startMessage, Direction.Before, 1).FlattenAsync();
 
-                        foreach (var message in messages)
-                        {
-                            var x = (IUserMessage)await Context.Channel.GetMessageAsync(message.Id);
-
-                            startMessage = x;
-
-                            if (!(x.Attachments.Count > 0 || x.Content.StartsWith("https://") || x.Content.StartsWith("http://")))
+                            if (!messages.Equals(oldMessages))
                             {
-                                continue;
+                                oldMessages = messages;
                             }
+                            else
+                                break;
 
-                            await x.AddReactionAsync(new Emoji("👍"));
-                            await x.AddReactionAsync(new Emoji("👎"));
+                            foreach (var message in messages)
+                            {
+                                var x = (IUserMessage)await Context.Channel.GetMessageAsync(message.Id);
+
+                                startMessage = x;
+
+                                if (!(x.Attachments.Count > 0 || x.Content.StartsWith("https://") || x.Content.StartsWith("http://")))
+                                {
+                                    continue;
+                                }
+
+                                await x.AddReactionAsync(new Emoji("👍"));
+                                await x.AddReactionAsync(new Emoji("👎"));
+                            }
                         }
                     }
-                }
-                finally
-                {
-                    await pruneMessage.ModifyAsync(x => x.Content = "completed, this message will self destruct in 5 seconds!");
-                    await Task.Factory.StartNew(async () =>
+                    finally
                     {
-                        await Task.Delay(5000);
-                        await pruneMessage.DeleteAsync();
-                    });
-                }
-            }
-            //mit fehlenden Argumenten
-            else if (ChannelID != 0 && MessageID == 0 || ChannelID == 0 && MessageID != 0)
-            {
-                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("try", "!setvoteall **[<ServerID>** **<MessageID>]**"), Classes.Colors.error, "error"));
-                return;
-            }
-            //mit Argumenten
-            else
-            {
-                var pruneMessage = await Context.Channel.SendMessageAsync("in progress, give me a moment...");
-
-                try
-                {
-                    var Channel = Context.Client.GetChannel(ChannelID) as ISocketMessageChannel;
-                    var startMessage = await Channel.GetMessageAsync(MessageID) as IUserMessage;
-
-                    var oldMessages = await Context.Channel.GetMessagesAsync(pruneMessage, Direction.Before, 1).FlattenAsync();
-
-                    while (true)
-                    {
-                        var messages = await Channel.GetMessagesAsync(startMessage, Direction.Before, 1, CacheMode.AllowDownload).FlattenAsync();
-
-                        if (!messages.Equals(oldMessages))
-                            oldMessages = messages;
-                        else
-                            break;
-
-                        foreach (var message in messages)
+                        await pruneMessage.ModifyAsync(x => x.Content = "completed, this message will self destruct in 5 seconds!");
+                        await Task.Factory.StartNew(async () =>
                         {
-                            var x = (IUserMessage) await Channel.GetMessageAsync(message.Id);
-
-                            startMessage = x;
-
-                            if (!(x.Attachments.Count > 0 || x.Content.Contains("https://") || x.Content.Contains("http://")))
-                            {
-                                continue;
-                            }
-
-                            await x.AddReactionAsync(new Emoji("👍"));
-                            await x.AddReactionAsync(new Emoji("👎"));
-                        }
+                            await Task.Delay(5000);
+                            await pruneMessage.DeleteAsync();
+                        });
                     }
                 }
-                catch (Exception e)
+                //mit fehlenden Argumenten
+                else if (ChannelID != 0 && MessageID == 0 || ChannelID == 0 && MessageID != 0)
                 {
-                    Console.WriteLine("Error:" + e.ToString());
+                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("try", "!setvoteall **[<ServerID>** **<MessageID>]**"), Classes.Colors.error, "error"));
+                    return;
                 }
-                finally
+                //mit Argumenten
+                else
                 {
-                    await pruneMessage.ModifyAsync(x => x.Content = "completed, this message will self destruct in 5 seconds!");
-                    await Task.Factory.StartNew(async () =>
+                    var pruneMessage = await Context.Channel.SendMessageAsync("in progress, give me a moment...");
+
+                    try
                     {
-                        await Task.Delay(5000);
-                        await pruneMessage.DeleteAsync();
-                    });
+                        var Channel = Context.Client.GetChannel(ChannelID) as ISocketMessageChannel;
+                        var startMessage = await Channel.GetMessageAsync(MessageID) as IUserMessage;
+
+                        var oldMessages = await Context.Channel.GetMessagesAsync(pruneMessage, Direction.Before, 1).FlattenAsync();
+
+                        while (true)
+                        {
+                            var messages = await Channel.GetMessagesAsync(startMessage, Direction.Before, 1, CacheMode.AllowDownload).FlattenAsync();
+
+                            if (!messages.Equals(oldMessages))
+                                oldMessages = messages;
+                            else
+                                break;
+
+                            foreach (var message in messages)
+                            {
+                                var x = (IUserMessage)await Channel.GetMessageAsync(message.Id);
+
+                                startMessage = x;
+
+                                if (!(x.Attachments.Count > 0 || x.Content.Contains("https://") || x.Content.Contains("http://")))
+                                {
+                                    continue;
+                                }
+
+                                await x.AddReactionAsync(new Emoji("👍"));
+                                await x.AddReactionAsync(new Emoji("👎"));
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Error:" + e.ToString());
+                        throw e;
+                    }
+                    finally
+                    {
+                        await pruneMessage.ModifyAsync(x => x.Content = "completed, this message will self destruct in 5 seconds!");
+                        await Task.Factory.StartNew(async () =>
+                        {
+                            await Task.Delay(5000);
+                            await pruneMessage.DeleteAsync();
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"command - setvoteall - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
             }
         }
     }
