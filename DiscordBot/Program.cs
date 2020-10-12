@@ -54,8 +54,6 @@ namespace DiscordBot
                     {
                         if (vote_channel.aktiv == 1)
                         {
-                            Log.Information($"system - vote handler - start vote_channel:{vote_channel.id} message:{Context.Message.Id} channel:{Context.Channel.Id}");
-
                             var vote = Vote.GetById(vote_channel.vote);
                             string[] what = vote.what.Split(';');
 
@@ -63,6 +61,8 @@ namespace DiscordBot
                             {
                                 if (Message.Content.Contains(what_item) && what_item != "" || what_item == "" && Context.Message.Attachments.Count == 1)
                                 {
+                                    Log.Information($"system - vote handler - start vote_channel:{vote_channel.id} message:{Context.Message.Id} channel:{Context.Channel.Id}");
+
                                     string[] how = vote.how.Split(';');
 
                                     foreach (var how_item in how)
@@ -113,6 +113,8 @@ namespace DiscordBot
                                 }
                                 else if (Message.Content.Contains(what_item) && what_item != "" || what_item == "" && Context.Message.Attachments.Count > 1)
                                 {
+                                    Log.Information($"system - vote handler - start vote_channel:{vote_channel.id} message:{Context.Message.Id} channel:{Context.Channel.Id}");
+
                                     string[] how = vote.how.Split(';');
                                     List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
                                     
@@ -194,8 +196,6 @@ namespace DiscordBot
                         if (channel_event.aktiv != 1)
                             continue;
 
-                        Log.Information($"system - channel_event handler - start channel_event:{channel_event.id} message:{Context.Message.Id} channel:{Context.Channel.Id}");
-
                         var e = Event.GetById(channel_event.Event);
 
                         //move
@@ -207,6 +207,8 @@ namespace DiscordBot
                             {
                                 if (Context.Message.Content.Contains(when_item) && when_item != "" || when_item == "" && Context.Message.Attachments.Count > 0)
                                 {
+                                    Log.Information($"system - channel_event handler - start channel_event:{channel_event.id} message:{Context.Message.Id} channel:{Context.Channel.Id}");
+
                                     if (e.what == "move")
                                     {
                                         var channel = Client.GetChannel((ulong)Convert.ToInt64(e.how)) as ISocketMessageChannel;
@@ -228,6 +230,8 @@ namespace DiscordBot
                             {
                                 if (Context.Message.Content.Contains(when_item) && when_item != "" || when_item == "" && Context.Message.Attachments.Count > 0)
                                 {
+                                    Log.Information($"system - channel_event handler - start channel_event:{channel_event.id} message:{Context.Message.Id} channel:{Context.Channel.Id}");
+
                                     if (e.what == "copy")
                                     {
                                         if (e.how == "broadcast")
@@ -259,6 +263,8 @@ namespace DiscordBot
                                 {
                                     if (!Context.Message.Content.Contains(when_item))
                                     {
+                                        Log.Information($"system - channel_event handler - start channel_event:{channel_event.id} message:{Context.Message.Id} channel:{Context.Channel.Id}");
+
                                         await Context.Channel.DeleteMessageAsync(Message.Id);
                                     }
 
@@ -269,6 +275,8 @@ namespace DiscordBot
                                 {
                                     if (Context.Message.Content.Contains(when_item))
                                     {
+                                        Log.Information($"system - channel_event handler - start channel_event:{channel_event.id} message:{Context.Message.Id} channel:{Context.Channel.Id}");
+
                                         await Context.Channel.DeleteMessageAsync(Message.Id);
                                     }
 
@@ -308,8 +316,6 @@ namespace DiscordBot
                         if (channel_event.aktiv != 1)
                             continue;
 
-                        Log.Information($"system - reaction added channel_event - start channel_event:{channel_event.id} channel:{Channel.Id}");
-
                         var e = Event.GetById(channel_event.Event);
                         string[] what_list = e.what.Split(";");
                         string[] how = e.how.Split(";");
@@ -317,6 +323,8 @@ namespace DiscordBot
                         //reaction update event
                         if (Reaction.Emote.Name == e.what)
                         {
+                            Log.Information($"system - reaction added channel_event - start channel_event:{channel_event.id} channel:{Channel.Id}");
+
                             if (how[0] == "present")
                             {
                                 var message = Core.Classes.Message.GetByMessageAndChannelAndType(userMessage.Id, Channel.Id, 'u');
@@ -375,6 +383,8 @@ namespace DiscordBot
                                 {
                                     if (reaction.Key.Name == e.what && reaction.Value.ReactionCount == Convert.ToInt32(channel_event.when) + 1)
                                     {
+                                        Log.Information($"system - reaction added channel_event - start channel_event:{channel_event.id} channel:{Channel.Id}");
+
                                         if (how.Length == 1)
                                         {
                                             if (how[0] == "pin")
@@ -403,6 +413,8 @@ namespace DiscordBot
                                 {
                                     if (reaction.Key.Name == what_list[0] && reaction.Value.ReactionCount == Convert.ToInt32(channel_event.when) + 1)
                                     {
+                                        Log.Information($"system - reaction added channel_event - start channel_event:{channel_event.id} channel:{Channel.Id}");
+
                                         if (how.Length == 1)
                                         {
                                             if (what_list[1] == "copy")
@@ -517,8 +529,6 @@ namespace DiscordBot
                         if (channel_event.aktiv != 1)
                             continue;
 
-                        Log.Information($"system - reaction removed channel_event - start channel_event:{channel_event.id} channel:{Channel.Id}");
-
                         var e = Event.GetById(channel_event.Event);
                         string[] what_list = e.what.Split(";");
                         string[] how = e.how.Split(";");
@@ -526,6 +536,8 @@ namespace DiscordBot
                         //reaction update event
                         if (Reaction.Emote.Name == e.what)
                         {
+                            Log.Information($"system - reaction removed channel_event - start channel_event:{channel_event.id} channel:{Channel.Id}");
+
                             if (how[0] == "present")
                             {
                                 var message = Core.Classes.Message.GetByMessageAndChannelAndType(userMessage.Id, Channel.Id, 'u');
