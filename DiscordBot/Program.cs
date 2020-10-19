@@ -156,10 +156,8 @@ namespace DiscordBot
                                                         }
                                                     }
 
-
                                                     user.karma += karma_per_post;
                                                 }
-
 
                                                 User.Edit(user);
                                             }
