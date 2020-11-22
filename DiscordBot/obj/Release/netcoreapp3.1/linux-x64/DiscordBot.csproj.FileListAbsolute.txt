@@ -11,17 +11,13 @@ C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\li
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Discord.Net.Webhook.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Discord.Net.WebSocket.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Google.Protobuf.dll
-C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.Bcl.AsyncInterfaces.dll
-C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.Bcl.HashCode.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.EntityFrameworkCore.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.EntityFrameworkCore.Abstractions.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.EntityFrameworkCore.Design.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.Extensions.Caching.Abstractions.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.Extensions.Caching.Memory.dll
-C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.Extensions.Configuration.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.Extensions.Configuration.Abstractions.dll
-C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.Extensions.Configuration.Binder.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.Extensions.Logging.dll
@@ -482,3 +478,4 @@ C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\obj\Release\netcoreapp3
 C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\obj\Release\netcoreapp3.1\linux-x64\DiscordBot.genruntimeconfig.cache
 C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\obj\Release\netcoreapp3.1\linux-x64\DiscordBot.csprojAssemblyReference.cache
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\obj\Release\netcoreapp3.1\linux-x64\DiscordBot.csprojAssemblyReference.cache
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Humanizer.dll

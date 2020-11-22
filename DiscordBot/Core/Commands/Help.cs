@@ -65,7 +65,8 @@ namespace DiscordBot.Core.Commands
                                     "!data event getall | ga"));
                                 fields.Add(Classes.Field.CreateFieldBuilder("data channel_event",
                                     "!data channel_event | c_e getall | ga **[<ChannelID>]**"));
-
+                                fields.Add(Classes.Field.CreateFieldBuilder("admin reset roles",
+                                    "!admin reset roles - **RESETS ALL ROLES EXCPECT ADMIN** - back to the rules"));
 
 
                                 if (user.privileg >= Classes.Privileg.owner)
