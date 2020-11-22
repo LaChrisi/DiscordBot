@@ -6,17 +6,13 @@ C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Disc
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\DiscordBot.pdb
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Google.Protobuf.dll
-C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Microsoft.Bcl.AsyncInterfaces.dll
-C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Microsoft.Bcl.HashCode.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Abstractions.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.Abstractions.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.Memory.dll
-C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Abstractions.dll
-C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Binder.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.dll
@@ -124,3 +120,5 @@ C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Syst
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
 C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
 C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Humanizer.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\System.ComponentModel.Annotations.dll
