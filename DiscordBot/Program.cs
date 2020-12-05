@@ -10,7 +10,6 @@ using Discord.WebSocket;
 using Discord.Commands;
 
 using DiscordBot.Core.Classes;
-using Org.BouncyCastle.Math.EC;
 
 namespace DiscordBot
 {

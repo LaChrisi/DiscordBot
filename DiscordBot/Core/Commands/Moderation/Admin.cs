@@ -47,8 +47,10 @@ namespace DiscordBot.Core.Commands.Moderation
 
                         Role = Core.Classes.Role.GetById(6);
                         exclutedRoles.Add(channel.Guild.Roles.FirstOrDefault(x => x.Id == 356486959901835264));
-                        
 
+                        Role = Core.Classes.Role.GetById(6);
+                        exclutedRoles.Add(channel.Guild.Roles.FirstOrDefault(x => x.Id == 780036990158110730));
+                        
                         List<IRole> roles = new List<IRole>();
 
                         foreach (var role in channel.Guild.Roles)

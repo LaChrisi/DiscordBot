@@ -67,6 +67,12 @@ namespace DiscordBot.Core.Commands
                                     "!data channel_event | c_e getall | ga **[<ChannelID>]**"));
                                 fields.Add(Classes.Field.CreateFieldBuilder("admin reset roles",
                                     "!admin reset roles - **RESETS ALL ROLES EXCPECT ADMIN** - back to the rules"));
+                                fields.Add(Classes.Field.CreateFieldBuilder("say",
+                                        "!say **<ChannelID>** **\"<What-to-Say>\"**"));
+                                fields.Add(Classes.Field.CreateFieldBuilder("delete",
+                                    "!delete **<ChannelID>** **<MessageID>**"));
+                                fields.Add(Classes.Field.CreateFieldBuilder("edit",
+                                    "!delete **<ChannelID>** **<MessageID>** **<What-to-Say>**"));
 
 
                                 if (user.privileg >= Classes.Privileg.owner)
@@ -76,10 +82,6 @@ namespace DiscordBot.Core.Commands
                                         "!get server"));
                                     fields.Add(Classes.Field.CreateFieldBuilder("backdoor",
                                         "!backdoor **<ServerID>**"));
-                                    fields.Add(Classes.Field.CreateFieldBuilder("say",
-                                        "!say **<ChannelID>** **\"<What-to-Say>\"**"));
-                                    fields.Add(Classes.Field.CreateFieldBuilder("delete",
-                                        "!delete **<ChannelID>** **<MessageID>**"));
                                     fields.Add(Classes.Field.CreateFieldBuilder("status",
                                         "!status **<play | watch | listen>** **<\"Status-Message\">**"));
                                     fields.Add(Classes.Field.CreateFieldBuilder("data user",
