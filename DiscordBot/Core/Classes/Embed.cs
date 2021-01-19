@@ -39,6 +39,45 @@ namespace DiscordBot.Core.Classes
             {
                 embed.AddField(field);
             }
+
+            embed.WithColor(color);
+            embed.WithFooter(f => f.Text = footer);
+            embed.WithTimestamp(DateTimeOffset.Now);
+
+            return embed.Build();
+        }
+
+        public static Discord.Embed New(Discord.Rest.RestUser author, EmbedFieldBuilder field, Color color, string title = "", string description = "", string imgURL = "", string thumbnailUrl = "", string footer = "")
+        {
+            EmbedBuilder embed = new EmbedBuilder();
+
+            embed.WithAuthor(author);
+            embed.WithTitle(title);
+            embed.WithDescription(description);
+            embed.WithImageUrl(imgURL);
+            embed.WithThumbnailUrl(thumbnailUrl);
+            embed.AddField(field);
+            embed.WithColor(color);
+            embed.WithFooter(f => f.Text = footer);
+            embed.WithTimestamp(DateTimeOffset.Now);
+
+            return embed.Build();
+        }
+
+        public static Discord.Embed New(Discord.Rest.RestUser author, List<EmbedFieldBuilder> fields, Color color, string title = "", string description = "", string imgURL = "", string thumbnailUrl = "", string footer = "")
+        {
+            EmbedBuilder embed = new EmbedBuilder();
+
+            embed.WithAuthor(author);
+            embed.WithTitle(title);
+            embed.WithDescription(description);
+            embed.WithImageUrl(imgURL);
+            embed.WithThumbnailUrl(thumbnailUrl);
+
+            foreach (var field in fields)
+            {
+                embed.AddField(field);
+            }
             
             embed.WithColor(color);
             embed.WithFooter(f => f.Text = footer);
@@ -94,7 +133,7 @@ namespace DiscordBot.Core.Classes
                 i++;
             }
 
-            return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "top 5 memers", "ordered by upvotes");
+            return Embed.New(Program.Client.Rest.CurrentUser, fields, Colors.information, "top 5 memers", "ordered by upvotes");
         }
 
         public static Discord.Embed CreatePresent(SocketReaction reaction)
@@ -103,7 +142,7 @@ namespace DiscordBot.Core.Classes
 
             fields.Add(Field.CreateFieldBuilder(reaction.User.Value.Username, $"{DateTime.Now.ToString("dd.M. - HH:mm:ss")}"));
 
-            return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members", "current: 1");
+            return Embed.New(Program.Client.Rest.CurrentUser, fields, Colors.information, "present members", "current: 1");
         }
 
         public static Discord.Embed UpdatePresent(IUserMessage message, SocketReaction reaction, bool remove = false)
@@ -125,7 +164,7 @@ namespace DiscordBot.Core.Classes
                     }
                 }
 
-                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members", "current: " + current);
+                return Embed.New(Program.Client.Rest.CurrentUser, fields, Colors.information, "present members", "current: " + current);
             }
             else
             {
@@ -140,7 +179,7 @@ namespace DiscordBot.Core.Classes
                     fields.Add(Field.CreateFieldBuilder(reaction.User.Value.Username, $"{DateTime.Now.ToString("dd.M. - HH:mm:ss")}"));
                     current++;
                 }
-                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members", "current: " + current);
+                return Embed.New(Program.Client.Rest.CurrentUser, fields, Colors.information, "present members", "current: " + current);
             }
         }
 
@@ -168,7 +207,7 @@ namespace DiscordBot.Core.Classes
                     }
                 }
 
-                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members", "current: " + current);
+                return Embed.New(Program.Client.Rest.CurrentUser, fields, Colors.information, "present members", "current: " + current);
             }
             else
             {
@@ -189,7 +228,7 @@ namespace DiscordBot.Core.Classes
                     }
                 }
 
-                return Embed.New(Program.Client.CurrentUser, fields, Colors.information, "present members", "current: " + current);
+                return Embed.New(Program.Client.Rest.CurrentUser, fields, Colors.information, "present members", "current: " + current);
             }
         }
 

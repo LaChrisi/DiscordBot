@@ -37,7 +37,9 @@ namespace DiscordBot.Core.Commands
                             if (user.karma != -1)
                                 fields.Add(Field.CreateFieldBuilder(":bar_chart: - karma", user.karma.ToString()));
 
-                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Client.GetUser(UserID), fields, Colors.information, "stats"));
+                            var restUser = await Context.Client.Rest.GetUserAsync(UserID);
+                            
+                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(restUser, fields, Colors.information, "stats"));
                         }
                         else
                         {
