@@ -28,8 +28,6 @@ C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\li
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\MySql.Data.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Ubiety.Dns.Core.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Newtonsoft.Json.dll
-C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Renci.SshNet.dll
-C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\SshNet.Security.Cryptography.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\System.Configuration.ConfigurationManager.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\System.Drawing.Common.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\System.Interactive.Async.dll
@@ -37,7 +35,6 @@ C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\li
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\System.Security.Permissions.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\System.Windows.Extensions.dll
-C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\System.Xml.XPath.XmlDocument.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.CSharp.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.VisualBasic.Core.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Microsoft.VisualBasic.dll

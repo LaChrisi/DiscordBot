@@ -120,7 +120,7 @@ namespace DiscordBot
                                     
                                     foreach (var attachment in Context.Message.Attachments)
                                     {
-                                        var new_message = await Context.Channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachment.ProxyUrl, footer: Message.Author.Id.ToString()));
+                                        var new_message = await Context.Channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachment.ProxyUrl, footer: Message.Author.Id.ToString()));
 
 
                                         foreach (var how_item in how)
@@ -965,14 +965,14 @@ namespace DiscordBot
                                 if (Message.Content != "")
                                     fields.Add(Field.CreateFieldBuilder("message", Message.Content));
 
-                                x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Image.Value.Url, footer: Message.Author.Id.ToString()));
+                                x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Image.Value.Url, footer: Message.Author.Id.ToString()));
                             }
                             else if (embeds.FirstOrDefault().Thumbnail != null)
                             {
                                 if (Message.Content != "")
                                     fields.Add(Field.CreateFieldBuilder("message", Message.Content));
 
-                                x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Thumbnail.Value.Url, footer: Message.Author.Id.ToString()));
+                                x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Thumbnail.Value.Url, footer: Message.Author.Id.ToString()));
                             }
 
                         }
@@ -983,19 +983,19 @@ namespace DiscordBot
                                 if (Message.Content != "")
                                     fields.Add(Field.CreateFieldBuilder("message", Message.Content));
 
-                                x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachments.First().Url, footer: Message.Author.Id.ToString()));
+                                x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachments.First().Url, footer: Message.Author.Id.ToString()));
                             }
                             else
                             {
                                 if (Message.Content.EndsWith(".jpg") || Message.Content.EndsWith(".jpeg") || Message.Content.EndsWith(".png"))
                                 {
                                     fields.Add(Field.CreateFieldBuilder("message", Message.Content));
-                                    x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: Message.Content, footer: Message.Author.Id.ToString()));
+                                    x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: Message.Content, footer: Message.Author.Id.ToString()));
                                 }
                                 else
                                 {
                                     fields.Add(Field.CreateFieldBuilder("message", Message.Content));
-                                    x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", footer: Message.Author.Id.ToString()));
+                                    x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", footer: Message.Author.Id.ToString()));
                                 }
                             }
                         }
@@ -1051,14 +1051,14 @@ namespace DiscordBot
                                     if (Message.Content != "")
                                         fields.Add(Field.CreateFieldBuilder("message", Message.Content));
 
-                                    x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Image.Value.Url, footer: Message.Author.Id.ToString()));
+                                    x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Image.Value.Url, footer: Message.Author.Id.ToString()));
                                 }
                                 else if (embeds.FirstOrDefault().Thumbnail != null)
                                 {
                                     if (Message.Content != "")
                                         fields.Add(Field.CreateFieldBuilder("message", Message.Content));
 
-                                    x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Thumbnail.Value.Url, footer: Message.Author.Id.ToString()));
+                                    x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: embeds.FirstOrDefault().Thumbnail.Value.Url, footer: Message.Author.Id.ToString()));
                                 }
 
                             }
@@ -1069,19 +1069,19 @@ namespace DiscordBot
                                     if (Message.Content != "")
                                         fields.Add(Field.CreateFieldBuilder("message", Message.Content));
 
-                                    x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachments.First().Url, footer: Message.Author.Id.ToString()));
+                                    x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachments.First().Url, footer: Message.Author.Id.ToString()));
                                 }
                                 else
                                 {
                                     if (Message.Content.EndsWith(".jpg") || Message.Content.EndsWith(".jpeg") || Message.Content.EndsWith(".png"))
                                     {
                                         fields.Add(Field.CreateFieldBuilder("message", Message.Content));
-                                        x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: Message.Content, footer: Message.Author.Id.ToString()));
+                                        x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: Message.Content, footer: Message.Author.Id.ToString()));
                                     }
                                     else
                                     {
                                         fields.Add(Field.CreateFieldBuilder("message", Message.Content));
-                                        x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"meme from [{Message.Channel.Name}]({Message.GetJumpUrl()})", footer: Message.Author.Id.ToString()));
+                                        x = await channel.SendMessageAsync(embed: Core.Classes.Embed.New(restUser, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", footer: Message.Author.Id.ToString()));
                                     }
                                 }
                             }

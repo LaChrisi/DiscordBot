@@ -18,7 +18,7 @@ namespace DiscordBot.Core.Commands
                 Log.Information($"command - join - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
 
                 channel = (Context.User as IGuildUser).VoiceChannel;
-                await channel.ConnectAsync();
+                var x = await channel.ConnectAsync();
             }
             catch (Exception ex)
             {

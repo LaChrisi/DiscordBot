@@ -75,6 +75,30 @@ namespace DiscordBot.Core.Commands.Moderation
                     }
                 }
             }
+            [Command("restart"), SummaryAttribute("restarts all timer")]
+            public async Task HalloModule()
+            {
+                try
+                {
+                    if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.owner))
+                    {
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("warning", "You are not my god!"), Classes.Colors.warning));
+                        Log.Warning($"command - admin restart - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                        return;
+                    }
+
+                    Log.Information($"command - admin restart - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
+
+                    Repetitive_Timer.SetUpDailyTimer(new TimeSpan(Convert.ToInt32(Global.GetByName("daily_timer_hour").value), 0, 0));
+                    Repetitive_Timer.SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
+
+                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("info", "restart done!"), Classes.Colors.information));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"command - admin restart - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+                }
+            }
         }
     }
 }
