@@ -99,6 +99,28 @@ namespace DiscordBot.Core.Commands.Moderation
                     Log.Error($"command - admin restart - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
                 }
             }
+            [Command("leave"), SummaryAttribute("leaves the server")]
+            public async Task LeaveModule()
+            {
+                try
+                {
+                    if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.owner))
+                    {
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("warning", "You are not my god!"), Classes.Colors.warning));
+                        Log.Warning($"command - admin restart - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                        return;
+                    }
+
+                    Log.Information($"command - admin leave - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
+
+                    await Context.Guild.LeaveAsync();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"command - admin leave - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+                }
+            }
+
         }
     }
 }

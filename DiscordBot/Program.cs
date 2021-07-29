@@ -117,11 +117,11 @@ namespace DiscordBot
 
                                     string[] how = vote.how.Split(';');
                                     List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
-                                    
+
+
                                     foreach (var attachment in Context.Message.Attachments)
                                     {
-                                        var new_message = await Context.Channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachment.ProxyUrl, footer: Message.Author.Id.ToString()));
-
+         /**/                           var new_message = await Context.Channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachment.ProxyUrl, footer: Message.Author.Id.ToString()));
 
                                         foreach (var how_item in how)
                                         {

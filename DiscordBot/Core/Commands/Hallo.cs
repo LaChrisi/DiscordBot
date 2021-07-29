@@ -40,8 +40,6 @@ namespace DiscordBot.Core.Commands
                 }
 
                 Log.Information($"command - test - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
-
-                Channel_Event.Add(new Channel_Event(1, Context.Channel.Id, 15, $"{id}", 'r'));
             }
             catch (Exception ex)
             {

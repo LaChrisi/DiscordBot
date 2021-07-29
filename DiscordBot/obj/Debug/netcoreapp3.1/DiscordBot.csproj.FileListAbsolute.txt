@@ -106,7 +106,6 @@ C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Zsta
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\System.Interactive.Async.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\System.Linq.Async.dll
-C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\obj\Debug\netcoreapp3.1\DiscordBot.csproj.CoreCompileInputs.cache
 C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\K4os.Compression.LZ4.dll
 C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\K4os.Compression.LZ4.Streams.dll
 C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\K4os.Hash.xxHash.dll

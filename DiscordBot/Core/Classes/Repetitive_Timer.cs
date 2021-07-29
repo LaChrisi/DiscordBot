@@ -11,6 +11,22 @@ namespace DiscordBot.Core.Classes
         public static Timer daily_timer;
         public static Timer hourly_timer;
 
+        public static async void CheckNextBirthday()
+        {
+            var nextBirthday = Database.Birthdays.GetNext();
+
+            DateTime today = new DateTime(0001, DateTime.Now.Month, DateTime.Now.Day);
+
+            if (nextBirthday.date == today)
+            {
+                ulong channelID = (ulong)Convert.ToInt64(Global.GetByName("birthday_channel_id").value);
+                var channel = await Program.Client.GetGroupChannelAsync(channelID);
+                var user = User.GetById(nextBirthday.user);
+
+                await channel.SendMessageAsync(embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("information", $"It's {user.name}s birthday today!"), Colors.information));
+            }
+        }
+
         public static void SetUpDailyTimer(TimeSpan alertTime)
         {
             try
@@ -152,6 +168,8 @@ namespace DiscordBot.Core.Classes
 
                     User.Edit(user);
                 }
+
+                CheckNextBirthday();
 
                 SetUpDailyTimer(new TimeSpan(Convert.ToInt32(Global.GetByName("daily_timer_hour").value), 0, 0));
             }
