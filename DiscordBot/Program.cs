@@ -10,6 +10,8 @@ using Discord.WebSocket;
 using Discord.Commands;
 
 using DiscordBot.Core.Classes;
+using System.Net;
+using System.IO;
 
 namespace DiscordBot
 {
@@ -19,8 +21,10 @@ namespace DiscordBot
         private CommandService Commands;
 
         static void Main(string[] args)
-            => new Program().MainAsync().GetAwaiter().GetResult();
-        
+        {
+            new Program().MainAsync().GetAwaiter().GetResult();
+        }
+
         private async Task Client_MessageReceived(SocketMessage MessageParam)
         {
             if (MessageParam.Source == MessageSource.System || MessageParam.Source == MessageSource.Bot)
@@ -29,7 +33,7 @@ namespace DiscordBot
             var Message = MessageParam as SocketUserMessage;
             var Context = new SocketCommandContext(Client, Message);
 
-            //command handler - log
+            //command handler - console log
             {
                 int ArgPos = 0;
                 if (Message.HasStringPrefix("!", ref ArgPos) || Message.HasMentionPrefix(Client.CurrentUser, ref ArgPos))
@@ -100,7 +104,7 @@ namespace DiscordBot
 
                                                 user.karma += karma_per_post;
                                             }
-                                               
+
                                             User.Edit(user);
                                         }
                                         else
@@ -111,6 +115,7 @@ namespace DiscordBot
 
                                     break;
                                 }
+                                /**/
                                 else if (Message.Content.Contains(what_item) && what_item != "" || what_item == "" && Context.Message.Attachments.Count > 1)
                                 {
                                     Log.Information($"system - vote handler - start vote_channel:{vote_channel.id} message:{Context.Message.Id} channel:{Context.Channel.Id}");
@@ -118,10 +123,17 @@ namespace DiscordBot
                                     string[] how = vote.how.Split(';');
                                     List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
 
+                                    using var webclient = new WebClient();
 
                                     foreach (var attachment in Context.Message.Attachments)
                                     {
-         /**/                           var new_message = await Context.Channel.SendMessageAsync(embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: attachment.ProxyUrl, footer: Message.Author.Id.ToString()));
+                                        string fileName = Context.Channel.Id + "-" + Context.Message.Id + "--" + attachment.Filename;
+
+                                        webclient.DownloadFile(new Uri(attachment.Url), fileName);
+
+                                        var new_message = await Context.Channel.SendFileAsync(fileName, embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: $"attachment://{fileName}", footer: Message.Author.Id.ToString()));
+
+                                        File.Delete(fileName);
 
                                         foreach (var how_item in how)
                                         {
@@ -168,7 +180,7 @@ namespace DiscordBot
                                         }
                                     }
                                     await Context.Message.DeleteAsync();
-                                    
+
                                     break;
                                 }
                             }
@@ -256,7 +268,7 @@ namespace DiscordBot
 
                             foreach (var when_item in when)
                             {
-                                //nicht enthalten
+                                //not in
                                 if (e.what == "not")
                                 {
                                     if (!Context.Message.Content.Contains(when_item))
@@ -268,7 +280,7 @@ namespace DiscordBot
 
                                     break;
                                 }
-                                //enthalten
+                                //in
                                 else if (e.what == "in")
                                 {
                                     if (Context.Message.Content.Contains(when_item))
@@ -292,7 +304,7 @@ namespace DiscordBot
                 Console.WriteLine("ERROR] " + e.Message);
                 Log.Error($"system - channel_event handler - message:{Context.Message.Id} channel:{Context.Channel.Id} error:{e.Message}");
             }
-            
+
         }
 
         private async Task Client_ReactionAdded(Cacheable<IUserMessage, ulong> Message, ISocketMessageChannel Channel, SocketReaction Reaction)
@@ -386,7 +398,7 @@ namespace DiscordBot
                                     var guildUser = await guildChannel.GetUserAsync(userId) ?? await Client.Rest.GetGuildUserAsync(guildChannel.Guild.Id, userId);
 
                                     var guildRole = guildChannel.Guild.Roles.FirstOrDefault(x => x.Name == role.name);
-                                    
+
                                     await guildUser.AddRoleAsync(guildRole);
                                 }
                                 catch (Exception ex)

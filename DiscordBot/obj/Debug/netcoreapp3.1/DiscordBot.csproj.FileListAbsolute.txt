@@ -118,3 +118,4 @@ C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1
 C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\Humanizer.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Debug\netcoreapp3.1\System.ComponentModel.Annotations.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\obj\Debug\netcoreapp3.1\DiscordBot.csproj.CoreCompileInputs.cache
