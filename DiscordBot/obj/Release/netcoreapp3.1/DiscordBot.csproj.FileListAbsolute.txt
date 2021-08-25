@@ -119,3 +119,8 @@ C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3
 C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\Humanizer.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\System.ComponentModel.Annotations.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\Google.Apis.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\Google.Apis.Auth.PlatformServices.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\Google.Apis.Auth.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\Google.Apis.Calendar.v3.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\Google.Apis.Core.dll

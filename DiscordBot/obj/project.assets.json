@@ -85,6 +85,58 @@
           "lib/netstandard2.1/Discord.Net.WebSocket.dll": {}
         }
       },
+      "Google.Apis/1.54.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis.Core": "1.54.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.dll": {}
+        }
+      },
+      "Google.Apis.Auth/1.54.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis": "1.54.0",
+          "Google.Apis.Core": "1.54.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll": {},
+          "lib/netstandard2.0/Google.Apis.Auth.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll": {},
+          "lib/netstandard2.0/Google.Apis.Auth.dll": {}
+        }
+      },
+      "Google.Apis.Calendar.v3/1.54.0.2410": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis": "1.54.0",
+          "Google.Apis.Auth": "1.54.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.Calendar.v3.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Calendar.v3.dll": {}
+        }
+      },
+      "Google.Apis.Core/1.54.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.Core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Core.dll": {}
+        }
+      },
       "Google.Protobuf/3.14.0": {
         "type": "package",
         "dependencies": {
@@ -391,7 +443,7 @@
           "lib/netstandard2.1/Zstandard.Net.dll": {}
         }
       },
-      "Newtonsoft.Json/12.0.2": {
+      "Newtonsoft.Json/12.0.3": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
@@ -697,6 +749,58 @@
           "lib/netstandard2.1/Discord.Net.WebSocket.dll": {}
         }
       },
+      "Google.Apis/1.54.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis.Core": "1.54.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.dll": {}
+        }
+      },
+      "Google.Apis.Auth/1.54.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis": "1.54.0",
+          "Google.Apis.Core": "1.54.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll": {},
+          "lib/netstandard2.0/Google.Apis.Auth.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll": {},
+          "lib/netstandard2.0/Google.Apis.Auth.dll": {}
+        }
+      },
+      "Google.Apis.Calendar.v3/1.54.0.2410": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis": "1.54.0",
+          "Google.Apis.Auth": "1.54.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.Calendar.v3.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Calendar.v3.dll": {}
+        }
+      },
+      "Google.Apis.Core/1.54.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.Core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Core.dll": {}
+        }
+      },
       "Google.Protobuf/3.14.0": {
         "type": "package",
         "dependencies": {
@@ -997,7 +1101,7 @@
           "lib/netstandard2.1/Zstandard.Net.dll": {}
         }
       },
-      "Newtonsoft.Json/12.0.2": {
+      "Newtonsoft.Json/12.0.3": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
@@ -1294,6 +1398,108 @@
         "lib/netstandard2.0/Discord.Net.WebSocket.xml",
         "lib/netstandard2.1/Discord.Net.WebSocket.dll",
         "lib/netstandard2.1/Discord.Net.WebSocket.xml"
+      ]
+    },
+    "Google.Apis/1.54.0": {
+      "sha512": "53PujXOst4JNibnySRlOzduBwr3wt4hiLPbVCpZs/P2G8waltIW3cmma6sG7lTaW9ag/3T6MtIgt/uFtWBBkwA==",
+      "type": "package",
+      "path": "google.apis/1.54.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.apis.1.54.0.nupkg.sha512",
+        "google.apis.nuspec",
+        "lib/net45/Google.Apis.PlatformServices.dll",
+        "lib/net45/Google.Apis.dll",
+        "lib/net45/Google.Apis.pdb",
+        "lib/net45/Google.Apis.xml",
+        "lib/netstandard1.3/Google.Apis.dll",
+        "lib/netstandard1.3/Google.Apis.pdb",
+        "lib/netstandard1.3/Google.Apis.xml",
+        "lib/netstandard2.0/Google.Apis.dll",
+        "lib/netstandard2.0/Google.Apis.pdb",
+        "lib/netstandard2.0/Google.Apis.xml"
+      ]
+    },
+    "Google.Apis.Auth/1.54.0": {
+      "sha512": "gVWia+KE7MLBTiAaDG//TociR6lE0/reEXx+go065L/w20skB2Ib58vnp4iGPaLehwY8ib8XmXy3P1n/Fr5Y4A==",
+      "type": "package",
+      "path": "google.apis.auth/1.54.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.apis.auth.1.54.0.nupkg.sha512",
+        "google.apis.auth.nuspec",
+        "lib/net45/Google.Apis.Auth.PlatformServices.dll",
+        "lib/net45/Google.Apis.Auth.dll",
+        "lib/net45/Google.Apis.Auth.pdb",
+        "lib/net45/Google.Apis.Auth.xml",
+        "lib/net461/Google.Apis.Auth.PlatformServices.dll",
+        "lib/net461/Google.Apis.Auth.dll",
+        "lib/net461/Google.Apis.Auth.pdb",
+        "lib/net461/Google.Apis.Auth.xml",
+        "lib/netstandard1.3/Google.Apis.Auth.PlatformServices.dll",
+        "lib/netstandard1.3/Google.Apis.Auth.dll",
+        "lib/netstandard1.3/Google.Apis.Auth.pdb",
+        "lib/netstandard1.3/Google.Apis.Auth.xml",
+        "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll",
+        "lib/netstandard2.0/Google.Apis.Auth.dll",
+        "lib/netstandard2.0/Google.Apis.Auth.pdb",
+        "lib/netstandard2.0/Google.Apis.Auth.xml"
+      ]
+    },
+    "Google.Apis.Calendar.v3/1.54.0.2410": {
+      "sha512": "AXrvt9j3GkPaXEb/IdraKWxmWRtoOHL9wTNLaOFl7Xtvd0FEX7yJ7NIhh24cYf3Nzb+gPGjPJsT89GvG//cFVA==",
+      "type": "package",
+      "path": "google.apis.calendar.v3/1.54.0.2410",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.apis.calendar.v3.1.54.0.2410.nupkg.sha512",
+        "google.apis.calendar.v3.nuspec",
+        "lib/net40/Google.Apis.Calendar.v3.dll",
+        "lib/net40/Google.Apis.Calendar.v3.pdb",
+        "lib/net40/Google.Apis.Calendar.v3.xml",
+        "lib/net45/Google.Apis.Calendar.v3.dll",
+        "lib/net45/Google.Apis.Calendar.v3.pdb",
+        "lib/net45/Google.Apis.Calendar.v3.xml",
+        "lib/netstandard1.0/Google.Apis.Calendar.v3.dll",
+        "lib/netstandard1.0/Google.Apis.Calendar.v3.pdb",
+        "lib/netstandard1.0/Google.Apis.Calendar.v3.xml",
+        "lib/netstandard1.3/Google.Apis.Calendar.v3.dll",
+        "lib/netstandard1.3/Google.Apis.Calendar.v3.pdb",
+        "lib/netstandard1.3/Google.Apis.Calendar.v3.xml",
+        "lib/netstandard2.0/Google.Apis.Calendar.v3.dll",
+        "lib/netstandard2.0/Google.Apis.Calendar.v3.pdb",
+        "lib/netstandard2.0/Google.Apis.Calendar.v3.xml"
+      ]
+    },
+    "Google.Apis.Core/1.54.0": {
+      "sha512": "NKeTTKCttOQrLUCyLyRo5m53b2mG8ymJaiL+i1fR6w8TrrHD31ixPGO+BlwQs9OLuLd/p8BKkSdSaNGjKw5rkA==",
+      "type": "package",
+      "path": "google.apis.core/1.54.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.apis.core.1.54.0.nupkg.sha512",
+        "google.apis.core.nuspec",
+        "lib/net45/Google.Apis.Core.dll",
+        "lib/net45/Google.Apis.Core.pdb",
+        "lib/net45/Google.Apis.Core.xml",
+        "lib/netstandard1.3/Google.Apis.Core.dll",
+        "lib/netstandard1.3/Google.Apis.Core.pdb",
+        "lib/netstandard1.3/Google.Apis.Core.xml",
+        "lib/netstandard2.0/Google.Apis.Core.dll",
+        "lib/netstandard2.0/Google.Apis.Core.pdb",
+        "lib/netstandard2.0/Google.Apis.Core.xml"
       ]
     },
     "Google.Protobuf/3.14.0": {
@@ -1820,10 +2026,10 @@
         "mysql.data.nuspec"
       ]
     },
-    "Newtonsoft.Json/12.0.2": {
-      "sha512": "rTK0s2EKlfHsQsH6Yx2smvcTCeyoDNgCW7FEYyV01drPlh2T243PR2DiDXqtC5N4GDm4Ma/lkxfW5a/4793vbA==",
+    "Newtonsoft.Json/12.0.3": {
+      "sha512": "6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
       "type": "package",
-      "path": "newtonsoft.json/12.0.2",
+      "path": "newtonsoft.json/12.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1846,8 +2052,9 @@
         "lib/portable-net40+sl5+win8+wp8+wpa81/Newtonsoft.Json.xml",
         "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.dll",
         "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.xml",
-        "newtonsoft.json.12.0.2.nupkg.sha512",
-        "newtonsoft.json.nuspec"
+        "newtonsoft.json.12.0.3.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
       ]
     },
     "System.Buffers/4.5.1": {
@@ -2418,6 +2625,7 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
       "Discord.Net >= 2.4.0",
+      "Google.Apis.Calendar.v3 >= 1.54.0.2410",
       "Microsoft.EntityFrameworkCore >= 5.0.9",
       "Microsoft.EntityFrameworkCore.Design >= 5.0.9",
       "Microsoft.EntityFrameworkCore.Tools >= 5.0.9",
@@ -2464,6 +2672,10 @@
           "Discord.Net": {
             "target": "Package",
             "version": "[2.4.0, )"
+          },
+          "Google.Apis.Calendar.v3": {
+            "target": "Package",
+            "version": "[1.54.0.2410, )"
           },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",

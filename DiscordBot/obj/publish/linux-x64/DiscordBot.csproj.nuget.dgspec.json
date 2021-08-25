@@ -42,6 +42,10 @@
               "target": "Package",
               "version": "[2.4.0, )"
             },
+            "Google.Apis.Calendar.v3": {
+              "target": "Package",
+              "version": "[1.54.0.2410, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[5.0.9, )"

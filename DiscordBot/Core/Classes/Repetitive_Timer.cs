@@ -11,22 +11,6 @@ namespace DiscordBot.Core.Classes
         public static Timer daily_timer;
         public static Timer hourly_timer;
 
-        public static async void CheckNextBirthday()
-        {
-            var nextBirthday = Database.Birthdays.GetNext();
-
-            DateTime today = new DateTime(0001, DateTime.Now.Month, DateTime.Now.Day);
-
-            if (nextBirthday.date == today)
-            {
-                ulong channelID = (ulong)Convert.ToInt64(Global.GetByName("birthday_channel_id").value);
-                var channel = await Program.Client.GetGroupChannelAsync(channelID);
-                var user = User.GetById(nextBirthday.user);
-
-                await channel.SendMessageAsync(embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("information", $"It's {user.name}s birthday today!"), Colors.information));
-            }
-        }
-
         public static void SetUpDailyTimer(TimeSpan alertTime)
         {
             try
@@ -110,7 +94,7 @@ namespace DiscordBot.Core.Classes
                     }
                 }
 
-                //renew leaderboard event
+                //renew event
                 channel_event_list = Channel_Event.GetAllByType('r');
 
                 foreach (var channel_event in channel_event_list)
@@ -123,6 +107,19 @@ namespace DiscordBot.Core.Classes
                         if (e.what == "renew")
                         {
                             if (e.how == "leaderboard")
+                            {
+                                var message = await channel.GetMessageAsync((ulong)Convert.ToInt64(channel_event.when)) as IUserMessage;
+
+                                try
+                                {
+                                    await message.ModifyAsync(x => { x.Embed = Embed.GetLeaderboard(); });
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message);
+                                }
+                            }
+                            else if (e.how == "nextBirthday")
                             {
                                 var message = await channel.GetMessageAsync((ulong)Convert.ToInt64(channel_event.when)) as IUserMessage;
 
@@ -168,8 +165,6 @@ namespace DiscordBot.Core.Classes
 
                     User.Edit(user);
                 }
-
-                CheckNextBirthday();
 
                 SetUpDailyTimer(new TimeSpan(Convert.ToInt32(Global.GetByName("daily_timer_hour").value), 0, 0));
             }

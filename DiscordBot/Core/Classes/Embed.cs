@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using DiscordBot.Core.Commands;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -134,6 +135,23 @@ namespace DiscordBot.Core.Classes
             }
 
             return Embed.New(Program.Client.Rest.CurrentUser, fields, Colors.information, "top 5 memers", "ordered by upvotes");
+        }
+
+        public static Discord.Embed GetNextBirthday()
+        {
+            var items = Birthday.GetNextBirthday();
+
+            string content = "";
+
+            foreach (var item in items)
+            {
+                if (items[0].Start.Date == item.Start.Date)
+                {
+                    content = content + item.Summary + "\n";
+                }
+            }
+
+            return Embed.New(Program.Client.Rest.CurrentUser, Field.CreateFieldBuilder(Birthday.DateToSting(items[0].Start.Date), content), Colors.information, "top 5 memers", "ordered by upvotes");
         }
 
         public static Discord.Embed CreatePresent(SocketReaction reaction)

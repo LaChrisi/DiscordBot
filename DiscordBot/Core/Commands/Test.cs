@@ -7,10 +7,12 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBot.Core.Classes;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Services;
 
 namespace DiscordBot.Core.Commands
 {
-    public class Hello : ModuleBase<SocketCommandContext>
+    public class Test : ModuleBase<SocketCommandContext>
     {
         [Command("hallo"), SummaryAttribute("Hallo Welt")]
         public async Task HalloModule()
@@ -28,7 +30,7 @@ namespace DiscordBot.Core.Commands
         }
 
         [Command("test"), SummaryAttribute("test command")]
-        public async Task TestModule(ulong id)
+        public async Task TestModule(ulong id = 0)
         {
             try
             {
@@ -40,6 +42,12 @@ namespace DiscordBot.Core.Commands
                 }
 
                 Log.Information($"command - test - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
+
+                //start test here
+
+
+                
+                //test end
             }
             catch (Exception ex)
             {

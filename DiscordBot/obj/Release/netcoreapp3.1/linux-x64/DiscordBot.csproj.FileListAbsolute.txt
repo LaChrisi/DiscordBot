@@ -476,3 +476,8 @@ C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\obj\Release\netcoreapp3
 C:\Users\ch.mueller\Desktop\GitHub\DiscordBot\DiscordBot\obj\Release\netcoreapp3.1\linux-x64\DiscordBot.csprojAssemblyReference.cache
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\obj\Release\netcoreapp3.1\linux-x64\DiscordBot.csprojAssemblyReference.cache
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Humanizer.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Google.Apis.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Google.Apis.Auth.PlatformServices.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Google.Apis.Auth.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Google.Apis.Calendar.v3.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Google.Apis.Core.dll
