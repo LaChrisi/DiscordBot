@@ -1013,7 +1013,7 @@ namespace DiscordBot
                         }
 
                         if (!move)
-                            Core.Classes.Message.Add(new Core.Classes.Message(Message.Author.Id, Message.Id, channel.Id, 'c'));
+                            Core.Classes.Message.Add(new Message(Message.Author.Id, Message.Id, channel.Id, 'c'));
                     }
                     finally
                     {

@@ -130,6 +130,33 @@ namespace DiscordBot.Core.Classes
             return new Message((ulong)Convert.ToInt64(dt.Rows[0]["id"]), (ulong)Convert.ToInt64(dt.Rows[0]["user"]), (ulong)Convert.ToInt64(dt.Rows[0]["message"]), (ulong)Convert.ToInt64(dt.Rows[0]["channel"]), Convert.ToChar(dt.Rows[0]["type"]), (ulong)Convert.ToInt64(dt.Rows[0]["reference"]));
         }
 
+        public static List<Message> GetAllByChannelAndType(ulong channel, char type)
+        {
+            var query = "SELECT * FROM message WHERE channel = @channel AND type = @type";
+            var args = new Dictionary<string, object>
+            {
+                {"@channel", channel},
+                {"@type", type}
+            };
+            DataTable dt = Data.ExecuteRead(query, args);
+
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                return null;
+            }
+
+            List<Message> list = new List<Message>();
+            int i = 0;
+
+            foreach (var item in dt.Rows)
+            {
+                list.Add(new Message((ulong)Convert.ToInt64(dt.Rows[i]["id"]), (ulong)Convert.ToInt64(dt.Rows[i]["user"]), (ulong)Convert.ToInt64(dt.Rows[i]["message"]), (ulong)Convert.ToInt64(dt.Rows[i]["channel"]), Convert.ToChar(dt.Rows[i]["type"]), (ulong)Convert.ToInt64(dt.Rows[i]["reference"])));
+                i++;
+            }
+
+            return list;
+        }
+
         public static Message GetLastByChannelAndType(ulong channel, char type)
         {
             var query = "SELECT * FROM message WHERE channel = @channel AND type = @type ORDER BY ID DESC LIMIT 1";

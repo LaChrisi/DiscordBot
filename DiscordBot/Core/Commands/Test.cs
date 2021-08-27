@@ -45,8 +45,58 @@ namespace DiscordBot.Core.Commands
 
                 //start test here
 
+                var channel_event_list = Channel_Event.GetAllByType('s');
 
-                
+                foreach (var channel_event in channel_event_list)
+                {
+                    if (channel_event.aktiv == 1)
+                    {
+                        var channel = Program.Client.GetChannel(channel_event.channel) as ISocketMessageChannel;
+                        var e = Event.GetById(channel_event.Event);
+
+                        if (e.what == "say")
+                        {
+                            if (e.how == "todays_birthday")
+                            {
+                                var message_list = Message.GetAllByChannelAndType(channel.Id, 't');
+
+                                if (message_list != null)
+                                {
+                                    foreach (var message in message_list)
+                                    {
+                                        await channel.DeleteMessageAsync(message.message);
+                                        Message.DeleteById(message.id);
+                                    }
+                                }
+
+                                var items = Birthday.GetNextBirthday();
+
+                                if (items != null)
+                                {
+                                    string content = "";
+
+                                    foreach (var item in items)
+                                    {
+                                        if (item.Start.Date == DateTime.Now.Date.ToString("yyyy-MM-dd"))
+                                        {
+                                            content = content + item.Summary + "\n";
+                                        }
+                                    }
+
+                                    if (content != "")
+                                    {
+                                        content = content + "\nHappy Birthday!";
+
+                                        var message = await channel.SendMessageAsync(embed: Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder(Birthday.DateToSting(items[0].Start.Date), content), Colors.information, "todays birthday"));
+
+                                        Message.Add(new Message(Program.Client.CurrentUser.Id, message.Id, channel.Id, 't'));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 //test end
             }
             catch (Exception ex)
