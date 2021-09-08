@@ -24,7 +24,8 @@ namespace DiscordBot.Core.Commands
                 {
                     if (items[0].Start.Date == item.Start.Date)
                     {
-                        content = content + item.Summary + "\n";
+                        var user = Program.Client.GetUser((ulong)Convert.ToInt64(item.Description));
+                        content = content + user.Username + "\n";
                     }
                 }
 
@@ -56,7 +57,7 @@ namespace DiscordBot.Core.Commands
             request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
             request.MaxResults = Convert.ToInt32(Global.GetByName("max_birthdays_a_day").value);
             request.TimeMin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            request.Fields = "items(summary,start)";
+            request.Fields = "items(summary,description,start)";
 
             var response = request.Execute();
 

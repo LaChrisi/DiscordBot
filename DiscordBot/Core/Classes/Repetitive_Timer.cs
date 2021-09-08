@@ -62,7 +62,7 @@ namespace DiscordBot.Core.Classes
         }
 
         //hourly_timer event
-        private static async void Hourly_timer_Elapsed(object sender, ElapsedEventArgs eArgs)
+        public static async void Hourly_timer_Elapsed(object sender, ElapsedEventArgs eArgs)
         {
             try
             {
@@ -134,7 +134,9 @@ namespace DiscordBot.Core.Classes
                                     {
                                         if (items[0].Start.Date == item.Start.Date)
                                         {
-                                            content = content + item.Summary + "\n";
+                                            var user = Program.Client.GetUser((ulong) Convert.ToInt64(item.Description));
+                                            content = content + user.Username + "\n";
+                                            //content = content + item.Summary + "\n";
                                         }
                                     }
 
@@ -159,7 +161,7 @@ namespace DiscordBot.Core.Classes
         }
 
         //daily_timer event
-        private static async void Daily_timer_Elapsed(object sender, ElapsedEventArgs eArgs)
+        public static async void Daily_timer_Elapsed(object sender, ElapsedEventArgs eArgs)
         {
             try
             {
@@ -217,7 +219,9 @@ namespace DiscordBot.Core.Classes
                                     {
                                         if (item.Start.Date == DateTime.Now.Date.ToString("yyyy-MM-dd"))
                                         {
-                                            content = content + item.Summary + "\n";
+                                            var user = Program.Client.GetUser((ulong)Convert.ToInt64(item.Description));
+                                            content = content + user.Mention + "\n";
+                                            //content = content + item.Summary + "\n";
                                         }
                                     }
 

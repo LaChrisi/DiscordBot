@@ -15,7 +15,7 @@ namespace DiscordBot.Core.Commands.Moderation
         [Group("admin"), Summary("admin commands")]
         public class AdminGroup : ModuleBase<SocketCommandContext>
         {
-            [Group("reset"), Summary("admin commands")]
+            [Group("reset"), Summary("reset group")]
             public class ResetGroup : ModuleBase<SocketCommandContext>
             {
                 [Command("roles")]
@@ -75,39 +75,16 @@ namespace DiscordBot.Core.Commands.Moderation
                     }
                 }
             }
-            [Command("restart"), SummaryAttribute("restarts all timer")]
-            public async Task HalloModule()
-            {
-                try
-                {
-                    if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.owner))
-                    {
-                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("warning", "You are not my god!"), Classes.Colors.warning));
-                        Log.Warning($"command - admin restart - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
-                        return;
-                    }
 
-                    Log.Information($"command - admin restart - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
-
-                    Repetitive_Timer.SetUpDailyTimer(new TimeSpan(Convert.ToInt32(Global.GetByName("daily_timer_hour").value), 0, 0));
-                    Repetitive_Timer.SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
-
-                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("info", "restart done!"), Classes.Colors.information));
-                }
-                catch (Exception ex)
-                {
-                    Log.Error($"command - admin restart - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
-                }
-            }
             [Command("leave"), SummaryAttribute("leaves the server")]
             public async Task LeaveModule()
             {
                 try
                 {
-                    if (!Classes.Privileg.CheckById(Context.User.Id, Classes.Privileg.owner))
+                    if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Classes.Field.CreateFieldBuilder("warning", "You are not my god!"), Classes.Colors.warning));
-                        Log.Warning($"command - admin restart - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Classes.Colors.warning));
+                        Log.Warning($"command - admin leave - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
                         return;
                     }
 
@@ -118,6 +95,83 @@ namespace DiscordBot.Core.Commands.Moderation
                 catch (Exception ex)
                 {
                     Log.Error($"command - admin leave - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+                }
+            }
+
+            [Group("timer"), Summary("timer group")]
+            public class TimerGroup : ModuleBase<SocketCommandContext>
+            {
+                [Command("restart"), SummaryAttribute("restarts all timer")]
+                public async Task RestartModule()
+                {
+                    try
+                    {
+                        if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
+                        {
+                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                            Log.Warning($"command - admin timer restart - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                            return;
+                        }
+
+                        Log.Information($"command - admin timer restart - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
+
+                        Repetitive_Timer.SetUpDailyTimer(new TimeSpan(Convert.ToInt32(Global.GetByName("daily_timer_hour").value), 0, 0));
+                        Repetitive_Timer.SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
+
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("info", "restart done!"), Colors.information));
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"command - admin timer restart - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+                    }
+                }
+
+                [Command("hour"), SummaryAttribute("uses the hourly event")]
+                public async Task HourModule()
+                {
+                    try
+                    {
+                        if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
+                        {
+                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                            Log.Warning($"command - admin timer hour - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                            return;
+                        }
+
+                        Log.Information($"command - admin timer hour - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
+
+                        Repetitive_Timer.Hourly_timer_Elapsed(null, null);
+
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("info", "timer hour done!"), Colors.information));
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"command - admin timer hour - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+                    }
+                }
+
+                [Command("day"), SummaryAttribute("uses the daily event")]
+                public async Task DayModule()
+                {
+                    try
+                    {
+                        if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
+                        {
+                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                            Log.Warning($"command - admin timer day - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                            return;
+                        }
+
+                        Log.Information($"command - admin timer day - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
+
+                        Repetitive_Timer.Daily_timer_Elapsed(null, null);
+
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("info", "timer hour done!"), Colors.information));
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"command - admin timer day - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+                    }
                 }
             }
 
