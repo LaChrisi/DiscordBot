@@ -166,7 +166,7 @@ namespace DiscordBot.Core.Commands.Moderation
 
                         Repetitive_Timer.Daily_timer_Elapsed(null, null);
 
-                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("info", "timer hour done!"), Colors.information));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("info", "timer day done!"), Colors.information));
                     }
                     catch (Exception ex)
                     {

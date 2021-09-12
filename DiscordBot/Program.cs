@@ -306,8 +306,8 @@ namespace DiscordBot
             }
 
         }
-
-        private async Task Client_ReactionAdded(Cacheable<IUserMessage, ulong> Message, ISocketMessageChannel Channel, SocketReaction Reaction)
+        
+        private async Task Client_ReactionAdded(Cacheable<IUserMessage, ulong> Message, Cacheable<IMessageChannel, ulong> Channelarg, SocketReaction Reaction)
         {
             try
             {
@@ -316,6 +316,8 @@ namespace DiscordBot
                     if (Reaction.User.Value.IsBot)
                         return;
                 }
+
+                var Channel = await Client.GetChannelAsync(Channelarg.Id) as ISocketMessageChannel;
 
                 var userMessage = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
                 var Reactions = userMessage.Reactions;
@@ -541,11 +543,11 @@ namespace DiscordBot
             }
             catch (Exception ex)
             {
-                Log.Error($"system - reaction added - message:{Message.Id} channel:{Channel.Id} error:{ex.Message}");
+                Log.Error($"system - reaction added - message:{Message.Id} channel:{Channelarg.Id} error:{ex.Message}");
             }
         }
 
-        private async Task Client_ReactionRemoved(Cacheable<IUserMessage, ulong> Message, ISocketMessageChannel Channel, SocketReaction Reaction)
+        private async Task Client_ReactionRemoved(Cacheable<IUserMessage, ulong> Message, Cacheable<IMessageChannel, ulong> Channelarg, SocketReaction Reaction)
         {
             try
             {
@@ -554,6 +556,8 @@ namespace DiscordBot
                     if (Reaction.User.Value.IsBot)
                         return;
                 }
+
+                var Channel = await Client.GetChannelAsync(Channelarg.Id) as ISocketMessageChannel;
 
                 var userMessage = await Channel.GetMessageAsync(Message.Id) as IUserMessage;
                 var Reactions = userMessage.Reactions;
@@ -691,7 +695,7 @@ namespace DiscordBot
             }
             catch (Exception ex)
             {
-                Log.Error($"system - reaction removed - message:{Message.Id} channel:{Channel.Id} error:{ex.Message}");
+                Log.Error($"system - reaction removed - message:{Message.Id} channel:{Channelarg.Id} error:{ex.Message}");
             }
         }
 
@@ -731,6 +735,8 @@ namespace DiscordBot
             Client.UserJoined += Client_UserJoined;
             Client.UserUpdated += Client_UserUpdated;
 
+            Client.InteractionCreated += Client_InteractionCreated;
+
 #if DEBUG
             await Client.LoginAsync(TokenType.Bot, Token.token_test);
 #else
@@ -743,6 +749,49 @@ namespace DiscordBot
             await Client.StartAsync();
 
             await Task.Delay(-1);
+        }
+
+        private async Task Client_InteractionCreated(SocketInteraction interaction)
+        {
+            // Checking the type of this interaction
+            switch (interaction)
+            {
+                // Slash commands
+                case SocketSlashCommand commandInteraction:
+                    await Core.Classes.SlashCommands.SlashCommandHandler(commandInteraction);
+                    break;
+
+                // Button clicks/selection dropdowns
+                case SocketMessageComponent componentInteraction:
+                    await MyMessageComponentHandler(componentInteraction);
+                    break;
+
+                // Unused or Unknown/Unsupported
+                default:
+                    break;
+            }
+        }
+
+        
+
+        private async Task MyMessageComponentHandler(SocketMessageComponent interaction)
+        {
+            // Get the custom ID 
+            var customId = interaction.Data.CustomId;
+            // Get the user
+            var user = (SocketGuildUser)interaction.User;
+            // Get the guild
+            var guild = user.Guild;
+
+            // Respond with the update message. This edits the message which this component resides.
+            await interaction.UpdateAsync(msgProps => msgProps.Content = $"Clicked {interaction.Data.CustomId}!");
+
+            // Also you can followup with a additional messages
+            await interaction.FollowupAsync($"Clicked {interaction.Data.CustomId}!", ephemeral: true);
+
+            // If you are using selection dropdowns, you can get the selected label and values using these
+            var selectedLabel = ((SelectMenu)interaction.Message.Components.First().Components.First()).Options.FirstOrDefault(x => x.Value == interaction.Data.Values.FirstOrDefault())?.Label;
+            var selectedValue = interaction.Data.Values.First();
         }
 
 #pragma warning disable CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.

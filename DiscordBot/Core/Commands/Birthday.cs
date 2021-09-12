@@ -25,7 +25,11 @@ namespace DiscordBot.Core.Commands
                     if (items[0].Start.Date == item.Start.Date)
                     {
                         var user = Program.Client.GetUser((ulong)Convert.ToInt64(item.Description));
-                        content = content + user.Username + "\n";
+
+                        if (user != null)
+                        {
+                            content = content + user.Username + "\n";
+                        }
                     }
                 }
 

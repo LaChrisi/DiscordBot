@@ -38,13 +38,13 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
-            "Discord.Net": {
+            "Discord.Net.Labs": {
               "target": "Package",
-              "version": "[2.4.0, )"
+              "version": "[3.0.2, )"
             },
             "Google.Apis.Calendar.v3": {
               "target": "Package",
-              "version": "[1.54.0.2410, )"
+              "version": "[1.55.0.2410, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",

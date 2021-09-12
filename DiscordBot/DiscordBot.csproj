@@ -13,8 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="2.4.0" />
-    <PackageReference Include="Google.Apis.Calendar.v3" Version="1.54.0.2410" />
+    <PackageReference Include="Discord.Net.Labs" Version="3.0.2" />
+    <PackageReference Include="Google.Apis.Calendar.v3" Version="1.55.0.2410" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
       <PrivateAssets>all</PrivateAssets>

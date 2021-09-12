@@ -135,8 +135,12 @@ namespace DiscordBot.Core.Classes
                                         if (items[0].Start.Date == item.Start.Date)
                                         {
                                             var user = Program.Client.GetUser((ulong) Convert.ToInt64(item.Description));
-                                            content = content + user.Username + "\n";
-                                            //content = content + item.Summary + "\n";
+
+                                            if (user != null)
+                                            {
+                                                content = content + user.Username + "\n";
+                                                //content = content + item.Summary + "\n";
+                                            }
                                         }
                                     }
 
@@ -172,15 +176,18 @@ namespace DiscordBot.Core.Classes
 
                 var user_list = User.GetAllWithKarma();
 
-                foreach (var user in user_list)
+                if (user_list != null)
                 {
-                    user.karma -= Convert.ToInt32(Global.GetByName("karma_daily_loss").value);
-                    int karma_minimum = Convert.ToInt32(Global.GetByName("karma_minimum").value);
+                    foreach (var user in user_list)
+                    {
+                        user.karma -= Convert.ToInt32(Global.GetByName("karma_daily_loss").value);
+                        int karma_minimum = Convert.ToInt32(Global.GetByName("karma_minimum").value);
 
-                    if (user.karma < karma_minimum)
-                        user.karma = karma_minimum;
+                        if (user.karma < karma_minimum)
+                            user.karma = karma_minimum;
 
-                    User.Edit(user);
+                        User.Edit(user);
+                    }
                 }
 
                 //todays birthday event
@@ -220,8 +227,12 @@ namespace DiscordBot.Core.Classes
                                         if (item.Start.Date == DateTime.Now.Date.ToString("yyyy-MM-dd"))
                                         {
                                             var user = Program.Client.GetUser((ulong)Convert.ToInt64(item.Description));
-                                            content = content + user.Mention + "\n";
-                                            //content = content + item.Summary + "\n";
+
+                                            if (user != null)
+                                            {
+                                                content = content + user.Mention + "\n";
+                                                //content = content + item.Summary + "\n";
+                                            }
                                         }
                                     }
 
