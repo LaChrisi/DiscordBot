@@ -157,6 +157,50 @@ namespace DiscordBot.Core.Classes
                     Log.Error($"command - /help - user:{interaction.User.Id} channel:{interaction.Channel.Id} error:{ex.Message}");
                 }
             }
+            else if (interaction.Data.Name == "get")
+            {
+                Log.Information($"command - /get - start user:{interaction.User.Id} channel:{interaction.Channel.Id} command: /get");
+                try
+                {
+                    foreach (var item in interaction.Data.Options)
+                    {
+                        if (item.Name == "what")
+                        {
+                            if (item.Value.ToString() == "stats")
+                            {
+                                User user = User.GetById(interaction.User.Id);
+
+                                if (user != null)
+                                {
+                                    List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+
+                                    fields.Add(Field.CreateFieldBuilder(":+1: - upvotes", user.upvotes.ToString()));
+                                    fields.Add(Field.CreateFieldBuilder(":-1: - downvotes", user.downvotes.ToString()));
+                                    fields.Add(Field.CreateFieldBuilder(":notepad_spiral: - posts", user.posts.ToString()));
+
+                                    if (user.karma != -1)
+                                        fields.Add(Field.CreateFieldBuilder(":bar_chart: - karma", user.karma.ToString()));
+
+                                    await interaction.RespondAsync(ephemeral: true, embed: Embed.New(interaction.User, fields, Colors.information, "stats"));
+                                }
+                                else
+                                {
+                                    await interaction.RespondAsync(ephemeral: true, embed: Embed.New(interaction.User, Field.CreateFieldBuilder("error", "User not found!"), Colors.error));
+                                    throw new Exception("User not found!");
+                                }
+                            }
+                            else if (item.Value.ToString() == "leaderboard")
+                            {
+                                await interaction.RespondAsync(ephemeral: true, embed: Embed.GetLeaderboard());
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"command - /get - user:{interaction.User.Id} channel:{interaction.Channel.Id} error:{ex.Message}");
+                }
+            }
         }
     }
 }

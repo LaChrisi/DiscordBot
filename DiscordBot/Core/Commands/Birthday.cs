@@ -30,6 +30,10 @@ namespace DiscordBot.Core.Commands
                         {
                             content = content + user.Username + "\n";
                         }
+                        else
+                        {
+                            content = content + item.Summary + "\n";
+                        }
                     }
                 }
 

@@ -9,8 +9,8 @@
     ".NETCoreApp,Version=v3.1/linux-x64": {
       "DiscordBot/1.0.0": {
         "dependencies": {
-          "Discord.Net": "2.4.0",
-          "Google.Apis.Calendar.v3": "1.54.0.2410",
+          "Discord.Net.Labs": "3.0.2",
+          "Google.Apis.Calendar.v3": "1.55.0.2410",
           "Microsoft.EntityFrameworkCore": "5.0.9",
           "Microsoft.EntityFrameworkCore.Design": "5.0.9",
           "Microsoft.EntityFrameworkCore.Tools": "5.0.9",
@@ -746,121 +746,121 @@
           }
         }
       },
-      "Discord.Net/2.4.0": {
+      "Discord.Net.Labs/3.0.2": {
         "dependencies": {
-          "Discord.Net.Commands": "2.4.0",
-          "Discord.Net.Core": "2.4.0",
-          "Discord.Net.Rest": "2.4.0",
-          "Discord.Net.WebSocket": "2.4.0",
-          "Discord.Net.Webhook": "2.4.0"
+          "Discord.Net.Labs.Commands": "3.0.0",
+          "Discord.Net.Labs.Core": "3.0.0",
+          "Discord.Net.Labs.Rest": "3.0.1",
+          "Discord.Net.Labs.WebSocket": "3.0.2",
+          "Discord.Net.Labs.Webhook": "3.0.0"
         }
       },
-      "Discord.Net.Commands/2.4.0": {
+      "Discord.Net.Labs.Commands/3.0.0": {
         "dependencies": {
-          "Discord.Net.Core": "2.4.0"
+          "Discord.Net.Labs.Core": "3.0.0"
         },
         "runtime": {
           "lib/netstandard2.1/Discord.Net.Commands.dll": {
-            "assemblyVersion": "2.4.0.0",
-            "fileVersion": "2.4.0.0"
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.0.0"
           }
         }
       },
-      "Discord.Net.Core/2.4.0": {
+      "Discord.Net.Labs.Core/3.0.0": {
         "dependencies": {
-          "Newtonsoft.Json": "12.0.3",
+          "Newtonsoft.Json": "13.0.1",
           "System.Collections.Immutable": "5.0.0",
           "System.Interactive.Async": "4.0.0"
         },
         "runtime": {
           "lib/netstandard2.1/Discord.Net.Core.dll": {
-            "assemblyVersion": "2.4.0.0",
-            "fileVersion": "2.4.0.0"
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.0.0"
           }
         }
       },
-      "Discord.Net.Rest/2.4.0": {
+      "Discord.Net.Labs.Rest/3.0.1": {
         "dependencies": {
-          "Discord.Net.Core": "2.4.0"
+          "Discord.Net.Labs.Core": "3.0.0"
         },
         "runtime": {
           "lib/netstandard2.1/Discord.Net.Rest.dll": {
-            "assemblyVersion": "2.4.0.0",
-            "fileVersion": "2.4.0.0"
+            "assemblyVersion": "3.0.1.0",
+            "fileVersion": "3.0.1.0"
           }
         }
       },
-      "Discord.Net.Webhook/2.4.0": {
+      "Discord.Net.Labs.Webhook/3.0.0": {
         "dependencies": {
-          "Discord.Net.Core": "2.4.0",
-          "Discord.Net.Rest": "2.4.0"
+          "Discord.Net.Labs.Core": "3.0.0",
+          "Discord.Net.Labs.Rest": "3.0.1"
         },
         "runtime": {
           "lib/netstandard2.1/Discord.Net.Webhook.dll": {
-            "assemblyVersion": "2.4.0.0",
-            "fileVersion": "2.4.0.0"
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.0.0"
           }
         }
       },
-      "Discord.Net.WebSocket/2.4.0": {
+      "Discord.Net.Labs.WebSocket/3.0.2": {
         "dependencies": {
-          "Discord.Net.Core": "2.4.0",
-          "Discord.Net.Rest": "2.4.0"
+          "Discord.Net.Labs.Core": "3.0.0",
+          "Discord.Net.Labs.Rest": "3.0.1"
         },
         "runtime": {
           "lib/netstandard2.1/Discord.Net.WebSocket.dll": {
-            "assemblyVersion": "2.4.0.0",
-            "fileVersion": "2.4.0.0"
+            "assemblyVersion": "3.0.2.0",
+            "fileVersion": "3.0.2.0"
           }
         }
       },
-      "Google.Apis/1.54.0": {
+      "Google.Apis/1.55.0": {
         "dependencies": {
-          "Google.Apis.Core": "1.54.0"
+          "Google.Apis.Core": "1.55.0"
         },
         "runtime": {
           "lib/netstandard2.0/Google.Apis.dll": {
-            "assemblyVersion": "1.54.0.0",
-            "fileVersion": "1.54.0.0"
+            "assemblyVersion": "1.55.0.0",
+            "fileVersion": "1.55.0.0"
           }
         }
       },
-      "Google.Apis.Auth/1.54.0": {
+      "Google.Apis.Auth/1.55.0": {
         "dependencies": {
-          "Google.Apis": "1.54.0",
-          "Google.Apis.Core": "1.54.0"
+          "Google.Apis": "1.55.0",
+          "Google.Apis.Core": "1.55.0"
         },
         "runtime": {
           "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll": {
-            "assemblyVersion": "1.54.0.0",
-            "fileVersion": "1.54.0.0"
+            "assemblyVersion": "1.55.0.0",
+            "fileVersion": "1.55.0.0"
           },
           "lib/netstandard2.0/Google.Apis.Auth.dll": {
-            "assemblyVersion": "1.54.0.0",
-            "fileVersion": "1.54.0.0"
+            "assemblyVersion": "1.55.0.0",
+            "fileVersion": "1.55.0.0"
           }
         }
       },
-      "Google.Apis.Calendar.v3/1.54.0.2410": {
+      "Google.Apis.Calendar.v3/1.55.0.2410": {
         "dependencies": {
-          "Google.Apis": "1.54.0",
-          "Google.Apis.Auth": "1.54.0"
+          "Google.Apis": "1.55.0",
+          "Google.Apis.Auth": "1.55.0"
         },
         "runtime": {
           "lib/netstandard2.0/Google.Apis.Calendar.v3.dll": {
-            "assemblyVersion": "1.54.0.2410",
-            "fileVersion": "1.54.0.2410"
+            "assemblyVersion": "1.55.0.2410",
+            "fileVersion": "1.55.0.2410"
           }
         }
       },
-      "Google.Apis.Core/1.54.0": {
+      "Google.Apis.Core/1.55.0": {
         "dependencies": {
-          "Newtonsoft.Json": "12.0.3"
+          "Newtonsoft.Json": "13.0.1"
         },
         "runtime": {
           "lib/netstandard2.0/Google.Apis.Core.dll": {
-            "assemblyVersion": "1.54.0.0",
-            "fileVersion": "1.54.0.0"
+            "assemblyVersion": "1.55.0.0",
+            "fileVersion": "1.55.0.0"
           }
         }
       },
@@ -1089,11 +1089,11 @@
           }
         }
       },
-      "Newtonsoft.Json/12.0.3": {
+      "Newtonsoft.Json/13.0.1": {
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
-            "assemblyVersion": "12.0.0.0",
-            "fileVersion": "12.0.3.23909"
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "13.0.1.25517"
           }
         }
       },
@@ -1229,75 +1229,75 @@
       "path": "bouncycastle.netcore/1.8.5",
       "hashPath": "bouncycastle.netcore.1.8.5.nupkg.sha512"
     },
-    "Discord.Net/2.4.0": {
+    "Discord.Net.Labs/3.0.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-cP2GoFsvkMf7xruBiUZlIG4HWeUsMosU7qZg+3E0DeIoCEDQ/2N3fi49RX1LjS6CEdBb8s2IabD/OVP7QCEz3g==",
-      "path": "discord.net/2.4.0",
-      "hashPath": "discord.net.2.4.0.nupkg.sha512"
+      "sha512": "sha512-HAJmxtjDzr3N17kr+7DVvn8BHbq7fSxtE1mpx4Q185C2fPsDK4zZtofkgHUyBrkwlF61MzzFE9R8Xhiy5NzisQ==",
+      "path": "discord.net.labs/3.0.2",
+      "hashPath": "discord.net.labs.3.0.2.nupkg.sha512"
     },
-    "Discord.Net.Commands/2.4.0": {
+    "Discord.Net.Labs.Commands/3.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-KqkqhTBh30ewHVBpGSq10KY0SWk5n0UWFYcxlYziExU+/0g8Ebu3iBGA21SHSvy27fsSUkmQmeUR4e/qs8ksHg==",
-      "path": "discord.net.commands/2.4.0",
-      "hashPath": "discord.net.commands.2.4.0.nupkg.sha512"
+      "sha512": "sha512-YBeH/C/bL9Y0032dN5NjAP875ABh6DUilUh9zBwy/FtoiRyhQSbxvMRi2n1iABFJDAwImkQcNXt5+yc6xdqTaA==",
+      "path": "discord.net.labs.commands/3.0.0",
+      "hashPath": "discord.net.labs.commands.3.0.0.nupkg.sha512"
     },
-    "Discord.Net.Core/2.4.0": {
+    "Discord.Net.Labs.Core/3.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-3nRnZgXtwId/iXJqY/BmbFFOXf18TRExE3JYil6RaUEBEjFF9ufMbhTcE249W0rfTv6F2dzrNKa0yXS912a4Kw==",
-      "path": "discord.net.core/2.4.0",
-      "hashPath": "discord.net.core.2.4.0.nupkg.sha512"
+      "sha512": "sha512-UJZ6Dd/s5N638mgRrPXjSWUeNV5M2cML5lK3etY/OBKLhS6fTnNFwfvjBJSHkXwaSODx8OoIWdHptYDthzK4iQ==",
+      "path": "discord.net.labs.core/3.0.0",
+      "hashPath": "discord.net.labs.core.3.0.0.nupkg.sha512"
     },
-    "Discord.Net.Rest/2.4.0": {
+    "Discord.Net.Labs.Rest/3.0.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-dnC7yId1fPG+WNFKceQTvDB4ZUVP6eneDGpChrT0UXdAFQX18EuN0qVXcZWCDcVTev4ZG3VpN2QENa7TNrxQxA==",
-      "path": "discord.net.rest/2.4.0",
-      "hashPath": "discord.net.rest.2.4.0.nupkg.sha512"
+      "sha512": "sha512-oR1kfpgRvXxqJUZlXw1eozdjWhEX+rseO2d4+oXSKXljkPHYvmiUEIkKsAM4z8MR7uEMWWH5cJ6zdp61jbnBKw==",
+      "path": "discord.net.labs.rest/3.0.1",
+      "hashPath": "discord.net.labs.rest.3.0.1.nupkg.sha512"
     },
-    "Discord.Net.Webhook/2.4.0": {
+    "Discord.Net.Labs.Webhook/3.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ajQuZvhQMGzkUr1RmB18okjDDigxCmHBrlgGg51LcY87lik4XfWJdVl690AU9l1xl35UVQ/YF4vEDUduczT29w==",
-      "path": "discord.net.webhook/2.4.0",
-      "hashPath": "discord.net.webhook.2.4.0.nupkg.sha512"
+      "sha512": "sha512-YXWMhLdSvETfWu1mtZR47fUUevBpG0vrzps+DB0ippVcUfudStl9ztph4Jl55mZhexMKcnExqmii6uNSxCmvGg==",
+      "path": "discord.net.labs.webhook/3.0.0",
+      "hashPath": "discord.net.labs.webhook.3.0.0.nupkg.sha512"
     },
-    "Discord.Net.WebSocket/2.4.0": {
+    "Discord.Net.Labs.WebSocket/3.0.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-+cHZFW2H03sGP+0vm8WG+S0dnhWamHfm1Oa4aSW9q8kWXOUhI+3oytb7VuGD2kxNWR/R8Ow8OVl7yhUiWVqqRA==",
-      "path": "discord.net.websocket/2.4.0",
-      "hashPath": "discord.net.websocket.2.4.0.nupkg.sha512"
+      "sha512": "sha512-NBvaDTb4DnGJEqdDOYkyp3YcxsovWTW0vdKhR78BAT4poptfh/pUmLUKqtiU+0lRBJ1v7mLcL1WWpEVUa9xb5Q==",
+      "path": "discord.net.labs.websocket/3.0.2",
+      "hashPath": "discord.net.labs.websocket.3.0.2.nupkg.sha512"
     },
-    "Google.Apis/1.54.0": {
+    "Google.Apis/1.55.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-53PujXOst4JNibnySRlOzduBwr3wt4hiLPbVCpZs/P2G8waltIW3cmma6sG7lTaW9ag/3T6MtIgt/uFtWBBkwA==",
-      "path": "google.apis/1.54.0",
-      "hashPath": "google.apis.1.54.0.nupkg.sha512"
+      "sha512": "sha512-siw3M6VOFbkrTlOTo7F89BrdDFQw/XVks8qo4xDMXwGpwKpCt0KWENYs7N2RWFznJghlrmPuZ6Sx13vvYqrynA==",
+      "path": "google.apis/1.55.0",
+      "hashPath": "google.apis.1.55.0.nupkg.sha512"
     },
-    "Google.Apis.Auth/1.54.0": {
+    "Google.Apis.Auth/1.55.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-gVWia+KE7MLBTiAaDG//TociR6lE0/reEXx+go065L/w20skB2Ib58vnp4iGPaLehwY8ib8XmXy3P1n/Fr5Y4A==",
-      "path": "google.apis.auth/1.54.0",
-      "hashPath": "google.apis.auth.1.54.0.nupkg.sha512"
+      "sha512": "sha512-YPHAgzqsU3j/CiPjb2GSvZo2kHhVkFsdfrqA8X5CUWxlwfivcvSn3N5Hi995r4vpGRNmyXNiWZOXbFKps03bmg==",
+      "path": "google.apis.auth/1.55.0",
+      "hashPath": "google.apis.auth.1.55.0.nupkg.sha512"
     },
-    "Google.Apis.Calendar.v3/1.54.0.2410": {
+    "Google.Apis.Calendar.v3/1.55.0.2410": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-AXrvt9j3GkPaXEb/IdraKWxmWRtoOHL9wTNLaOFl7Xtvd0FEX7yJ7NIhh24cYf3Nzb+gPGjPJsT89GvG//cFVA==",
-      "path": "google.apis.calendar.v3/1.54.0.2410",
-      "hashPath": "google.apis.calendar.v3.1.54.0.2410.nupkg.sha512"
+      "sha512": "sha512-dBYSTD49JdIoF35TOcstspbydAEbuZtsPsD/l8ytlwf0NPnHQnH28DzVP1Sjm7O5ab3gXaAIan+SpMpCkendCQ==",
+      "path": "google.apis.calendar.v3/1.55.0.2410",
+      "hashPath": "google.apis.calendar.v3.1.55.0.2410.nupkg.sha512"
     },
-    "Google.Apis.Core/1.54.0": {
+    "Google.Apis.Core/1.55.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-NKeTTKCttOQrLUCyLyRo5m53b2mG8ymJaiL+i1fR6w8TrrHD31ixPGO+BlwQs9OLuLd/p8BKkSdSaNGjKw5rkA==",
-      "path": "google.apis.core/1.54.0",
-      "hashPath": "google.apis.core.1.54.0.nupkg.sha512"
+      "sha512": "sha512-QX6pmjRxZYgyGFqsa7tyxdjoEb6ssJ9lv6ub8AxhPd/BCMEglmqzW4GpsuKQZaRg9Qq9gp9HRzjCiLZ3RgmNgw==",
+      "path": "google.apis.core/1.55.0",
+      "hashPath": "google.apis.core.1.55.0.nupkg.sha512"
     },
     "Google.Protobuf/3.14.0": {
       "type": "package",
@@ -1467,12 +1467,12 @@
       "path": "mysql.data/8.0.25",
       "hashPath": "mysql.data.8.0.25.nupkg.sha512"
     },
-    "Newtonsoft.Json/12.0.3": {
+    "Newtonsoft.Json/13.0.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
-      "path": "newtonsoft.json/12.0.3",
-      "hashPath": "newtonsoft.json.12.0.3.nupkg.sha512"
+      "sha512": "sha512-ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
+      "path": "newtonsoft.json/13.0.1",
+      "hashPath": "newtonsoft.json.13.0.1.nupkg.sha512"
     },
     "System.Buffers/4.5.1": {
       "type": "package",

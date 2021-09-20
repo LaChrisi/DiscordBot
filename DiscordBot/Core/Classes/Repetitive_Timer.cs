@@ -139,7 +139,10 @@ namespace DiscordBot.Core.Classes
                                             if (user != null)
                                             {
                                                 content = content + user.Username + "\n";
-                                                //content = content + item.Summary + "\n";
+                                            }
+                                            else
+                                            {
+                                                content = content + item.Summary + "\n";
                                             }
                                         }
                                     }
@@ -231,7 +234,10 @@ namespace DiscordBot.Core.Classes
                                             if (user != null)
                                             {
                                                 content = content + user.Mention + "\n";
-                                                //content = content + item.Summary + "\n";
+                                            }
+                                            else
+                                            {
+                                                content = content + item.Summary + "\n";
                                             }
                                         }
                                     }

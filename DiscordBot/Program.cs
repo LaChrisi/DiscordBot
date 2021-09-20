@@ -124,58 +124,59 @@ namespace DiscordBot
                                     List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
 
                                     using var webclient = new WebClient();
-
-                                    foreach (var attachment in Context.Message.Attachments)
                                     {
-                                        string fileName = Context.Channel.Id + "-" + Context.Message.Id + "--" + attachment.Filename;
-
-                                        webclient.DownloadFile(new Uri(attachment.Url), fileName);
-
-                                        var new_message = await Context.Channel.SendFileAsync(fileName, embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: $"attachment://{fileName}", footer: Message.Author.Id.ToString()));
-
-                                        File.Delete(fileName);
-
-                                        foreach (var how_item in how)
+                                        foreach (var attachment in Context.Message.Attachments)
                                         {
-                                            await new_message.AddReactionAsync(new Emoji(how_item));
-                                        }
+                                            string fileName = Context.Channel.Id + "-" + Context.Message.Id + "--" + attachment.Filename;
 
-                                        if (vote.id == 1)
-                                        {
-                                            User user = User.GetById(Message.Author.Id);
+                                            webclient.DownloadFile(new Uri(attachment.Url), fileName);
 
-                                            if (user != null)
+                                            var new_message = await Context.Channel.SendFileAsync(fileName, embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: $"attachment://{fileName}", footer: Message.Author.Id.ToString()));
+
+                                            File.Delete(fileName);
+
+                                            foreach (var how_item in how)
                                             {
-                                                user.posts++;
+                                                await new_message.AddReactionAsync(new Emoji(how_item));
+                                            }
 
-                                                if (user.karma != -1)
+                                            if (vote.id == 1)
+                                            {
+                                                User user = User.GetById(Message.Author.Id);
+
+                                                if (user != null)
                                                 {
-                                                    int karma_threshold_to_remind = Convert.ToInt32(Global.GetByName("karma_threshold_to_remind").value);
-                                                    int karma_per_post = Convert.ToInt32(Global.GetByName("karma_per_post").value);
+                                                    user.posts++;
 
-                                                    if (user.karma < karma_threshold_to_remind && user.karma + karma_per_post >= karma_threshold_to_remind)
+                                                    if (user.karma != -1)
                                                     {
-                                                        var message_list = Core.Classes.Message.GetAllByUserAndType(user.id, 'k');
+                                                        int karma_threshold_to_remind = Convert.ToInt32(Global.GetByName("karma_threshold_to_remind").value);
+                                                        int karma_per_post = Convert.ToInt32(Global.GetByName("karma_per_post").value);
 
-                                                        if (message_list != null)
+                                                        if (user.karma < karma_threshold_to_remind && user.karma + karma_per_post >= karma_threshold_to_remind)
                                                         {
-                                                            foreach (var message in message_list)
+                                                            var message_list = Core.Classes.Message.GetAllByUserAndType(user.id, 'k');
+
+                                                            if (message_list != null)
                                                             {
-                                                                var channel = Client.GetChannel(message.channel) as ISocketMessageChannel;
-                                                                await channel.DeleteMessageAsync(message.message);
-                                                                Core.Classes.Message.DeleteById(message.id);
+                                                                foreach (var message in message_list)
+                                                                {
+                                                                    var channel = Client.GetChannel(message.channel) as ISocketMessageChannel;
+                                                                    await channel.DeleteMessageAsync(message.message);
+                                                                    Core.Classes.Message.DeleteById(message.id);
+                                                                }
                                                             }
                                                         }
+
+                                                        user.karma += karma_per_post;
                                                     }
 
-                                                    user.karma += karma_per_post;
+                                                    User.Edit(user);
                                                 }
-
-                                                User.Edit(user);
-                                            }
-                                            else
-                                            {
-                                                User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
+                                                else
+                                                {
+                                                    User.Add(new User(Message.Author.Id, Message.Author.Username, 0, 1));
+                                                }
                                             }
                                         }
                                     }
@@ -293,6 +294,37 @@ namespace DiscordBot
                                     break;
                                 }
                             }
+                        }
+
+                        //attachment
+                        if (channel_event.type == 'a')
+                        {
+                            foreach (var attachment in Context.Message.Attachments)
+                            {
+                                //EndsWith
+                                if (channel_event.when == "EndsWith")
+                                {
+                                    if (attachment.Filename.EndsWith(e.what))
+                                    {
+                                        string fileName = Context.Channel.Id + "-" + Context.Message.Id + "--" + attachment.Filename + e.how;
+
+                                        using var webclient = new WebClient();
+                                        {
+                                            webclient.DownloadFile(new Uri(attachment.Url), fileName);
+                                        }
+
+                                        List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+
+                                        await Context.Channel.SendFileAsync(fileName, embed: Core.Classes.Embed.New((SocketUser)Message.Author, fields, Colors.meme, description: $"from [{Message.Channel.Name}]({Message.GetJumpUrl()})", imgURL: $"attachment://{fileName}", footer: Message.Author.Id.ToString()));
+
+                                        await Context.Channel.DeleteMessageAsync(Message.Id);
+
+                                        File.Delete(fileName);
+                                    }
+                                }
+                            }
+
+                            break;
                         }
 
 
@@ -758,7 +790,7 @@ namespace DiscordBot
             {
                 // Slash commands
                 case SocketSlashCommand commandInteraction:
-                    await Core.Classes.SlashCommands.SlashCommandHandler(commandInteraction);
+                    await SlashCommands.SlashCommandHandler(commandInteraction);
                     break;
 
                 // Button clicks/selection dropdowns

@@ -45,8 +45,6 @@ namespace DiscordBot.Core.Commands
 
                 //start test here
 
-                
-
                 //test end
             }
             catch (Exception ex)

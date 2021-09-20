@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using DiscordBot.Core.Classes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DiscordBot.Core.Commands.Moderation
 {
@@ -39,16 +37,16 @@ namespace DiscordBot.Core.Commands.Moderation
 
                         List<IRole> exclutedRoles = new List<IRole>();
 
-                        var Role = Core.Classes.Role.GetById(6);
+                        var Role = Classes.Role.GetById(6);
                         exclutedRoles.Add(channel.Guild.Roles.FirstOrDefault(x => x.Id == 573492166954057730));
 
-                        Role = Core.Classes.Role.GetById(6);
+                        Role = Classes.Role.GetById(6);
                         exclutedRoles.Add(channel.Guild.Roles.FirstOrDefault(x => x.Id == 778203675687387156));
 
-                        Role = Core.Classes.Role.GetById(6);
+                        Role = Classes.Role.GetById(6);
                         exclutedRoles.Add(channel.Guild.Roles.FirstOrDefault(x => x.Id == 356486959901835264));
 
-                        Role = Core.Classes.Role.GetById(6);
+                        Role = Classes.Role.GetById(6);
                         exclutedRoles.Add(channel.Guild.Roles.FirstOrDefault(x => x.Id == 780036990158110730));
                         
                         List<IRole> roles = new List<IRole>();
@@ -83,7 +81,7 @@ namespace DiscordBot.Core.Commands.Moderation
                 {
                     if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
                     {
-                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Classes.Colors.warning));
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
                         Log.Warning($"command - admin leave - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
                         return;
                     }
@@ -127,7 +125,7 @@ namespace DiscordBot.Core.Commands.Moderation
                 }
 
                 [Command("hour"), SummaryAttribute("uses the hourly event")]
-                public async Task HourModule()
+                public async Task TimerHourModule()
                 {
                     try
                     {
@@ -151,7 +149,7 @@ namespace DiscordBot.Core.Commands.Moderation
                 }
 
                 [Command("day"), SummaryAttribute("uses the daily event")]
-                public async Task DayModule()
+                public async Task TimerDayModule()
                 {
                     try
                     {
@@ -175,6 +173,142 @@ namespace DiscordBot.Core.Commands.Moderation
                 }
             }
 
+            [Command("add"), SummaryAttribute("adds a slash command")]
+            public async Task AddModule(string name, ulong guildID = 0)
+            {
+                try
+                {
+                    List<SlashCommandBuilder> slashCommands = new List<SlashCommandBuilder>();
+
+                    var command = new SlashCommandBuilder();
+                    command.WithName("help");
+                    command.WithDescription("displays all bots commands");
+
+                    command.AddOption("type", ApplicationCommandOptionType.String, "type of help", false, false, null, new ApplicationCommandOptionChoiceProperties { Name = "data", Value = "data" });
+
+                    slashCommands.Add(command);
+
+                    command = new SlashCommandBuilder();
+                    command.WithName("get");
+                    command.WithDescription("get various things");
+
+                    var options = new List<ApplicationCommandOptionChoiceProperties>();
+                    options.Add(new ApplicationCommandOptionChoiceProperties { Name = "stats", Value = "stats" });
+                    options.Add(new ApplicationCommandOptionChoiceProperties { Name = "leaderboard", Value = "leaderboard" });
+
+                    command.AddOption("what", ApplicationCommandOptionType.String, "what to get", true, false, null, options.ToArray());
+
+                    slashCommands.Add(command);
+
+                    foreach (var slashCommand in slashCommands)
+                    {
+                        if (guildID != 0)
+                        {
+                            if (slashCommand.Name == name)
+                            {
+                                await Program.Client.Rest.CreateGuildCommand(slashCommand.Build(), guildID);
+                            }
+                        }
+                        else
+                        {
+                            if (slashCommand.Name == name)
+                            {
+                                await Program.Client.Rest.CreateGlobalCommand(slashCommand.Build());
+                            }
+                        }
+                    }
+
+                    await Context.Message.ReplyAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("info", "done!"), Colors.information));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"command - !admin get - user:{Context.Message.Author.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+                }
+            }
+
+            [Command("get"), SummaryAttribute("gets all slash commands")]
+            public async Task GetModule()
+            {
+                try
+                {
+                    var commands = await Program.Client.Rest.GetGlobalApplicationCommands();
+
+                    List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+
+                    string output = "";
+
+                    foreach (var command in commands)
+                    {
+                        output = output + command.Name + "\n";
+                    }
+
+                    if (output != "")
+                    {
+                        fields.Add(Field.CreateFieldBuilder("global slash commands", output));
+                    }
+                    else
+                    {
+                        fields.Add(Field.CreateFieldBuilder("global slash commands", "NULL"));
+                    }
+
+                    foreach (var server in Program.Client.Guilds)
+                    {
+                        try
+                        {
+                            var commands2 = await Program.Client.Rest.GetGuildApplicationCommands(server.Id);
+
+                            output = "";
+
+                            foreach (var command in commands2)
+                            {
+                                output = output + command.Name + "\n";
+                            }
+
+                            if (output != "")
+                            {
+                                fields.Add(Field.CreateFieldBuilder(server.Name, output));
+                            }
+                            else
+                            {
+                                fields.Add(Field.CreateFieldBuilder(server.Name, "NULL"));
+                            }
+                        }
+                        catch
+                        { 
+
+                        }
+                    }
+
+                    await Context.Message.ReplyAsync(embed: Classes.Embed.New(Context.Message.Author, fields, Colors.information));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"command - !admin get - user:{Context.Message.Author.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+                }
+    }
+
+            [Command("delete"), SummaryAttribute("delete all global slash commands")]
+            public async Task DeleteModule(ulong id = 0)
+            {
+                try
+                {
+                    if (id == 0)
+                    {
+                        await Program.Client.Rest.DeleteAllGlobalCommandsAsync();
+                    }
+                    else
+                    {
+                        var guild = Program.Client.GetGuild(id);
+                        await guild.DeleteApplicationCommandsAsync();
+                    }
+
+                    await Context.Message.ReplyAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("info", "done!"), Colors.information));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"command - !admin delete - user:{Context.Message.Author.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+                }
+            }
         }
     }
 }
