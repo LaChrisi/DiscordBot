@@ -38,9 +38,13 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "CliWrap": {
+              "target": "Package",
+              "version": "[3.3.3, )"
+            },
             "Discord.Net.Labs": {
               "target": "Package",
-              "version": "[3.0.2, )"
+              "version": "[3.1.0, )"
             },
             "Google.Apis.Calendar.v3": {
               "target": "Package",
@@ -48,23 +52,39 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[5.0.9, )"
+              "version": "[5.0.10, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[5.0.9, )"
+              "version": "[5.0.10, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[5.0.9, )"
+              "version": "[5.0.10, )"
             },
             "MySql.Data": {
               "target": "Package",
               "version": "[8.0.25, )"
+            },
+            "Opus": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "YoutubeExplode": {
+              "target": "Package",
+              "version": "[6.0.5, )"
+            },
+            "YoutubeExplode.Converter": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "libsodium": {
+              "target": "Package",
+              "version": "[1.0.18.1, )"
             }
           },
           "imports": [

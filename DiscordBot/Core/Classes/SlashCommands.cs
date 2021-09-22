@@ -201,6 +201,10 @@ namespace DiscordBot.Core.Classes
                     Log.Error($"command - /get - user:{interaction.User.Id} channel:{interaction.Channel.Id} error:{ex.Message}");
                 }
             }
+            else if (interaction.Data.Name == "play")
+            {
+
+            }
         }
     }
 }

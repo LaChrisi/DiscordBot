@@ -12,6 +12,7 @@ using Discord.Commands;
 using DiscordBot.Core.Classes;
 using System.Net;
 using System.IO;
+using Discord.Audio;
 
 namespace DiscordBot
 {
@@ -820,10 +821,6 @@ namespace DiscordBot
 
             // Also you can followup with a additional messages
             await interaction.FollowupAsync($"Clicked {interaction.Data.CustomId}!", ephemeral: true);
-
-            // If you are using selection dropdowns, you can get the selected label and values using these
-            var selectedLabel = ((SelectMenu)interaction.Message.Components.First().Components.First()).Options.FirstOrDefault(x => x.Value == interaction.Data.Values.FirstOrDefault())?.Label;
-            var selectedValue = interaction.Data.Values.First();
         }
 
 #pragma warning disable CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.

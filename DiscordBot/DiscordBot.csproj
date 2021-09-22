@@ -13,18 +13,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net.Labs" Version="3.0.2" />
+    <PackageReference Include="CliWrap" Version="3.3.3" />
+    <PackageReference Include="Discord.Net.Labs" Version="3.1.0" />
     <PackageReference Include="Google.Apis.Calendar.v3" Version="1.55.0.2410" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
+    <PackageReference Include="libsodium" Version="1.0.18.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.9">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="MySql.Data" Version="8.0.25" />
+    <PackageReference Include="Opus" Version="1.0.0" />
+    <PackageReference Include="YoutubeExplode" Version="6.0.5" />
+    <PackageReference Include="YoutubeExplode.Converter" Version="2.1.0" />
   </ItemGroup>
 
 </Project>

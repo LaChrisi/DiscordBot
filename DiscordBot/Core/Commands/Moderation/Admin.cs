@@ -288,17 +288,17 @@ namespace DiscordBot.Core.Commands.Moderation
     }
 
             [Command("delete"), SummaryAttribute("delete all global slash commands")]
-            public async Task DeleteModule(ulong id = 0)
+            public async Task DeleteModule(ulong guildID = 0)
             {
                 try
                 {
-                    if (id == 0)
+                    if (guildID == 0)
                     {
                         await Program.Client.Rest.DeleteAllGlobalCommandsAsync();
                     }
                     else
                     {
-                        var guild = Program.Client.GetGuild(id);
+                        var guild = Program.Client.GetGuild(guildID);
                         await guild.DeleteApplicationCommandsAsync();
                     }
 

@@ -481,3 +481,10 @@ C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\li
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Google.Apis.Auth.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Google.Apis.Calendar.v3.dll
 C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\Google.Apis.Core.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\libsodium.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\opus.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\libsodium.so
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\AngleSharp.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\CliWrap.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\YoutubeExplode.dll
+C:\Users\Chris\Desktop\GitHub\DiscordBot\DiscordBot\bin\Release\netcoreapp3.1\linux-x64\YoutubeExplode.Converter.dll
