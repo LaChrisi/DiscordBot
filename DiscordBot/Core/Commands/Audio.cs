@@ -11,13 +11,12 @@ using YoutubeExplode.Converter;
 using System.IO;
 using CliWrap;
 using System.Collections.Generic;
+using Discord.WebSocket;
 
 namespace DiscordBot.Core.Commands
 {
     public class Audio : ModuleBase<SocketCommandContext>
     {
-        //private static IAudioClient audioClient;
-
         private static Dictionary<ulong, IAudioClient> audioClients = new Dictionary<ulong, IAudioClient>();
         private static Dictionary<ulong, List<string>> queues = new Dictionary<ulong, List<string>>();
 
@@ -63,44 +62,8 @@ namespace DiscordBot.Core.Commands
                     audioClients.Add(Context.Guild.Id, await channel.ConnectAsync());
                 }
 
-                await audioClients[Context.Guild.Id].SetSpeakingAsync(true);
+                PlaySong(Context.Guild.Id, input);
 
-                if (input.StartsWith("https://www.youtube.com/watch?v="))
-                {
-                    YoutubeClient youtube = new YoutubeClient();
-
-                    var streamManifest = await youtube.Videos.Streams.GetManifestAsync(input.Substring(32));
-                    var streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
-
-                    var stream = await youtube.Videos.Streams.GetAsync(streamInfo);
-
-                    var memoryStream = new MemoryStream();
-                    await Cli.Wrap("ffmpeg")
-                        .WithArguments(" -hide_banner -loglevel panic -i pipe:0 -ac 2 -f s16le -ar 48000 pipe:1")
-                        .WithStandardInputPipe(PipeSource.FromStream(stream))
-                        .WithStandardOutputPipe(PipeTarget.ToStream(memoryStream))
-                        .ExecuteAsync();
-
-                    using (var discord = audioClients[Context.Guild.Id].CreatePCMStream(AudioApplication.Mixed))
-                    {
-                        try { await discord.WriteAsync(memoryStream.ToArray(), 0, (int)memoryStream.Length); }
-                        finally { await discord.FlushAsync(); }
-                    }
-                }
-                else
-                {
-                    string path = "music/" + input + ".mp3";
-
-                    using (var ffmpeg = CreateStream(path))
-                    using (var output = ffmpeg.StandardOutput.BaseStream)
-                    using (var discord = audioClients[Context.Guild.Id].CreatePCMStream(AudioApplication.Mixed))
-                    {
-                        try { await output.CopyToAsync(discord); }
-                        finally { await discord.FlushAsync(); }
-                    }
-                }
-
-                await audioClients[Context.Guild.Id].SetSpeakingAsync(false);
             }
             catch (Exception ex)
             {
@@ -121,6 +84,48 @@ namespace DiscordBot.Core.Commands
                 RedirectStandardOutput = true,
                 UseShellExecute = false
             });
+        }
+
+        private async void PlaySong(ulong guildID, string input)
+        {
+            await audioClients[guildID].SetSpeakingAsync(true);
+
+            if (input.StartsWith("https://www.youtube.com/watch?v="))
+            {
+                YoutubeClient youtube = new YoutubeClient();
+
+                var streamManifest = await youtube.Videos.Streams.GetManifestAsync(input.Substring(32));
+                var streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
+
+                var stream = await youtube.Videos.Streams.GetAsync(streamInfo);
+
+                var memoryStream = new MemoryStream();
+                await Cli.Wrap("ffmpeg")
+                    .WithArguments(" -hide_banner -loglevel panic -i pipe:0 -ac 2 -f s16le -ar 48000 pipe:1")
+                    .WithStandardInputPipe(PipeSource.FromStream(stream))
+                    .WithStandardOutputPipe(PipeTarget.ToStream(memoryStream))
+                    .ExecuteAsync();
+
+                using (var discord = audioClients[guildID].CreatePCMStream(AudioApplication.Mixed))
+                {
+                    try { await discord.WriteAsync(memoryStream.ToArray(), 0, (int)memoryStream.Length); }
+                    finally { await discord.FlushAsync(); }
+                }
+            }
+            else
+            {
+                string path = "music/" + input + ".mp3";
+
+                using (var ffmpeg = CreateStream(path))
+                using (var output = ffmpeg.StandardOutput.BaseStream)
+                using (var discord = audioClients[guildID].CreatePCMStream(AudioApplication.Mixed))
+                {
+                    try { await output.CopyToAsync(discord); }
+                    finally { await discord.FlushAsync(); }
+                }
+            }
+
+            await audioClients[Context.Guild.Id].SetSpeakingAsync(false);
         }
     }
 }
