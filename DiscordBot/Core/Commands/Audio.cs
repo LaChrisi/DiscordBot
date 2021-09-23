@@ -18,7 +18,7 @@ namespace DiscordBot.Core.Commands
     public class Audio : ModuleBase<SocketCommandContext>
     {
         private static Dictionary<ulong, IAudioClient> audioClients = new Dictionary<ulong, IAudioClient>();
-        private static Dictionary<ulong, List<string>> queues = new Dictionary<ulong, List<string>>();
+        private static Dictionary<ulong, Queue<string>> queues = new Dictionary<ulong, Queue<string>>();
 
         [Command("leave", RunMode = RunMode.Async), Summary("leave the current voice channel")]
         public async Task LeaveModule()
@@ -62,8 +62,15 @@ namespace DiscordBot.Core.Commands
                     audioClients.Add(Context.Guild.Id, await channel.ConnectAsync());
                 }
 
-                PlaySong(Context.Guild.Id, input);
-
+                if (queues[Context.Guild.Id].Count == 0)
+                {
+                    PlaySong(Context.Guild.Id, input);
+                    
+                }
+                else
+                {
+                    queues[Context.Guild.Id].Enqueue(input);
+                }
             }
             catch (Exception ex)
             {
@@ -126,6 +133,16 @@ namespace DiscordBot.Core.Commands
             }
 
             await audioClients[Context.Guild.Id].SetSpeakingAsync(false);
+        }
+
+        private Task CreateTask()
+        {
+            Action action = () =>
+            {
+                
+            };
+
+            return new Task(action);
         }
     }
 }
