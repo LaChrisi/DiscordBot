@@ -17,6 +17,75 @@ namespace DiscordBot.Core.Commands
 {
     public class Audio : ModuleBase<SocketCommandContext>
     {
+        private static Dictionary<ulong, AudioClient> audioClients = new Dictionary<ulong, AudioClient>();
+
+        [Command("leave", RunMode = RunMode.Async), Summary("leave the current voice channel")]
+        public async Task LeaveModule()
+        {
+            try
+            {
+                Log.Information($"command - leave - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
+
+                audioClients[Context.Guild.Id].Stop();
+
+                //cleanup
+                if (audioClients.ContainsKey(Context.Guild.Id))
+                {
+                    audioClients.Remove(Context.Guild.Id);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"command - leave - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+            }
+        }
+
+        [Command("stop", RunMode = RunMode.Async), Summary("stop the current music")]
+        public async Task StopModule()
+        {
+            try
+            {
+                Log.Information($"command - stop - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
+
+                audioClients[Context.Guild.Id].Stop();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"command - stop - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+            }
+        }
+
+        [Command("play", RunMode = RunMode.Async), Summary("play music")]
+        public async Task PlayModule(string input)
+        {
+            try
+            {
+                Log.Information($"command - play - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
+
+                //join if not connected
+                if (!audioClients.ContainsKey(Context.Guild.Id))
+                {
+                    var channel = (Context.User as IVoiceState).VoiceChannel;
+
+                    audioClients.Add(Context.Guild.Id, new AudioClient(await channel.ConnectAsync()));
+                }
+
+                audioClients[Context.Guild.Id].Add(input);
+
+                if (audioClients[Context.Guild.Id].playing == null)
+                {
+                    await audioClients[Context.Guild.Id].Start();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"command - play - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+            }
+        }
+
+
+        /*
+
         private static Dictionary<ulong, IAudioClient> audioClients = new Dictionary<ulong, IAudioClient>();
         private static Dictionary<ulong, Queue<string>> queues = new Dictionary<ulong, Queue<string>>();
 
@@ -144,5 +213,7 @@ namespace DiscordBot.Core.Commands
 
             return new Task(action);
         }
+
+        */
     }
 }
