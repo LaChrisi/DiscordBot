@@ -184,7 +184,7 @@ namespace DiscordBot.Core.Commands.Moderation
                     command.WithName("help");
                     command.WithDescription("displays all bots commands");
 
-                    command.AddOption("type", ApplicationCommandOptionType.String, "type of help", false, false, null, new ApplicationCommandOptionChoiceProperties { Name = "data", Value = "data" });
+                    command.AddOption("type", ApplicationCommandOptionType.String, "type of help", false, false, true, null, new ApplicationCommandOptionChoiceProperties { Name = "data", Value = "data" });
 
                     slashCommands.Add(command);
 
@@ -196,7 +196,7 @@ namespace DiscordBot.Core.Commands.Moderation
                     options.Add(new ApplicationCommandOptionChoiceProperties { Name = "stats", Value = "stats" });
                     options.Add(new ApplicationCommandOptionChoiceProperties { Name = "leaderboard", Value = "leaderboard" });
 
-                    command.AddOption("what", ApplicationCommandOptionType.String, "what to get", true, false, null, options.ToArray());
+                    command.AddOption("what", ApplicationCommandOptionType.String, "what to get", true, false, true, null, options.ToArray());
 
                     slashCommands.Add(command);
 

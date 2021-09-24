@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Discord.Audio;
 using System.Diagnostics;
 using YoutubeExplode;
+using YoutubeExplode.Common;
 using YoutubeExplode.Videos.Streams;
 using System.IO;
 using CliWrap;
@@ -13,95 +14,177 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
 using DiscordBot.Core.Commands;
+using System.Web;
 
 namespace DiscordBot.Core.Classes
 {
     class AudioClient
     {
         public IAudioClient audioClient { get; set; }
-
-        public string playing { get; set; }
-        private Queue<string> queue { get; set; }
-
+        public YoutubeExplode.Videos.Video playing { get; set; }
+        public Queue<YoutubeExplode.Videos.Video> queue { get; set; }
         private CancellationTokenSource Cancel { get; set; }
         private CancellationTokenSource Skip { get; set; }
+        private IMessageChannel channel { get; set; }
 
-        public AudioClient(IAudioClient Client)
+        public AudioClient(IAudioClient Client, IMessageChannel Channel)
         {
             audioClient = Client;
             playing = null;
-            queue = new Queue<string>();
+            queue = new Queue<YoutubeExplode.Videos.Video>();
             Cancel = null;
             Skip = null;
+            channel = Channel;
         }
 
         public void Stop()
         {
-            Cancel?.Cancel();
-            Skip?.Cancel();
-            playing = null;
+            try
+            {
+                Cancel?.Cancel();
+                Skip?.Cancel();
+                playing = null;
+            }
+            catch (Exception)
+            {
+
+            }
+            
         }
 
         public void Next()
         {
-            Skip?.Cancel();
-            playing = null;
+            try
+            {
+                Skip?.Cancel();
+                playing = null;
+            }
+            catch (Exception)
+            {
+
+            }
+            
         }
 
-        public void Shuffle()
+        public async void Shuffle()
         {
-            var Rand = new Random();
-            var NewQueue = new Queue<string>();
+            try
+            {
+                var Rand = new Random();
+                var NewQueue = new Queue<YoutubeExplode.Videos.Video>();
 
-            foreach (var Song in queue.ToArray().OrderBy(x => Rand.Next()))
-                NewQueue.Enqueue(Song);
+                foreach (var Song in queue.ToArray().OrderBy(x => Rand.Next()))
+                    NewQueue.Enqueue(Song);
 
-            queue = NewQueue;
+                queue = NewQueue;
+
+                await channel.SendMessageAsync(embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("queue", $"shuffling done!"), Colors.information));
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
-        public void Add(string input)
+        public async void Add(string[] input)
         {
-            queue.Enqueue(input);
+            try
+            {
+                var youtube = new YoutubeClient();
+
+                if (input.Length > 0)
+                {
+                    if (input.FirstOrDefault().StartsWith("https://www.youtube.com/watch?v="))
+                    {
+                        var video = await youtube.Videos.GetAsync(input.FirstOrDefault());
+
+                        queue.Enqueue(video);
+
+                        await channel.SendMessageAsync(embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("queue added", $"[{video.Title}]({video.Url})\n{video.Duration}"), Colors.information));
+                    }
+                    else if (input.FirstOrDefault().StartsWith("https://www.youtube.com/playlist?list="))
+                    {
+                        var playlist = await youtube.Playlists.GetAsync(input.FirstOrDefault());
+
+                        var videos = await youtube.Playlists.GetVideosAsync(playlist.Id).CollectAsync();
+
+                        foreach (var video in videos)
+                        {
+                            queue.Enqueue(await youtube.Videos.GetAsync(video.Id));
+                        }
+
+                        await channel.SendMessageAsync(embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("queue", $"added {videos.Count} songs"), Colors.information));
+                    }
+                    else
+                    {
+                        string searchString = "";
+
+                        foreach (var item in input)
+                        {
+                            searchString = searchString + item + " ";
+                        }
+
+                        var search = await youtube.Search.GetVideosAsync(searchString).CollectAsync(1);
+                        var video = await youtube.Videos.GetAsync(search.FirstOrDefault().Id);
+
+                        queue.Enqueue(video);
+
+                        await channel.SendMessageAsync(embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("queue added", $"[{video.Title}]({video.Url})\n{video.Duration}"), Colors.information));
+                    }
+                }
+            }
+            catch(Exception)
+            {
+
+            }
         }
 
         public async Task Start()
         {
-            Cancel = new CancellationTokenSource();
-
-            while (!Cancel.IsCancellationRequested)
+            try
             {
-                try
+                Cancel = new CancellationTokenSource();
+
+                while (!Cancel.IsCancellationRequested)
                 {
-                    Skip = new CancellationTokenSource();
-
-                    while (queue.Count == 0 && !Cancel.IsCancellationRequested)
-                        await Task.Delay(10);
-
-                    playing = queue.Dequeue();
-
-                    if (playing != null)
+                    try
                     {
-                        PlaySong(playing);
+                        Skip = new CancellationTokenSource();
+
+                        while (queue.Count == 0 && !Cancel.IsCancellationRequested)
+                            await Task.Delay(10);
+
+                        playing = queue.Dequeue();
+
+                        if (playing != null)
+                        {
+                            await channel.SendMessageAsync(embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("now playing", $"[{playing.Title}]({playing.Url})\n{playing.Duration}"), Colors.information));
+                            await PlaySong(playing);
+                        }
+
+                        playing = null;
                     }
-                    
-                    playing = null;
+                    catch (Exception)
+                    {
+
+                    }
                 }
-                catch (Exception)
-                {
-                    
-                }
+            }
+            catch (Exception)
+            {
+
             }
         }
 
-        private async void PlaySong(string input)
+        private async Task PlaySong(YoutubeExplode.Videos.Video input)
         {
-            await audioClient.SetSpeakingAsync(true);
-
-            if (input.StartsWith("https://www.youtube.com/watch?v="))
+            try
             {
+                await audioClient.SetSpeakingAsync(true);
+
                 YoutubeClient youtube = new YoutubeClient();
 
-                var streamManifest = await youtube.Videos.Streams.GetManifestAsync(input.Substring(32));
+                var streamManifest = await youtube.Videos.Streams.GetManifestAsync(input.Id);
                 var streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
 
                 var stream = await youtube.Videos.Streams.GetAsync(streamInfo);
@@ -113,36 +196,16 @@ namespace DiscordBot.Core.Classes
                     .WithStandardOutputPipe(PipeTarget.ToStream(memoryStream))
                     .ExecuteAsync();
 
-                using (var discord = audioClient.CreatePCMStream(AudioApplication.Mixed))
+                using (var discord = audioClient.CreatePCMStream(AudioApplication.Music))
                 {
                     try { await discord.WriteAsync(memoryStream.ToArray(), 0, (int)memoryStream.Length, Skip.Token); }
                     finally { await discord.FlushAsync(); }
                 }
             }
-            else
+            catch (Exception)
             {
-                string path = "music/" + input + ".mp3";
 
-                using (var ffmpeg = Process.Start(new ProcessStartInfo
-                {
-#if DEBUG
-                    FileName = "ffmpeg.exe",
-#else
-                    FileName = "ffmpeg",
-#endif
-                    Arguments = $@"-i ""{path}"" -ac 2 -f s16le -ar 48000 pipe:1",
-                    RedirectStandardOutput = true,
-                    UseShellExecute = false
-                }))
-                using (var output = ffmpeg.StandardOutput.BaseStream)
-                using (var discord = audioClient.CreatePCMStream(AudioApplication.Mixed))
-                {
-                    try { await output.CopyToAsync(discord, Skip.Token); }
-                    finally { await discord.FlushAsync(); }
-                }
             }
-
-            await audioClient.SetSpeakingAsync(false);
         }
     }
 }

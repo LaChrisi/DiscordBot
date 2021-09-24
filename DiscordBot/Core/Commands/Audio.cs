@@ -3,15 +3,8 @@ using Discord.Commands;
 using DiscordBot.Core.Classes;
 using System;
 using System.Threading.Tasks;
-using Discord.Audio;
-using System.Diagnostics;
-using YoutubeExplode;
-using YoutubeExplode.Videos.Streams;
-using YoutubeExplode.Converter;
-using System.IO;
 using CliWrap;
 using System.Collections.Generic;
-using Discord.WebSocket;
 
 namespace DiscordBot.Core.Commands
 {
@@ -27,6 +20,10 @@ namespace DiscordBot.Core.Commands
                 Log.Information($"command - leave - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
 
                 audioClients[Context.Guild.Id].Stop();
+
+                await audioClients[Context.Guild.Id].audioClient.SetSpeakingAsync(false);
+
+                await audioClients[Context.Guild.Id].audioClient.StopAsync();
 
                 //cleanup
                 if (audioClients.ContainsKey(Context.Guild.Id))
@@ -48,6 +45,8 @@ namespace DiscordBot.Core.Commands
                 Log.Information($"command - stop - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
 
                 audioClients[Context.Guild.Id].Stop();
+
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("audio", $"stopped!"), Colors.information));
             }
             catch (Exception ex)
             {
@@ -55,8 +54,40 @@ namespace DiscordBot.Core.Commands
             }
         }
 
+        [Command("queue", RunMode = RunMode.Async), Summary("stop the current music")]
+        public async Task QueueModule()
+        {
+            try
+            {
+                Log.Information($"command - stop - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
+
+                var queue = audioClients[Context.Guild.Id].queue.ToArray();
+
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("queue", $"next 5 songs:\n[{queue[0].Title}]({queue[0].Url})\n[{queue[1].Title}]({queue[1].Url})\n[{queue[2].Title}]({queue[2].Url})\n[{queue[3].Title}]({queue[3].Url})\n[{queue[4].Title}]({queue[4].Url})\ntotal {audioClients[Context.Guild.Id].queue.Count} songs"), Colors.information));
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"command - stop - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+            }
+        }
+
+        [Command("skip", RunMode = RunMode.Async), Summary("skip the current song")]
+        public async Task SkipModule()
+        {
+            try
+            {
+                Log.Information($"command - skip - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
+
+                audioClients[Context.Guild.Id].Next();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"command - skip - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+            }
+        }
+
         [Command("play", RunMode = RunMode.Async), Summary("play music")]
-        public async Task PlayModule(string input)
+        public async Task PlayModule(params string[] input)
         {
             try
             {
@@ -67,7 +98,7 @@ namespace DiscordBot.Core.Commands
                 {
                     var channel = (Context.User as IVoiceState).VoiceChannel;
 
-                    audioClients.Add(Context.Guild.Id, new AudioClient(await channel.ConnectAsync()));
+                    audioClients.Add(Context.Guild.Id, new AudioClient(await channel.ConnectAsync(), (IMessageChannel) Context.Channel));
                 }
 
                 audioClients[Context.Guild.Id].Add(input);
@@ -82,138 +113,5 @@ namespace DiscordBot.Core.Commands
                 Log.Error($"command - play - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
             }
         }
-
-
-        /*
-
-        private static Dictionary<ulong, IAudioClient> audioClients = new Dictionary<ulong, IAudioClient>();
-        private static Dictionary<ulong, Queue<string>> queues = new Dictionary<ulong, Queue<string>>();
-
-        [Command("leave", RunMode = RunMode.Async), Summary("leave the current voice channel")]
-        public async Task LeaveModule()
-        {
-            try
-            {
-                Log.Information($"command - leave - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
-
-                await audioClients[Context.Guild.Id].SetSpeakingAsync(false);
-
-                await audioClients[Context.Guild.Id].StopAsync();
-
-                //cleanup
-                if (audioClients.ContainsKey(Context.Guild.Id))
-                {
-                    audioClients.Remove(Context.Guild.Id);
-                }
-
-                if (queues.ContainsKey(Context.Guild.Id))
-                {
-                    queues.Remove(Context.Guild.Id);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"command - leave - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
-            }
-        }
-
-        [Command("play", RunMode = RunMode.Async), Summary("play voice")]
-        public async Task SendModule(string input)
-        {
-            try
-            {
-                Log.Information($"command - play - start user:{Context.User.Id} channel:{Context.Channel.Id} command:{Context.Message.Content}");
-
-                if (!audioClients.ContainsKey(Context.Guild.Id))
-                {
-                    var channel = (Context.User as IVoiceState).VoiceChannel;
-
-                    audioClients.Add(Context.Guild.Id, await channel.ConnectAsync());
-                }
-
-                if (queues[Context.Guild.Id].Count == 0)
-                {
-                    PlaySong(Context.Guild.Id, input);
-                    
-                }
-                else
-                {
-                    queues[Context.Guild.Id].Enqueue(input);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"command - play - user:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
-            }
-        }
-
-        private Process CreateStream(string path)
-        {
-            return Process.Start(new ProcessStartInfo
-            {
-#if DEBUG
-                FileName = "ffmpeg.exe",
-#else
-                FileName = "ffmpeg",
-#endif
-                Arguments = $@"-i ""{path}"" -ac 2 -f s16le -ar 48000 pipe:1",
-                RedirectStandardOutput = true,
-                UseShellExecute = false
-            });
-        }
-
-        private async void PlaySong(ulong guildID, string input)
-        {
-            await audioClients[guildID].SetSpeakingAsync(true);
-
-            if (input.StartsWith("https://www.youtube.com/watch?v="))
-            {
-                YoutubeClient youtube = new YoutubeClient();
-
-                var streamManifest = await youtube.Videos.Streams.GetManifestAsync(input.Substring(32));
-                var streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
-
-                var stream = await youtube.Videos.Streams.GetAsync(streamInfo);
-
-                var memoryStream = new MemoryStream();
-                await Cli.Wrap("ffmpeg")
-                    .WithArguments(" -hide_banner -loglevel panic -i pipe:0 -ac 2 -f s16le -ar 48000 pipe:1")
-                    .WithStandardInputPipe(PipeSource.FromStream(stream))
-                    .WithStandardOutputPipe(PipeTarget.ToStream(memoryStream))
-                    .ExecuteAsync();
-
-                using (var discord = audioClients[guildID].CreatePCMStream(AudioApplication.Mixed))
-                {
-                    try { await discord.WriteAsync(memoryStream.ToArray(), 0, (int)memoryStream.Length); }
-                    finally { await discord.FlushAsync(); }
-                }
-            }
-            else
-            {
-                string path = "music/" + input + ".mp3";
-
-                using (var ffmpeg = CreateStream(path))
-                using (var output = ffmpeg.StandardOutput.BaseStream)
-                using (var discord = audioClients[guildID].CreatePCMStream(AudioApplication.Mixed))
-                {
-                    try { await output.CopyToAsync(discord); }
-                    finally { await discord.FlushAsync(); }
-                }
-            }
-
-            await audioClients[Context.Guild.Id].SetSpeakingAsync(false);
-        }
-
-        private Task CreateTask()
-        {
-            Action action = () =>
-            {
-                
-            };
-
-            return new Task(action);
-        }
-
-        */
     }
 }

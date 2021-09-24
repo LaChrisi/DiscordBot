@@ -10,7 +10,7 @@
       "DiscordBot/1.0.0": {
         "dependencies": {
           "CliWrap": "3.3.3",
-          "Discord.Net.Labs": "3.1.0",
+          "Discord.Net.Labs": "3.1.1",
           "Google.Apis.Calendar.v3": "1.55.0.2410",
           "Microsoft.EntityFrameworkCore": "5.0.10",
           "Microsoft.EntityFrameworkCore.Design": "5.0.10",
@@ -770,27 +770,27 @@
           }
         }
       },
-      "Discord.Net.Labs/3.1.0": {
+      "Discord.Net.Labs/3.1.1": {
         "dependencies": {
-          "Discord.Net.Labs.Commands": "3.0.0",
-          "Discord.Net.Labs.Core": "3.1.0",
-          "Discord.Net.Labs.Rest": "3.1.0",
-          "Discord.Net.Labs.WebSocket": "3.1.0",
+          "Discord.Net.Labs.Commands": "3.0.1",
+          "Discord.Net.Labs.Core": "3.1.1",
+          "Discord.Net.Labs.Rest": "3.1.1",
+          "Discord.Net.Labs.WebSocket": "3.1.1",
           "Discord.Net.Labs.Webhook": "3.0.0"
         }
       },
-      "Discord.Net.Labs.Commands/3.0.0": {
+      "Discord.Net.Labs.Commands/3.0.1": {
         "dependencies": {
-          "Discord.Net.Labs.Core": "3.1.0"
+          "Discord.Net.Labs.Core": "3.1.1"
         },
         "runtime": {
           "lib/netstandard2.1/Discord.Net.Commands.dll": {
-            "assemblyVersion": "3.0.0.0",
-            "fileVersion": "3.0.0.0"
+            "assemblyVersion": "3.0.1.0",
+            "fileVersion": "3.0.1.0"
           }
         }
       },
-      "Discord.Net.Labs.Core/3.1.0": {
+      "Discord.Net.Labs.Core/3.1.1": {
         "dependencies": {
           "Newtonsoft.Json": "13.0.1",
           "System.Collections.Immutable": "5.0.0",
@@ -798,26 +798,26 @@
         },
         "runtime": {
           "lib/netstandard2.1/Discord.Net.Core.dll": {
-            "assemblyVersion": "3.1.0.0",
-            "fileVersion": "3.1.0.0"
+            "assemblyVersion": "3.1.1.0",
+            "fileVersion": "3.1.1.0"
           }
         }
       },
-      "Discord.Net.Labs.Rest/3.1.0": {
+      "Discord.Net.Labs.Rest/3.1.1": {
         "dependencies": {
-          "Discord.Net.Labs.Core": "3.1.0"
+          "Discord.Net.Labs.Core": "3.1.1"
         },
         "runtime": {
           "lib/netstandard2.1/Discord.Net.Rest.dll": {
-            "assemblyVersion": "3.1.0.0",
-            "fileVersion": "3.1.0.0"
+            "assemblyVersion": "3.1.1.0",
+            "fileVersion": "3.1.1.0"
           }
         }
       },
       "Discord.Net.Labs.Webhook/3.0.0": {
         "dependencies": {
-          "Discord.Net.Labs.Core": "3.1.0",
-          "Discord.Net.Labs.Rest": "3.1.0"
+          "Discord.Net.Labs.Core": "3.1.1",
+          "Discord.Net.Labs.Rest": "3.1.1"
         },
         "runtime": {
           "lib/netstandard2.1/Discord.Net.Webhook.dll": {
@@ -826,15 +826,15 @@
           }
         }
       },
-      "Discord.Net.Labs.WebSocket/3.1.0": {
+      "Discord.Net.Labs.WebSocket/3.1.1": {
         "dependencies": {
-          "Discord.Net.Labs.Core": "3.1.0",
-          "Discord.Net.Labs.Rest": "3.1.0"
+          "Discord.Net.Labs.Core": "3.1.1",
+          "Discord.Net.Labs.Rest": "3.1.1"
         },
         "runtime": {
           "lib/netstandard2.1/Discord.Net.WebSocket.dll": {
-            "assemblyVersion": "3.1.0.0",
-            "fileVersion": "3.1.0.0"
+            "assemblyVersion": "3.1.1.0",
+            "fileVersion": "3.1.1.0"
           }
         }
       },
@@ -1308,33 +1308,33 @@
       "path": "cliwrap/3.3.3",
       "hashPath": "cliwrap.3.3.3.nupkg.sha512"
     },
-    "Discord.Net.Labs/3.1.0": {
+    "Discord.Net.Labs/3.1.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-B6mJaPzr50EhpZlsU34NHgjEzuJi0jgLJDiEvnFBD1VhrQYyi/q5JgUPhKSFE5h8JAAPzU0dF0LAvUkp3vUb4Q==",
-      "path": "discord.net.labs/3.1.0",
-      "hashPath": "discord.net.labs.3.1.0.nupkg.sha512"
+      "sha512": "sha512-SwNnoRMJ9vnd9ux/qiDxVtVe40NkNcs/LAiQ2d7ena5XRaZwQz3X1h1PGEopgmsu/DgurDdDRhyw169zURfZpw==",
+      "path": "discord.net.labs/3.1.1",
+      "hashPath": "discord.net.labs.3.1.1.nupkg.sha512"
     },
-    "Discord.Net.Labs.Commands/3.0.0": {
+    "Discord.Net.Labs.Commands/3.0.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-YBeH/C/bL9Y0032dN5NjAP875ABh6DUilUh9zBwy/FtoiRyhQSbxvMRi2n1iABFJDAwImkQcNXt5+yc6xdqTaA==",
-      "path": "discord.net.labs.commands/3.0.0",
-      "hashPath": "discord.net.labs.commands.3.0.0.nupkg.sha512"
+      "sha512": "sha512-JoK+ZCTuLibz+CuPLE4waEszthuZcpMCGQUMcgH5X0IXqjWp899qL1c4GsweAyxJTeKapUs4F0BLhpce4gO2qw==",
+      "path": "discord.net.labs.commands/3.0.1",
+      "hashPath": "discord.net.labs.commands.3.0.1.nupkg.sha512"
     },
-    "Discord.Net.Labs.Core/3.1.0": {
+    "Discord.Net.Labs.Core/3.1.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-YtgggmmTGmJkBaZ6dhwuJaWm69btyUGDyYb7ftO1lI5jJFLSoCOOh4halcDUcQoGbyYWqQJHLHjwQyL+gQY+ag==",
-      "path": "discord.net.labs.core/3.1.0",
-      "hashPath": "discord.net.labs.core.3.1.0.nupkg.sha512"
+      "sha512": "sha512-Ua9Q79Yzccm4Pj+65rYP8K2ipaFK4I2Gc0BKt7AlsK+XoX5tHndnOwKjRrRGqmJAdN7gUAvKy8V6Wqj91y+HOA==",
+      "path": "discord.net.labs.core/3.1.1",
+      "hashPath": "discord.net.labs.core.3.1.1.nupkg.sha512"
     },
-    "Discord.Net.Labs.Rest/3.1.0": {
+    "Discord.Net.Labs.Rest/3.1.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-jfNB3m5qNoVbMH/NM+75/stSnmx2xJIWS5lmDezRa34InisgnNDf8fqOhfJITFibwqqIatzvewmGKp448OhgXg==",
-      "path": "discord.net.labs.rest/3.1.0",
-      "hashPath": "discord.net.labs.rest.3.1.0.nupkg.sha512"
+      "sha512": "sha512-05k0LS/YqLFA87EJZMUVEg3sk9sd7ebSbYKIGQZ/4U7rfvPQ3IkXtZ3vOxRl6Nhr4V9zMq2Ek1M+yx0yFnVOtg==",
+      "path": "discord.net.labs.rest/3.1.1",
+      "hashPath": "discord.net.labs.rest.3.1.1.nupkg.sha512"
     },
     "Discord.Net.Labs.Webhook/3.0.0": {
       "type": "package",
@@ -1343,12 +1343,12 @@
       "path": "discord.net.labs.webhook/3.0.0",
       "hashPath": "discord.net.labs.webhook.3.0.0.nupkg.sha512"
     },
-    "Discord.Net.Labs.WebSocket/3.1.0": {
+    "Discord.Net.Labs.WebSocket/3.1.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-e+CgokhaF7X7ADi+7mK+7tgmk3clG+LfNzbfrrZh6VGiyaVZk01NWs6ppjzywVY42ySxAqXEmP4DYdNyeCKxzg==",
-      "path": "discord.net.labs.websocket/3.1.0",
-      "hashPath": "discord.net.labs.websocket.3.1.0.nupkg.sha512"
+      "sha512": "sha512-1oGxbFE2TVxNgnqwUoFuYmOmEaGi1Nbq9i//Cr1VdZvrcRDKYqHQk0/jmGvN5lZqfqjZki/tspldKCIq4abYyA==",
+      "path": "discord.net.labs.websocket/3.1.1",
+      "hashPath": "discord.net.labs.websocket.3.1.1.nupkg.sha512"
     },
     "Google.Apis/1.55.0": {
       "type": "package",

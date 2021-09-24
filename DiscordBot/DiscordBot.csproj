@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="CliWrap" Version="3.3.3" />
-    <PackageReference Include="Discord.Net.Labs" Version="3.1.0" />
+    <PackageReference Include="Discord.Net.Labs" Version="3.1.1" />
     <PackageReference Include="Google.Apis.Calendar.v3" Version="1.55.0.2410" />
     <PackageReference Include="libsodium" Version="1.0.18.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" />
