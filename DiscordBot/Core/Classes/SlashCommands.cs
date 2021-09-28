@@ -203,6 +203,192 @@ namespace DiscordBot.Core.Classes
             }
             else if (interaction.Data.Name == "play")
             {
+                List<string> input = new List<string>();
+
+                if (interaction.Data.Options != null)
+                {
+                    foreach (var item in interaction.Data.Options)
+                    {
+                        if (item.Name == "what")
+                        {
+                            input.Add(item.Value.ToString());
+                        }
+                    }
+                }
+
+                try
+                {
+                    Log.Information($"command - /play - start user:{interaction.User.Id} channel:{interaction.Channel.Id} what:{input.ToString()}");
+
+                    PlayMusic(interaction, input);
+
+                     await interaction.RespondAsync(ephemeral: false, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("audio", $"playing!"), Colors.information));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"command - /play - user:{interaction.User.Id} channel:{interaction.Channel.Id} error:{ex.Message}");
+                }
+            }
+            else if (interaction.Data.Name == "stop")
+            {
+                try
+                {
+                    Log.Information($"command - /stop - start user:{interaction.User.Id} channel:{interaction.Channel.Id}");
+
+                    var channelVoice = (interaction.User as IVoiceState).VoiceChannel;
+                    var channel = interaction.Channel as IGuildChannel;
+
+                    if (channelVoice == null)
+                        return;
+                    else if (Audio.audioClients[channel.GuildId].voiceChannel != channelVoice)
+                        return;
+
+                    Audio.audioClients[channel.GuildId].Stop();
+                    await interaction.RespondAsync(ephemeral: false, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("audio", $"stopped!"), Colors.information));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"command - /stop - user:{interaction.User.Id} channel:{interaction.Channel.Id} error:{ex.Message}");
+                }
+            }
+            else if (interaction.Data.Name == "skip")
+            {
+                try
+                {
+                    Log.Information($"command - /skip - start user:{interaction.User.Id} channel:{interaction.Channel.Id}");
+
+                    var channelVoice = (interaction.User as IVoiceState).VoiceChannel;
+                    var channel = interaction.Channel as IGuildChannel;
+
+                    if (channelVoice == null)
+                        return;
+                    else if (Audio.audioClients[channel.GuildId].voiceChannel != channelVoice)
+                        return;
+
+                    Audio.audioClients[channel.GuildId].Next();
+
+                    await interaction.RespondAsync(ephemeral: false, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("audio", $"skipped!"), Colors.information));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"command - /skip - user:{interaction.User.Id} channel:{interaction.Channel.Id} error:{ex.Message}");
+                }
+            }
+            else if (interaction.Data.Name == "leave")
+            {
+                try
+                {
+                    Log.Information($"command - /leave - start user:{interaction.User.Id} channel:{interaction.Channel.Id}");
+
+                    var channelVoice = (interaction.User as IVoiceState).VoiceChannel;
+                    var channel = interaction.Channel as IGuildChannel;
+
+                    if (channelVoice == null)
+                        return;
+                    else if (Audio.audioClients[channel.GuildId].voiceChannel != channelVoice)
+                        return;
+
+                    Audio.audioClients[channel.GuildId].Stop();
+
+                    Audio.audioClients[channel.GuildId].CleanUp();
+
+                    //cleanup
+                    if (Audio.audioClients.ContainsKey(channel.GuildId))
+                    {
+                        Audio.audioClients.Remove(channel.GuildId);
+                    }
+
+                    await interaction.RespondAsync(ephemeral: false, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("audio", $"left!"), Colors.information));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"command - /leave - user:{interaction.User.Id} channel:{interaction.Channel.Id} error:{ex.Message}");
+                }
+            }
+            else if (interaction.Data.Name == "shuffle")
+            {
+                try
+                {
+                    Log.Information($"command - /shuffle - start user:{interaction.User.Id} channel:{interaction.Channel.Id}");
+
+                    var channelVoice = (interaction.User as IVoiceState).VoiceChannel;
+                    var channel = interaction.Channel as IGuildChannel;
+
+                    if (channelVoice == null)
+                        return;
+                    else if (Audio.audioClients[channel.GuildId].voiceChannel != channelVoice)
+                        return;
+
+                    Audio.audioClients[channel.GuildId].Shuffle();
+
+                    await interaction.RespondAsync(ephemeral: false, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("audio", $"queue shuffled!"), Colors.information));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"command - /shuffle - user:{interaction.User.Id} channel:{interaction.Channel.Id} error:{ex.Message}");
+                }
+            }
+            else if (interaction.Data.Name == "queue")
+            {
+                try
+                {
+                    Log.Information($"command - /queue - start user:{interaction.User.Id} channel:{interaction.Channel.Id}");
+
+                    var channelVoice = (interaction.User as IVoiceState).VoiceChannel;
+                    var channel = interaction.Channel as IGuildChannel;
+
+                    if (channelVoice == null)
+                        return;
+                    else if (Audio.audioClients[channel.GuildId].voiceChannel != channelVoice)
+                        return;
+
+                    string queueOutput = "";
+
+                    if (Audio.audioClients[channel.GuildId].videoQueue != null)
+                    {
+                        foreach (var video in Audio.audioClients[channel.GuildId].videoQueue)
+                        {
+                            queueOutput = queueOutput + $"[{video.Title}]({video.Url})\n";
+                        }
+                    }
+
+                    await interaction.RespondAsync(ephemeral: false, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("queue", $"next 5 songs:\n{queueOutput}total {Audio.audioClients[channel.GuildId].videoQueue.Count + Audio.audioClients[channel.GuildId].IdQueue.Count} songs"), Colors.information));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"command - /queue - user:{interaction.User.Id} channel:{interaction.Channel.Id} error:{ex.Message}");
+                }
+            }
+
+        }
+
+        private static async Task PlayMusic(SocketSlashCommand interaction, List<string> input)
+        {
+            try
+            {
+                var channelVoice = (interaction.User as IVoiceState).VoiceChannel;
+                var channel = interaction.Channel as IGuildChannel;
+
+                //join if not connected
+                if (!Audio.audioClients.ContainsKey(channel.GuildId))
+                {
+                    Audio.audioClients.Add(channel.GuildId, new AudioClient(await channelVoice.ConnectAsync(), interaction.Channel, channelVoice));
+                }
+
+                if (channelVoice == null)
+                    return;
+                else if (Audio.audioClients[channel.GuildId].voiceChannel != channelVoice)
+                    return;
+
+                Audio.audioClients[channel.GuildId].Add(input.ToArray());
+
+                if (Audio.audioClients[channel.GuildId].playing == null)
+                {
+                    await Audio.audioClients[channel.GuildId].Start();
+                }
+            }
+            catch (Exception)
+            {
 
             }
         }

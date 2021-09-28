@@ -13,6 +13,7 @@ using DiscordBot.Core.Classes;
 using System.Net;
 using System.IO;
 using Discord.Audio;
+using System.Threading;
 
 namespace DiscordBot
 {
@@ -770,6 +771,8 @@ namespace DiscordBot
 
             Client.InteractionCreated += Client_InteractionCreated;
 
+            Client.UserVoiceStateUpdated += Client_UserVoiceStateUpdated;
+
 #if DEBUG
             await Client.LoginAsync(TokenType.Bot, Token.token_test);
 #else
@@ -782,6 +785,41 @@ namespace DiscordBot
             await Client.StartAsync();
 
             await Task.Delay(-1);
+        }
+
+        private async Task Client_UserVoiceStateUpdated(SocketUser user, SocketVoiceState state1, SocketVoiceState state2)
+        {
+            try
+            {
+                if (user.IsBot)
+                    return;
+
+                var guild = state2.VoiceChannel?.Guild ?? state1.VoiceChannel?.Guild;
+
+                if (guild == null)
+                    return;
+
+                if (!Core.Commands.Audio.audioClients.ContainsKey(guild.Id))
+                    return;
+
+                if (Core.Commands.Audio.audioClients[guild.Id].voiceChannel == state1.VoiceChannel & state2.VoiceChannel != state1.VoiceChannel)
+                {
+                    if (state1.VoiceChannel.Users.Count == 1)
+                    {
+                        Core.Commands.Audio.audioClients[guild.Id].Stop();
+                        Core.Commands.Audio.audioClients[guild.Id].CleanUp();
+
+                        if (Core.Commands.Audio.audioClients.ContainsKey(guild.Id))
+                        {
+                            Core.Commands.Audio.audioClients.Remove(guild.Id);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         private async Task Client_InteractionCreated(SocketInteraction interaction)
@@ -1000,7 +1038,7 @@ namespace DiscordBot
 
                 await Client.SetGameAsync(Convert.ToString(Global.GetByName("ready_initial_activity_playing").value), "", ActivityType.Playing);
 
-                Timer ready_timer = new Timer
+                System.Timers.Timer ready_timer = new System.Timers.Timer
                 {
                     AutoReset = false,
                     Interval = Convert.ToInt32(Global.GetByName("ready_timer_minute").value) * 60 * 1000,

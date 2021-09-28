@@ -1,10 +1,12 @@
 ﻿using Discord;
 using Discord.Commands;
 using DiscordBot.Core.Classes;
+using Discord.Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace DiscordBot.Core.Commands.Moderation
 {
@@ -181,24 +183,86 @@ namespace DiscordBot.Core.Commands.Moderation
                     List<SlashCommandBuilder> slashCommands = new List<SlashCommandBuilder>();
 
                     var command = new SlashCommandBuilder();
-                    command.WithName("help");
-                    command.WithDescription("displays all bots commands");
 
-                    command.AddOption("type", ApplicationCommandOptionType.String, "type of help", false, false, true, null, new ApplicationCommandOptionChoiceProperties { Name = "data", Value = "data" });
+                    //help
+                    {
+                        command.WithName("help");
+                        command.WithDescription("displays all bots commands");
 
-                    slashCommands.Add(command);
+                        command.AddOption("type", ApplicationCommandOptionType.String, "type of help", false, false, false, null, new ApplicationCommandOptionChoiceProperties { Name = "data", Value = "data" });
 
-                    command = new SlashCommandBuilder();
-                    command.WithName("get");
-                    command.WithDescription("get various things");
+                        slashCommands.Add(command);
+                    }
 
-                    var options = new List<ApplicationCommandOptionChoiceProperties>();
-                    options.Add(new ApplicationCommandOptionChoiceProperties { Name = "stats", Value = "stats" });
-                    options.Add(new ApplicationCommandOptionChoiceProperties { Name = "leaderboard", Value = "leaderboard" });
+                    //get
+                    {
+                        command = new SlashCommandBuilder();
+                        command.WithName("get");
+                        command.WithDescription("get various things");
 
-                    command.AddOption("what", ApplicationCommandOptionType.String, "what to get", true, false, true, null, options.ToArray());
+                        var options = new List<ApplicationCommandOptionChoiceProperties>();
+                        options.Add(new ApplicationCommandOptionChoiceProperties { Name = "stats", Value = "stats" });
+                        options.Add(new ApplicationCommandOptionChoiceProperties { Name = "leaderboard", Value = "leaderboard" });
 
-                    slashCommands.Add(command);
+                        command.AddOption("what", ApplicationCommandOptionType.String, "what to get", true, false, false, null, options.ToArray());
+
+                        slashCommands.Add(command);
+                    }
+
+                    //play
+                    {
+                        command = new SlashCommandBuilder();
+                        command.WithName("play");
+                        command.WithDescription("play music from youtube");
+                        command.AddOption("what", ApplicationCommandOptionType.String, "what to play", required: false);
+
+                        slashCommands.Add(command);
+                    }
+
+                    //stop
+                    {
+                        command = new SlashCommandBuilder();
+                        command.WithName("stop");
+                        command.WithDescription("stop music");
+
+                        slashCommands.Add(command);
+                    }
+
+                    //skip
+                    {
+                        command = new SlashCommandBuilder();
+                        command.WithName("skip");
+                        command.WithDescription("skip music track");
+
+                        slashCommands.Add(command);
+                    }
+
+                    //leave
+                    {
+                        command = new SlashCommandBuilder();
+                        command.WithName("leave");
+                        command.WithDescription("leave the connected voice channel");
+
+                        slashCommands.Add(command);
+                    }
+
+                    //shuffle
+                    {
+                        command = new SlashCommandBuilder();
+                        command.WithName("shuffle");
+                        command.WithDescription("shuffle music queue");
+
+                        slashCommands.Add(command);
+                    }
+
+                    //queue
+                    {
+                        command = new SlashCommandBuilder();
+                        command.WithName("queue");
+                        command.WithDescription("list the 5 next music tracks");
+
+                        slashCommands.Add(command);
+                    }
 
                     foreach (var slashCommand in slashCommands)
                     {
@@ -220,7 +284,12 @@ namespace DiscordBot.Core.Commands.Moderation
 
                     await Context.Message.ReplyAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("info", "done!"), Colors.information));
                 }
-                catch (Exception ex)
+                catch (ApplicationCommandException ex)
+                {
+                    var json = JsonConvert.SerializeObject(ex.Error, Formatting.Indented);
+                    await Context.Message.ReplyAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", json), Colors.error));
+                }
+                catch(Exception ex)
                 {
                     Log.Error($"command - !admin get - user:{Context.Message.Author.Id} channel:{Context.Channel.Id} error:{ex.Message}");
                 }
