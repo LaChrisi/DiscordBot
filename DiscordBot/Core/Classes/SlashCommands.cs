@@ -203,26 +203,21 @@ namespace DiscordBot.Core.Classes
             }
             else if (interaction.Data.Name == "play")
             {
-                List<string> input = new List<string>();
-
-                if (interaction.Data.Options != null)
-                {
-                    foreach (var item in interaction.Data.Options)
-                    {
-                        if (item.Name == "what")
-                        {
-                            input.Add(item.Value.ToString());
-                        }
-                    }
-                }
-
                 try
                 {
-                    Log.Information($"command - /play - start user:{interaction.User.Id} channel:{interaction.Channel.Id} what:{input.ToString()}");
+                    Log.Information($"command - /play - start user:{interaction.User.Id} channel:{interaction.Channel.Id}");
 
-                    PlayMusic(interaction, input);
+                    var channelVoice = (interaction.User as IVoiceState).VoiceChannel;
+                    var channel = interaction.Channel as IGuildChannel;
 
-                     await interaction.RespondAsync(ephemeral: false, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("audio", $"playing!"), Colors.information));
+                    if (channelVoice == null)
+                        await interaction.RespondAsync(ephemeral: true, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("error", $"you need to be in a voice channel!"), Colors.error));
+                    else if (Audio.audioClients[channel.GuildId].voiceChannel != channelVoice)
+                        await interaction.RespondAsync(ephemeral: true, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("error", $"you need to be in the same channel as the bot!"), Colors.error));
+
+                    PlayMusic(interaction);
+
+                     await interaction.RespondAsync(ephemeral: true, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("audio", $"playing!"), Colors.information));
                 }
                 catch (Exception ex)
                 {
@@ -239,9 +234,9 @@ namespace DiscordBot.Core.Classes
                     var channel = interaction.Channel as IGuildChannel;
 
                     if (channelVoice == null)
-                        return;
+                        await interaction.RespondAsync(ephemeral: true, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("error", $"you need to be in a voice channel!"), Colors.error));
                     else if (Audio.audioClients[channel.GuildId].voiceChannel != channelVoice)
-                        return;
+                        await interaction.RespondAsync(ephemeral: true, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("error", $"you need to be in the same channel as the bot!"), Colors.error));
 
                     Audio.audioClients[channel.GuildId].Stop();
                     await interaction.RespondAsync(ephemeral: false, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("audio", $"stopped!"), Colors.information));
@@ -261,9 +256,9 @@ namespace DiscordBot.Core.Classes
                     var channel = interaction.Channel as IGuildChannel;
 
                     if (channelVoice == null)
-                        return;
+                        await interaction.RespondAsync(ephemeral: true, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("error", $"you need to be in a voice channel!"), Colors.error));
                     else if (Audio.audioClients[channel.GuildId].voiceChannel != channelVoice)
-                        return;
+                        await interaction.RespondAsync(ephemeral: true, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("error", $"you need to be in the same channel as the bot!"), Colors.error));
 
                     Audio.audioClients[channel.GuildId].Next();
 
@@ -284,9 +279,9 @@ namespace DiscordBot.Core.Classes
                     var channel = interaction.Channel as IGuildChannel;
 
                     if (channelVoice == null)
-                        return;
+                        await interaction.RespondAsync(ephemeral: true, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("error", $"you need to be in a voice channel!"), Colors.error));
                     else if (Audio.audioClients[channel.GuildId].voiceChannel != channelVoice)
-                        return;
+                        await interaction.RespondAsync(ephemeral: true, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("error", $"you need to be in the same channel as the bot!"), Colors.error));
 
                     Audio.audioClients[channel.GuildId].Stop();
 
@@ -298,7 +293,7 @@ namespace DiscordBot.Core.Classes
                         Audio.audioClients.Remove(channel.GuildId);
                     }
 
-                    await interaction.RespondAsync(ephemeral: false, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("audio", $"left!"), Colors.information));
+                    await interaction.RespondAsync(ephemeral: true, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("audio", $"left!"), Colors.information));
                 }
                 catch (Exception ex)
                 {
@@ -315,9 +310,9 @@ namespace DiscordBot.Core.Classes
                     var channel = interaction.Channel as IGuildChannel;
 
                     if (channelVoice == null)
-                        return;
+                        await interaction.RespondAsync(ephemeral: true, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("error", $"you need to be in a voice channel!"), Colors.error));
                     else if (Audio.audioClients[channel.GuildId].voiceChannel != channelVoice)
-                        return;
+                        await interaction.RespondAsync(ephemeral: true, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("error", $"you need to be in the same channel as the bot!"), Colors.error));
 
                     Audio.audioClients[channel.GuildId].Shuffle();
 
@@ -338,9 +333,9 @@ namespace DiscordBot.Core.Classes
                     var channel = interaction.Channel as IGuildChannel;
 
                     if (channelVoice == null)
-                        return;
+                        await interaction.RespondAsync(ephemeral: true, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("error", $"you need to be in a voice channel!"), Colors.error));
                     else if (Audio.audioClients[channel.GuildId].voiceChannel != channelVoice)
-                        return;
+                        await interaction.RespondAsync(ephemeral: true, embed: Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("error", $"you need to be in the same channel as the bot!"), Colors.error));
 
                     string queueOutput = "";
 
@@ -362,10 +357,23 @@ namespace DiscordBot.Core.Classes
 
         }
 
-        private static async Task PlayMusic(SocketSlashCommand interaction, List<string> input)
+        private static async Task PlayMusic(SocketSlashCommand interaction)
         {
             try
             {
+                List<string> input = new List<string>();
+
+                if (interaction.Data.Options != null)
+                {
+                    foreach (var item in interaction.Data.Options)
+                    {
+                        if (item.Name == "what")
+                        {
+                            input.Add(item.Value.ToString());
+                        }
+                    }
+                }
+
                 var channelVoice = (interaction.User as IVoiceState).VoiceChannel;
                 var channel = interaction.Channel as IGuildChannel;
 
@@ -375,10 +383,6 @@ namespace DiscordBot.Core.Classes
                     Audio.audioClients.Add(channel.GuildId, new AudioClient(await channelVoice.ConnectAsync(), interaction.Channel, channelVoice));
                 }
 
-                if (channelVoice == null)
-                    return;
-                else if (Audio.audioClients[channel.GuildId].voiceChannel != channelVoice)
-                    return;
 
                 Audio.audioClients[channel.GuildId].Add(input.ToArray());
 

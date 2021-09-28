@@ -178,6 +178,13 @@ namespace DiscordBot.Core.Commands.Moderation
             [Command("add"), SummaryAttribute("adds a slash command")]
             public async Task AddModule(string name, ulong guildID = 0)
             {
+                if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
+                {
+                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                    Log.Warning($"command - admin add - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                    return;
+                }
+
                 try
                 {
                     List<SlashCommandBuilder> slashCommands = new List<SlashCommandBuilder>();
@@ -298,6 +305,13 @@ namespace DiscordBot.Core.Commands.Moderation
             [Command("get"), SummaryAttribute("gets all slash commands")]
             public async Task GetModule()
             {
+                if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
+                {
+                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                    Log.Warning($"command - admin get - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                    return;
+                }
+
                 try
                 {
                     var commands = await Program.Client.Rest.GetGlobalApplicationCommands();
@@ -361,6 +375,13 @@ namespace DiscordBot.Core.Commands.Moderation
             {
                 try
                 {
+                    if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
+                    {
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                        Log.Warning($"command - admin delete - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                        return;
+                    }
+
                     if (guildID == 0)
                     {
                         await Program.Client.Rest.DeleteAllGlobalCommandsAsync();

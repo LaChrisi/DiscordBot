@@ -25,7 +25,7 @@ namespace DiscordBot.Core.Classes
         private IMessageChannel channel { get; set; }
         private YoutubeClient youtube { get; set; }
 
-    public AudioClient(IAudioClient Client, IMessageChannel Channel, IVoiceChannel VoiceChannel)
+        public AudioClient(IAudioClient Client, IMessageChannel Channel, IVoiceChannel VoiceChannel)
         {
             audioClient = Client;
             playing = null;
