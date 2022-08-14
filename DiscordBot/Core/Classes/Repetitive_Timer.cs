@@ -154,6 +154,22 @@ namespace DiscordBot.Core.Classes
                                     Console.WriteLine(ex.Message);
                                 }
                             }
+                            else if (e.how == "daysLeft")
+                            {
+                                var message = await channel.GetMessageAsync((ulong)Convert.ToInt64(channel_event.when)) as IUserMessage;
+
+                                try
+                                {
+                                    var untilLegal = new DateTime(2005+18,11,9) - DateTime.Now;
+
+
+                                    await message.ModifyAsync(x => { x.Embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("in", $"{untilLegal.Days} days and {untilLegal.Hours} hours."), Colors.information, "Keanna will be legal"); });
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message);
+                                }
+                            }
                         }
                     }
                 }

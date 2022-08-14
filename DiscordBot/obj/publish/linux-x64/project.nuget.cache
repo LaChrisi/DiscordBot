@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "GcbmJ8jfeSceicnu56mn8aCRw3yxnOlOklvzDAu/cGr4K4p6hIBUIwE4nLkEzjdAqLu/HH1PQ0JrYigECdPZ9g==",
+  "dgSpecHash": "Re//LGC0XNrQ25vjq0R1Ye51yqTF6CETUgVt3YGYoU/kuUW+vwtyFHPrBL4//vkHb789A3rG2IdJuGnXYP5YxA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Chris\\Desktop\\GitHub\\DiscordBot\\DiscordBot\\DiscordBot.csproj",
+  "projectFilePath": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\DiscordBot.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Chris\\.nuget\\packages\\anglesharp\\0.14.0\\anglesharp.0.14.0.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\bouncycastle.netcore\\1.8.5\\bouncycastle.netcore.1.8.5.nupkg.sha512",
@@ -62,9 +62,12 @@
     "C:\\Users\\Chris\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\youtubeexplode\\6.0.5\\youtubeexplode.6.0.5.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\youtubeexplode.converter\\2.1.0\\youtubeexplode.converter.2.1.0.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-x64\\3.1.8\\microsoft.netcore.app.runtime.linux-x64.3.1.8.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-x64\\3.1.8\\microsoft.aspnetcore.app.runtime.linux-x64.3.1.8.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\3.1.8\\microsoft.netcore.app.host.linux-x64.3.1.8.nupkg.sha512"
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.ref\\3.1.0\\microsoft.netcore.app.ref.3.1.0.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\3.1.0\\microsoft.windowsdesktop.app.ref.3.1.0.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-x64\\3.1.23\\microsoft.netcore.app.runtime.linux-x64.3.1.23.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-x64\\3.1.23\\microsoft.aspnetcore.app.runtime.linux-x64.3.1.23.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\3.1.23\\microsoft.netcore.app.host.linux-x64.3.1.23.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.10\\microsoft.aspnetcore.app.ref.3.1.10.nupkg.sha512"
   ],
   "logs": []
 }
