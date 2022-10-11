@@ -160,7 +160,7 @@ namespace DiscordBot.Core.Classes
 
                                 try
                                 {
-                                    var untilLegal = new DateTime(2005+18,11,9) - DateTime.Now;
+                                    var untilLegal = new DateTime(2005+18,11,9,7,0,0) - DateTime.Now;
 
 
                                     await message.ModifyAsync(x => { x.Embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("in", $"{untilLegal.Days} days and {untilLegal.Hours} hours."), Colors.information, "Keanna will be legal"); });
