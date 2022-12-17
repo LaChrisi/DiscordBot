@@ -37,8 +37,6 @@ C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\linux-a
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\linux-arm64\Microsoft.Extensions.Primitives.dll
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\linux-arm64\Microsoft.Win32.SystemEvents.dll
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\linux-arm64\MySql.Data.dll
-C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\linux-arm64\Ubiety.Dns.Core.dll
-C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\linux-arm64\Zstandard.Net.dll
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\linux-arm64\Newtonsoft.Json.dll
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\linux-arm64\libsodium.dll
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\linux-arm64\opus.dll
@@ -243,3 +241,7 @@ C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-a
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-arm64\DiscordBot.pdb
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-arm64\DiscordBot.genruntimeconfig.cache
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-arm64\ref\DiscordBot.dll
+C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\linux-arm64\Microsoft.Extensions.DependencyModel.dll
+C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\linux-arm64\Mono.TextTemplating.dll
+C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\linux-arm64\ZstdNet.dll
+C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\linux-arm64\System.CodeDom.dll

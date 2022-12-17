@@ -46,7 +46,7 @@
           "dependencies": {
             "CliWrap": {
               "target": "Package",
-              "version": "[3.3.3, )"
+              "version": "[3.5.0, )"
             },
             "Discord.Net": {
               "target": "Package",
@@ -54,27 +54,27 @@
             },
             "Google.Apis.Calendar.v3": {
               "target": "Package",
-              "version": "[1.55.0.2410, )"
+              "version": "[1.58.0.2759, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[5.0.10, )"
+              "version": "[7.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[5.0.10, )"
+              "version": "[7.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[5.0.10, )"
+              "version": "[7.0.1, )"
             },
             "MySql.Data": {
               "target": "Package",
-              "version": "[8.0.25, )"
+              "version": "[8.0.31, )"
             },
             "Opus": {
               "target": "Package",
@@ -82,15 +82,15 @@
             },
             "YoutubeExplode": {
               "target": "Package",
-              "version": "[6.0.5, )"
+              "version": "[6.2.5, )"
             },
             "YoutubeExplode.Converter": {
               "target": "Package",
-              "version": "[2.1.0, )"
+              "version": "[6.2.5, )"
             },
             "libsodium": {
               "target": "Package",
-              "version": "[1.0.18.1, )"
+              "version": "[1.0.18.4, )"
             }
           },
           "imports": [
