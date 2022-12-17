@@ -196,7 +196,7 @@ namespace DiscordBot.Core.Commands.Moderation
                         command.WithName("help");
                         command.WithDescription("displays all bots commands");
 
-                        command.AddOption("type", ApplicationCommandOptionType.String, "type of help", false, false, false, null, new ApplicationCommandOptionChoiceProperties { Name = "data", Value = "data" });
+                        command.AddOption("type", ApplicationCommandOptionType.String, "type of help", false, false, false, null, choices: new ApplicationCommandOptionChoiceProperties { Name = "data", Value = "data" });
 
                         slashCommands.Add(command);
                     }
@@ -211,7 +211,7 @@ namespace DiscordBot.Core.Commands.Moderation
                         options.Add(new ApplicationCommandOptionChoiceProperties { Name = "stats", Value = "stats" });
                         options.Add(new ApplicationCommandOptionChoiceProperties { Name = "leaderboard", Value = "leaderboard" });
 
-                        command.AddOption("what", ApplicationCommandOptionType.String, "what to get", true, false, false, null, options.ToArray());
+                        command.AddOption("what", ApplicationCommandOptionType.String, "what to get", true, false, false, null, choices: options.ToArray());
 
                         slashCommands.Add(command);
                     }
@@ -221,7 +221,7 @@ namespace DiscordBot.Core.Commands.Moderation
                         command = new SlashCommandBuilder();
                         command.WithName("play");
                         command.WithDescription("play music from youtube");
-                        command.AddOption("what", ApplicationCommandOptionType.String, "what to play", required: false);
+                        command.AddOption("what", ApplicationCommandOptionType.String, "what to play", isRequired: false);
 
                         slashCommands.Add(command);
                     }
@@ -293,7 +293,7 @@ namespace DiscordBot.Core.Commands.Moderation
                 }
                 catch (ApplicationCommandException ex)
                 {
-                    var json = JsonConvert.SerializeObject(ex.Error, Formatting.Indented);
+                    var json = JsonConvert.SerializeObject(ex.Errors, Formatting.Indented);
                     await Context.Message.ReplyAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("error", json), Colors.error));
                 }
                 catch(Exception ex)
