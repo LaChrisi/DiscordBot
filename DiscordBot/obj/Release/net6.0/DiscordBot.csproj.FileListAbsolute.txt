@@ -67,7 +67,6 @@ C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\Discord
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\DiscordBot.AssemblyInfoInputs.cache
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\DiscordBot.AssemblyInfo.cs
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\DiscordBot.csproj.CoreCompileInputs.cache
-C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\DiscordBot.csproj.CopyComplete
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\DiscordBot.dll
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\refint\DiscordBot.dll
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\DiscordBot.pdb
@@ -83,3 +82,5 @@ C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\runtime
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\runtimes\linux-musl-arm64\native\libsodium.so
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\runtimes\osx-arm64\native\libsodium.dylib
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Release\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
+C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\DiscordBot.sourcelink.json
+C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\DiscordBot.csproj.Up2Date

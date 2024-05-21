@@ -1,18 +1,18 @@
 {
   "version": 2,
-  "dgSpecHash": "MnuVEmh9jgTzjWHOgxCJUYEu7zrfIp6MxDx5IxGMAaEqukTD67ILiNlPjF/U5AmcFzBz74xQTnOtqgPlP297yQ==",
+  "dgSpecHash": "i8YiWOfXR3I2iJwSVeGDYfLhCqo8qKiurcj7UMpQEF9Z/pOh1MokZ173FKJqzQ8BVblqcIO5stS3yw5qAMXFuA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\DiscordBot.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Chris\\.nuget\\packages\\anglesharp\\0.17.0\\anglesharp.0.17.0.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\cliwrap\\3.5.0\\cliwrap.3.5.0.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\discord.net\\3.8.1\\discord.net.3.8.1.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\discord.net.commands\\3.8.1\\discord.net.commands.3.8.1.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\discord.net.core\\3.8.1\\discord.net.core.3.8.1.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\discord.net.interactions\\3.8.1\\discord.net.interactions.3.8.1.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\discord.net.rest\\3.8.1\\discord.net.rest.3.8.1.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\discord.net.webhook\\3.8.1\\discord.net.webhook.3.8.1.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\discord.net.websocket\\3.8.1\\discord.net.websocket.3.8.1.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\discord.net\\3.13.1\\discord.net.3.13.1.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\discord.net.commands\\3.13.1\\discord.net.commands.3.13.1.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\discord.net.core\\3.13.1\\discord.net.core.3.13.1.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\discord.net.interactions\\3.13.1\\discord.net.interactions.3.13.1.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\discord.net.rest\\3.13.1\\discord.net.rest.3.13.1.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\discord.net.webhook\\3.13.1\\discord.net.webhook.3.13.1.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\discord.net.websocket\\3.13.1\\discord.net.websocket.3.13.1.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\google.apis\\1.58.0\\google.apis.1.58.0.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\google.apis.auth\\1.58.0\\google.apis.auth.1.58.0.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\google.apis.calendar.v3\\1.58.0.2759\\google.apis.calendar.v3.1.58.0.2759.nupkg.sha512",
@@ -39,6 +39,8 @@
     "C:\\Users\\Chris\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\7.0.0\\microsoft.extensions.logging.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\microsoft.extensions.options\\7.0.0\\microsoft.extensions.options.7.0.0.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.net.illink.analyzers\\7.0.100-1.23211.1\\microsoft.net.illink.analyzers.7.0.100-1.23211.1.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.net.illink.tasks\\7.0.100-1.23211.1\\microsoft.net.illink.tasks.7.0.100-1.23211.1.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
@@ -67,9 +69,9 @@
     "C:\\Users\\Chris\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\youtubeexplode\\6.2.5\\youtubeexplode.6.2.5.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\youtubeexplode.converter\\6.2.5\\youtubeexplode.converter.6.2.5.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-x64\\6.0.12\\microsoft.netcore.app.runtime.linux-x64.6.0.12.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-x64\\6.0.12\\microsoft.aspnetcore.app.runtime.linux-x64.6.0.12.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\6.0.12\\microsoft.netcore.app.host.linux-x64.6.0.12.nupkg.sha512"
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-x64\\6.0.27\\microsoft.netcore.app.runtime.linux-x64.6.0.27.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-x64\\6.0.27\\microsoft.aspnetcore.app.runtime.linux-x64.6.0.27.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\6.0.27\\microsoft.netcore.app.host.linux-x64.6.0.27.nupkg.sha512"
   ],
   "logs": []
 }

@@ -738,7 +738,8 @@ namespace DiscordBot
             Client = new DiscordSocketClient(new DiscordSocketConfig
             {
                 LogLevel = LogSeverity.Debug,
-                AlwaysDownloadUsers = true
+                AlwaysDownloadUsers = true,
+                GatewayIntents = GatewayIntents.All
             });
 
             Commands = new CommandService(new CommandServiceConfig
@@ -798,6 +799,31 @@ namespace DiscordBot
 
                 if (guild == null)
                     return;
+
+                //hier mit Nadine
+
+                if (guild.Id == 1201924759353557042)
+                {
+                    var channel = (ITextChannel) Client.GetChannel(1215366832815607819);
+
+                    if (state1.VoiceChannel == null && state2.VoiceChannel != null)
+                    {
+                        List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+
+                        var embed = Core.Classes.Embed.New(user, fields, Colors.information, "joined voice");
+
+                        await channel.SendMessageAsync(embed: embed);
+                    }
+                    else if (state1.VoiceChannel != null && state2.VoiceChannel == null)
+                    {
+                        List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+
+                        var embed = Core.Classes.Embed.New(user, fields, Colors.information, "left voice");
+
+                        await channel.SendMessageAsync(embed: embed);
+                    }
+                }
+
 
                 if (!Core.Commands.Audio.audioClients.ContainsKey(guild.Id))
                     return;

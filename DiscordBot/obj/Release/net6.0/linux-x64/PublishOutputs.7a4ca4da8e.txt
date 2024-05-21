@@ -1,0 +1,5 @@
+C:\Github\DiscordBot.pdb
+C:\Github\libsodium.dll
+C:\Github\opus.dll
+C:\Github\libsodium.so
+C:\Github\DiscordBot

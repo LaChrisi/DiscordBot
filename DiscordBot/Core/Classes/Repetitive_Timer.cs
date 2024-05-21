@@ -11,6 +11,7 @@ namespace DiscordBot.Core.Classes
     {
         public static Timer daily_timer;
         public static Timer hourly_timer;
+        public static Timer minutes_15_timer;
 
         public static void SetUpDailyTimer(TimeSpan alertTime)
         {
@@ -36,6 +37,7 @@ namespace DiscordBot.Core.Classes
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                Log.Error(ex.Message);
             }
         }
 
@@ -58,6 +60,7 @@ namespace DiscordBot.Core.Classes
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                Log.Error(ex.Message);
             }
         }
 
@@ -154,27 +157,19 @@ namespace DiscordBot.Core.Classes
                                     Console.WriteLine(ex.Message);
                                 }
                             }
-                            else if (e.how == "daysLeft")
-                            {
-                                var message = await channel.GetMessageAsync((ulong)Convert.ToInt64(channel_event.when)) as IUserMessage;
-
-                                try
-                                {
-                                    var untilLegal = new DateTime(2005+18,11,9,7,0,0) - DateTime.Now;
-
-
-                                    await message.ModifyAsync(x => { x.Embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder("in", $"{untilLegal.Days} days and {untilLegal.Hours} hours."), Colors.information, "Keanna will be legal"); });
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine(ex.Message);
-                                }
-                            }
                         }
                     }
                 }
-
-                SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
+                try
+                {
+                    SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
+                }
+                catch (Exception ex)
+                {
+                    SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
+                    Log.Error($"system - hourly_timer event - error:{ex.Message}");
+                }
+                
             }
             catch (Exception ex)
             {
@@ -193,6 +188,7 @@ namespace DiscordBot.Core.Classes
 
                 //Karma event
 
+                /*
                 var user_list = User.GetAllWithKarma();
 
                 if (user_list != null)
@@ -209,6 +205,7 @@ namespace DiscordBot.Core.Classes
                     }
                 }
 
+                */
                 //todays birthday event
 
                 var channel_event_list = Channel_Event.GetAllByType('s');

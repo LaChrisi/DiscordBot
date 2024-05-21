@@ -239,9 +239,10 @@ C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-x
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-x64\DiscordBot.AssemblyInfoInputs.cache
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-x64\DiscordBot.AssemblyInfo.cs
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-x64\DiscordBot.csproj.CoreCompileInputs.cache
-C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-x64\DiscordBot.csproj.CopyComplete
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-x64\DiscordBot.dll
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-x64\refint\DiscordBot.dll
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-x64\DiscordBot.pdb
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-x64\DiscordBot.genruntimeconfig.cache
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-x64\ref\DiscordBot.dll
+C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-x64\DiscordBot.sourcelink.json
+C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Release\net6.0\linux-x64\DiscordBot.csproj.Up2Date
