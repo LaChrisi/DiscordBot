@@ -353,6 +353,10 @@ namespace DiscordBot.Core.Classes
         public static Color information = Color.Blue;
         public static Color warning = Color.Gold;
         public static Color error = Color.Red;
+        public static Color nadine = Color.Red;
+        public static Color christoph = Color.Blue;
+        public static Color rumpfi = Color.Purple;
+        public static Color gray = Color.LightGrey;
     }
 
     class Field

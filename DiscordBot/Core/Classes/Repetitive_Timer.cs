@@ -101,7 +101,7 @@ namespace DiscordBot.Core.Classes
 
                 if (i > 1)
                 {
-                    var channel = Program.Client.GetChannel(1242534487561338982) as ISocketMessageChannel;
+                    var channel = Program.Client.GetChannel(1242565685146816584) as ISocketMessageChannel;
 
                     SpreadSheetConnector google = new SpreadSheetConnector();
                     google.ConnectToGoogle();
@@ -109,19 +109,38 @@ namespace DiscordBot.Core.Classes
                     while (true)
                     {
                         var item = google.GetRow(i);
+                        Discord.Embed embed = null;
 
                         if (item == null)
                             break;
 
-                        Discord.Embed embed = null;
+                        string notes = item.notes;
+
+                        var split = notes.Split("!alt - ");
+
+                        if (split.Length > 1)
+                            notes = $"{split[0]}\n*{split[1]}*";
+                        else
+                            notes = $"{split[0]}";
 
                         if (item.who != "")
                         {
-                            embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{item.who} ist durch {item.type} gekommen!", $"{item.notes}"), Colors.information, item.when, footer: $"{i - 1}");
+                            if (item.who == "Nadine")
+                            {
+                                embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{item.who} ist durch {item.type} gekommen!", $"{notes}"), Colors.nadine, item.when, footer: $"{i - 1}");
+                            }
+                            else if (item.who == "Christoph")
+                            {
+                                embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{item.who} ist durch {item.type} gekommen!", $"{notes}"), Colors.christoph, item.when, footer: $"{i - 1}");
+                            }
+                            else if (item.who == "Christoph, Nadine")
+                            {
+                                embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"Wir sind beide richtig geil durch {item.type} gekommen!", $"{notes}"), Colors.rumpfi, item.when, footer: $"{i - 1}");
+                            }
                         }
                         else
                         {
-                            embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"Wir hatten {item.type}!", $"{item.notes}"), Colors.information, item.when, footer: $"{i - 1}");
+                            embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"Wir hatten {item.type}!", $"{notes}"), Colors.gray, item.when, footer: $"{i - 1}");
                         }
 
                         await channel.SendMessageAsync(embed: embed);
@@ -129,8 +148,6 @@ namespace DiscordBot.Core.Classes
                         i++;
                         global.value = Convert.ToString(i);
                         Global.Edit(global);
-
-                        //System.Threading.Thread.Sleep(1000);
                     }
                 }
 

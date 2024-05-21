@@ -3,28 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|c:\\users\\chris\\documents\\github\\discordbot\\discordbot\\core\\classes\\repetitive_timer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|solutionrelative:discordbot\\core\\classes\\repetitive_timer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|c:\\users\\chris\\documents\\github\\discordbot\\discordbot\\core\\classes\\googlesheets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|solutionrelative:discordbot\\core\\classes\\googlesheets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|c:\\users\\chris\\documents\\github\\discordbot\\discordbot\\core\\classes\\embed.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|solutionrelative:discordbot\\core\\classes\\embed.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|c:\\users\\chris\\documents\\github\\discordbot\\discordbot\\core\\classes\\repetitive_timer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|solutionrelative:discordbot\\core\\classes\\repetitive_timer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|c:\\users\\chris\\documents\\github\\discordbot\\discordbot\\core\\commands\\moderation\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|solutionrelative:discordbot\\core\\commands\\moderation\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|c:\\users\\chris\\documents\\github\\discordbot\\discordbot\\core\\commands\\test.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|solutionrelative:discordbot\\core\\commands\\test.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|c:\\users\\chris\\documents\\github\\discordbot\\discordbot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|solutionrelative:discordbot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|c:\\users\\chris\\documents\\github\\discordbot\\discordbot\\core\\classes\\embed.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|solutionrelative:discordbot\\core\\classes\\embed.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|c:\\users\\chris\\documents\\github\\discordbot\\discordbot\\core\\commands\\moderation\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|solutionrelative:discordbot\\core\\commands\\moderation\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|c:\\users\\chris\\documents\\github\\discordbot\\discordbot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|solutionrelative:discordbot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|c:\\users\\chris\\documents\\github\\discordbot\\discordbot\\core\\classes\\slashcommands.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -66,11 +66,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\Program.cs",
               "RelativeDocumentMoniker": "DiscordBot\\Program.cs",
@@ -83,13 +83,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "GoogleSheets.cs",
               "DocumentMoniker": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\Core\\Classes\\GoogleSheets.cs",
               "RelativeDocumentMoniker": "DiscordBot\\Core\\Classes\\GoogleSheets.cs",
               "ToolTip": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\Core\\Classes\\GoogleSheets.cs",
               "RelativeToolTip": "DiscordBot\\Core\\Classes\\GoogleSheets.cs",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAiwCUAAAA3AAAA",
+              "ViewState": "AQIAAA0AAAAAAAAAAAAawBsAAABSAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-21T13:19:15.907Z",
               "IsPinned": true,
@@ -97,26 +97,27 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "Admin.cs",
               "DocumentMoniker": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\Core\\Commands\\Moderation\\Admin.cs",
               "RelativeDocumentMoniker": "DiscordBot\\Core\\Commands\\Moderation\\Admin.cs",
               "ToolTip": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\Core\\Commands\\Moderation\\Admin.cs",
               "RelativeToolTip": "DiscordBot\\Core\\Commands\\Moderation\\Admin.cs",
-              "ViewState": "AQIAAM8BAAAAAAAAAAD4v/YBAAAZAAAA",
+              "ViewState": "AQIAAOgBAAAAAAAAAAAEwA8CAAAgAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2022-12-17T13:50:44.944Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Repetitive_Timer.cs",
               "DocumentMoniker": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\Core\\Classes\\Repetitive_Timer.cs",
               "RelativeDocumentMoniker": "DiscordBot\\Core\\Classes\\Repetitive_Timer.cs",
               "ToolTip": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\Core\\Classes\\Repetitive_Timer.cs",
               "RelativeToolTip": "DiscordBot\\Core\\Classes\\Repetitive_Timer.cs",
-              "ViewState": "AQIAAF8AAAAAAAAAAAAtwHUAAAAYAAAA",
+              "ViewState": "AQIAAGAAAAAAAAAAAAAtwHsAAAAyAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2022-10-11T11:47:23.957Z",
               "IsPinned": true,
@@ -210,13 +211,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Embed.cs",
               "DocumentMoniker": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\Core\\Classes\\Embed.cs",
               "RelativeDocumentMoniker": "DiscordBot\\Core\\Classes\\Embed.cs",
               "ToolTip": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\Core\\Classes\\Embed.cs",
               "RelativeToolTip": "DiscordBot\\Core\\Classes\\Embed.cs",
-              "ViewState": "AQIAAG8BAAAAAAAAAAAawIoBAAAMAAAA",
+              "ViewState": "AQIAAE0BAAAAAAAAAAAvwGMBAAAuAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-07T18:45:18.845Z",
               "EditorCaption": ""

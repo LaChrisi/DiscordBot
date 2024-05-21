@@ -425,21 +425,32 @@ namespace DiscordBot.Core.Commands.Moderation
 
                             var item = google.GetRow(rowID);
 
-                            if (item == null)
+                            if (item != null)
                             {
-                                embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"warning", $"row {rowID} not found"), Colors.warning);
-                                await Context.Channel.SendMessageAsync(embed: embed);
+                                string notes = item.notes;
 
-                                throw new Exception();
-                            }
+                                var split = notes.Split("!alt - ");
+                                notes = $"{split[0]}\n*{split[1]}*";
 
-                            if (item.who != "")
-                            {
-                                embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{item.who} ist durch {item.type} gekommen!", $"{item.notes}"), Colors.information, item.when, footer: $"{rowID - 1}");
-                            }
-                            else
-                            {
-                                embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"Wir hatten {item.type}!", $"{item.notes}"), Colors.information, item.when, footer: $"{rowID - 1}");
+                                if (item.who != "")
+                                {
+                                    if (item.who == "Nadine")
+                                    {
+                                        embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{item.who} ist durch {item.type} gekommen!", $"{notes}"), Colors.nadine, item.when, footer: $"{rowID - 1}");
+                                    }
+                                    else if (item.who == "Christoph")
+                                    {
+                                        embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{item.who} ist durch {item.type} gekommen!", $"{notes}"), Colors.christoph, item.when, footer: $"{rowID - 1}");
+                                    }
+                                    else if (item.who == "Christoph, Nadine")
+                                    {
+                                        embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"Wir sind beide richtig geil durch {item.type} gekommen!", $"{notes}"), Colors.rumpfi, item.when, footer: $"{rowID - 1}");
+                                    }
+                                }
+                                else
+                                {
+                                    embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"Wir hatten {item.type}!", $"{notes}"), Colors.gray, item.when, footer: $"{rowID - 1}");
+                                }
                             }
 
                             await Context.Channel.SendMessageAsync(embed: embed);
@@ -482,19 +493,34 @@ namespace DiscordBot.Core.Commands.Moderation
                         while (true) 
                         {
                             var item = google.GetRow(i);
+                            Discord.Embed embed = null;
 
                             if (item == null)
                                 break;
 
-                            Discord.Embed embed = null;
+                            string notes = item.notes;
+
+                            var split = notes.Split("!alt - ");
+                            notes = $"{split[0]}\n*{split[1]}*";
 
                             if (item.who != "")
                             {
-                                embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{item.who} ist durch {item.type} gekommen!", $"{item.notes}"), Colors.information, item.when, footer: $"{i - 1}");
+                                if (item.who == "Nadine")
+                                {
+                                    embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{item.who} ist durch {item.type} gekommen!", $"{notes}"), Colors.nadine, item.when, footer: $"{i - 1}");
+                                }
+                                else if (item.who == "Christoph")
+                                {
+                                    embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{item.who} ist durch {item.type} gekommen!", $"{notes}"), Colors.christoph, item.when, footer: $"{i - 1}");
+                                }
+                                else if (item.who == "Christoph, Nadine")
+                                {
+                                    embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"Wir sind beide richtig geil durch {item.type} gekommen!", $"{notes}"), Colors.rumpfi, item.when, footer: $"{i - 1}");
+                                }
                             }
                             else
                             {
-                                embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"Wir hatten {item.type}!", $"{item.notes}"), Colors.information, item.when, footer: $"{i - 1}");
+                                embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"Wir hatten {item.type}!", $"{notes}"), Colors.gray, item.when, footer: $"{i - 1}");
                             }
 
                             await Context.Channel.SendMessageAsync(embed: embed);

@@ -35,7 +35,7 @@ namespace DiscordBot.Core.Classes
             {
                 foreach (var row in values)
                 {
-                    var notes = "Ich liebe dich Nadine!";
+                    var notes = "Ich liebe dich Nadine!\n*Christoph*";
 
                     try
                     {
