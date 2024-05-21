@@ -46,6 +46,8 @@ namespace DiscordBot.Core.Commands
                 //start test here
 
                 //test end
+
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Client.CurrentUser, Classes.Field.CreateFieldBuilder("test", $"Test successful!"), Classes.Colors.information));
             }
             catch (Exception ex)
             {
