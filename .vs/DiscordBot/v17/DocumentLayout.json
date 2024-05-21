@@ -87,8 +87,7 @@
               "ToolTip": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\DiscordBot.csproj",
               "RelativeToolTip": "DiscordBot\\DiscordBot.csproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-05-21T11:49:16.566Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-21T11:49:16.566Z"
             },
             {
               "$type": "Document",
@@ -100,8 +99,7 @@
               "RelativeToolTip": "DiscordBot\\Core\\Commands\\Get.cs",
               "ViewState": "AQIAAAMAAAAAAAAAAIBZwC0AAACeAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-07T18:39:39.677Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T18:39:39.677Z"
             },
             {
               "$type": "Document",
@@ -113,8 +111,7 @@
               "RelativeToolTip": "DiscordBot\\Core\\Commands\\Test.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAIBJwAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-07T17:56:40.793Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T17:56:40.793Z"
             },
             {
               "$type": "Document",
@@ -126,8 +123,7 @@
               "RelativeToolTip": "DiscordBot\\Core\\Classes\\Database\\Global.cs",
               "ViewState": "AQIAAEoAAAAAAAAAAAAuwAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2022-12-17T14:14:04.629Z",
-              "EditorCaption": ""
+              "WhenOpened": "2022-12-17T14:14:04.629Z"
             },
             {
               "$type": "Document",
@@ -139,8 +135,7 @@
               "RelativeToolTip": "DiscordBot\\Core\\Classes\\Token.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2022-12-17T14:06:08.189Z",
-              "EditorCaption": ""
+              "WhenOpened": "2022-12-17T14:06:08.189Z"
             },
             {
               "$type": "Document",
@@ -152,8 +147,7 @@
               "RelativeToolTip": "DiscordBot\\Core\\Commands\\Moderation\\Admin.cs",
               "ViewState": "AQIAAAwBAAAAAAAAAAAvwCUBAAAXAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2022-12-17T13:50:44.944Z",
-              "EditorCaption": ""
+              "WhenOpened": "2022-12-17T13:50:44.944Z"
             },
             {
               "$type": "Document",
@@ -165,8 +159,7 @@
               "RelativeToolTip": "DiscordBot\\Core\\Classes\\SlashCommands.cs",
               "ViewState": "AQIAAGgBAAAAAAAAAAAawH4BAAAUAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2022-12-17T13:48:40.033Z",
-              "EditorCaption": ""
+              "WhenOpened": "2022-12-17T13:48:40.033Z"
             },
             {
               "$type": "Document",
@@ -178,8 +171,7 @@
               "RelativeToolTip": "DiscordBot\\Core\\Classes\\Database\\Channel.cs",
               "ViewState": "AQIAABsAAAAAAAAAAAAmwB0AAAAsAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-08T18:26:45.207Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-08T18:26:45.207Z"
             },
             {
               "$type": "Document",
@@ -191,8 +183,7 @@
               "RelativeToolTip": "DiscordBot\\Core\\Classes\\Repetitive_Timer.cs",
               "ViewState": "AQIAAF8AAAAAAAAAAAAwwI0AAAA9AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2022-10-11T11:47:23.957Z",
-              "EditorCaption": ""
+              "WhenOpened": "2022-10-11T11:47:23.957Z"
             },
             {
               "$type": "Document",
@@ -204,8 +195,7 @@
               "RelativeToolTip": "DiscordBot\\Core\\Classes\\Embed.cs",
               "ViewState": "AQIAAGcAAAAAAAAAAAAiwHEAAABLAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-07T18:45:18.845Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T18:45:18.845Z"
             },
             {
               "$type": "Document",
@@ -217,8 +207,7 @@
               "RelativeToolTip": "DiscordBot\\Core\\Classes\\Database\\Channel_Event.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-08T18:19:58.776Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-08T18:19:58.776Z"
             },
             {
               "$type": "Document",
@@ -230,8 +219,7 @@
               "RelativeToolTip": "DiscordBot\\Core\\Classes\\Database\\Event.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2022-10-11T11:47:23.959Z",
-              "EditorCaption": ""
+              "WhenOpened": "2022-10-11T11:47:23.959Z"
             }
           ]
         }
