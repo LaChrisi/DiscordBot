@@ -22,15 +22,15 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net6.0"
+          "net8.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net6.0": {
-            "targetAlias": "net6.0",
+          "net8.0": {
+            "targetAlias": "net8.0",
             "projectReferences": {}
           }
         },
@@ -46,52 +46,54 @@
         }
       },
       "frameworks": {
-        "net6.0": {
-          "targetAlias": "net6.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "dependencies": {
             "CliWrap": {
               "target": "Package",
-              "version": "[3.5.0, )"
+              "version": "[3.6.6, )"
             },
             "Discord.Net": {
               "target": "Package",
-              "version": "[3.13.1, )"
+              "version": "[3.15.0, )"
             },
             "Google.Apis.Calendar.v3": {
               "target": "Package",
-              "version": "[1.58.0.2759, )"
+              "version": "[1.68.0.3402, )"
+            },
+            "Google.Apis.Drive.v3": {
+              "target": "Package",
+              "version": "[1.68.0.3416, )"
+            },
+            "Google.Apis.Sheets.v4": {
+              "target": "Package",
+              "version": "[1.68.0.3407, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[7.0.1, )"
+              "version": "[8.0.5, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.1, )"
+              "version": "[8.0.5, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.1, )"
-            },
-            "Microsoft.NET.ILLink.Analyzers": {
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[7.0.100-1.23211.1, )",
-              "autoReferenced": true
+              "version": "[8.0.5, )"
             },
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.100-1.23211.1, )",
+              "version": "[8.0.5, )",
               "autoReferenced": true
             },
             "MySql.Data": {
               "target": "Package",
-              "version": "[8.0.31, )"
+              "version": "[8.4.0, )"
             },
             "Opus": {
               "target": "Package",
@@ -99,15 +101,15 @@
             },
             "YoutubeExplode": {
               "target": "Package",
-              "version": "[6.2.5, )"
+              "version": "[6.3.15, )"
             },
             "YoutubeExplode.Converter": {
               "target": "Package",
-              "version": "[6.2.5, )"
+              "version": "[6.3.15, )"
             },
             "libsodium": {
               "target": "Package",
-              "version": "[1.0.18.4, )"
+              "version": "[1.0.19.2, )"
             }
           },
           "imports": [
@@ -124,15 +126,15 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Runtime.linux-x64",
-              "version": "[6.0.27, 6.0.27]"
+              "version": "[8.0.5, 8.0.5]"
             },
             {
               "name": "Microsoft.NETCore.App.Host.linux-x64",
-              "version": "[6.0.27, 6.0.27]"
+              "version": "[8.0.5, 8.0.5]"
             },
             {
               "name": "Microsoft.NETCore.App.Runtime.linux-x64",
-              "version": "[6.0.27, 6.0.27]"
+              "version": "[8.0.5, 8.0.5]"
             }
           ],
           "frameworkReferences": {
@@ -140,7 +142,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

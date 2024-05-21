@@ -227,6 +227,40 @@
           }
         }
       },
+      "Google.Apis.Drive.v3/1.68.0.3416": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis": "1.68.0",
+          "Google.Apis.Auth": "1.68.0"
+        },
+        "compile": {
+          "lib/net6.0/Google.Apis.Drive.v3.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Google.Apis.Drive.v3.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "Google.Apis.Sheets.v4/1.68.0.3407": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis": "1.68.0",
+          "Google.Apis.Auth": "1.68.0"
+        },
+        "compile": {
+          "lib/net6.0/Google.Apis.Sheets.v4.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Google.Apis.Sheets.v4.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Google.Protobuf/3.25.1": {
         "type": "package",
         "compile": {
@@ -1924,6 +1958,40 @@
         },
         "runtime": {
           "lib/net6.0/Google.Apis.Core.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "Google.Apis.Drive.v3/1.68.0.3416": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis": "1.68.0",
+          "Google.Apis.Auth": "1.68.0"
+        },
+        "compile": {
+          "lib/net6.0/Google.Apis.Drive.v3.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Google.Apis.Drive.v3.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "Google.Apis.Sheets.v4/1.68.0.3407": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis": "1.68.0",
+          "Google.Apis.Auth": "1.68.0"
+        },
+        "compile": {
+          "lib/net6.0/Google.Apis.Sheets.v4.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Google.Apis.Sheets.v4.dll": {
             "related": ".pdb;.xml"
           }
         }
@@ -3663,6 +3731,50 @@
         "lib/netstandard2.0/Google.Apis.Core.dll",
         "lib/netstandard2.0/Google.Apis.Core.pdb",
         "lib/netstandard2.0/Google.Apis.Core.xml"
+      ]
+    },
+    "Google.Apis.Drive.v3/1.68.0.3416": {
+      "sha512": "GrxLWVrkmqwypcZIKGOfHKm2yw2LOaCMO5+zd7rSSnwScskxfCP6Gpczq6cvobBVAqEXRvVaSDYFJyu3LEOOyA==",
+      "type": "package",
+      "path": "google.apis.drive.v3/1.68.0.3416",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.apis.drive.v3.1.68.0.3416.nupkg.sha512",
+        "google.apis.drive.v3.nuspec",
+        "lib/net462/Google.Apis.Drive.v3.dll",
+        "lib/net462/Google.Apis.Drive.v3.pdb",
+        "lib/net462/Google.Apis.Drive.v3.xml",
+        "lib/net6.0/Google.Apis.Drive.v3.dll",
+        "lib/net6.0/Google.Apis.Drive.v3.pdb",
+        "lib/net6.0/Google.Apis.Drive.v3.xml",
+        "lib/netstandard2.0/Google.Apis.Drive.v3.dll",
+        "lib/netstandard2.0/Google.Apis.Drive.v3.pdb",
+        "lib/netstandard2.0/Google.Apis.Drive.v3.xml"
+      ]
+    },
+    "Google.Apis.Sheets.v4/1.68.0.3407": {
+      "sha512": "z9dYweoUL+HwRjNe8llaS3hrmrIbjqfaYbAtt5P7KZ20HiBpcGOjTASGmy9xaPyZB9HpKwVsPiKWEgLTzDW0YQ==",
+      "type": "package",
+      "path": "google.apis.sheets.v4/1.68.0.3407",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.apis.sheets.v4.1.68.0.3407.nupkg.sha512",
+        "google.apis.sheets.v4.nuspec",
+        "lib/net462/Google.Apis.Sheets.v4.dll",
+        "lib/net462/Google.Apis.Sheets.v4.pdb",
+        "lib/net462/Google.Apis.Sheets.v4.xml",
+        "lib/net6.0/Google.Apis.Sheets.v4.dll",
+        "lib/net6.0/Google.Apis.Sheets.v4.pdb",
+        "lib/net6.0/Google.Apis.Sheets.v4.xml",
+        "lib/netstandard2.0/Google.Apis.Sheets.v4.dll",
+        "lib/netstandard2.0/Google.Apis.Sheets.v4.pdb",
+        "lib/netstandard2.0/Google.Apis.Sheets.v4.xml"
       ]
     },
     "Google.Protobuf/3.25.1": {
@@ -6543,6 +6655,8 @@
       "CliWrap >= 3.6.6",
       "Discord.Net >= 3.15.0",
       "Google.Apis.Calendar.v3 >= 1.68.0.3402",
+      "Google.Apis.Drive.v3 >= 1.68.0.3416",
+      "Google.Apis.Sheets.v4 >= 1.68.0.3407",
       "Microsoft.EntityFrameworkCore >= 8.0.5",
       "Microsoft.EntityFrameworkCore.Design >= 8.0.5",
       "Microsoft.EntityFrameworkCore.Tools >= 8.0.5",
@@ -6613,6 +6727,14 @@
           "Google.Apis.Calendar.v3": {
             "target": "Package",
             "version": "[1.68.0.3402, )"
+          },
+          "Google.Apis.Drive.v3": {
+            "target": "Package",
+            "version": "[1.68.0.3416, )"
+          },
+          "Google.Apis.Sheets.v4": {
+            "target": "Package",
+            "version": "[1.68.0.3407, )"
           },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",

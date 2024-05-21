@@ -61,6 +61,14 @@
               "target": "Package",
               "version": "[1.68.0.3402, )"
             },
+            "Google.Apis.Drive.v3": {
+              "target": "Package",
+              "version": "[1.68.0.3416, )"
+            },
+            "Google.Apis.Sheets.v4": {
+              "target": "Package",
+              "version": "[1.68.0.3407, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.5, )"

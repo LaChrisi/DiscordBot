@@ -27,6 +27,7 @@ namespace DiscordBot
             new Program().MainAsync().GetAwaiter().GetResult();
         }
 
+
         private async Task Client_MessageReceived(SocketMessage MessageParam)
         {
             if (MessageParam.Source == MessageSource.System || MessageParam.Source == MessageSource.Bot)
@@ -782,6 +783,7 @@ namespace DiscordBot
 
             Repetitive_Timer.SetUpHourlyTimer(new TimeSpan(DateTime.Now.Hour + 1, 0, 0));
             Repetitive_Timer.SetUpDailyTimer(new TimeSpan(Convert.ToInt32(Global.GetByName("daily_timer_hour").value), 0, 0));
+            Repetitive_Timer.SetUp5MinutesTimer(new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute + 5, 0));
 
             await Client.StartAsync();
 

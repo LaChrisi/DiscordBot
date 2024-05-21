@@ -26,6 +26,23 @@ namespace DiscordBot.Core.Classes
             return embed.Build();
         }
 
+        public static Discord.Embed New(SocketUser author, EmbedFieldBuilder field, Color color, DateTime timestamp, string title = "", string description = "", string imgURL = "", string thumbnailUrl = "", string footer = "")
+        {
+            EmbedBuilder embed = new EmbedBuilder();
+
+            embed.WithAuthor(author);
+            embed.WithTitle(title);
+            embed.WithDescription(description);
+            embed.WithImageUrl(imgURL);
+            embed.WithThumbnailUrl(thumbnailUrl);
+            embed.AddField(field);
+            embed.WithColor(color);
+            embed.WithFooter(f => f.Text = footer);
+            embed.WithTimestamp(timestamp);
+
+            return embed.Build();
+        }
+
         public static Discord.Embed New(SocketUser author, List<EmbedFieldBuilder> fields, Color color, string title = "", string description = "", string imgURL = "", string thumbnailUrl = "", string footer = "")
         {
             EmbedBuilder embed = new EmbedBuilder();

@@ -155,3 +155,5 @@ C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Debug\net8.0\refint\Di
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Debug\net8.0\DiscordBot.pdb
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Debug\net8.0\DiscordBot.genruntimeconfig.cache
 C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\obj\Debug\net8.0\ref\DiscordBot.dll
+C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Debug\net8.0\Google.Apis.Drive.v3.dll
+C:\Users\Chris\Documents\GitHub\DiscordBot\DiscordBot\bin\Debug\net8.0\Google.Apis.Sheets.v4.dll

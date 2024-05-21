@@ -16,6 +16,8 @@
     <PackageReference Include="CliWrap" Version="3.6.6" />
     <PackageReference Include="Discord.Net" Version="3.15.0" />
     <PackageReference Include="Google.Apis.Calendar.v3" Version="1.68.0.3402" />
+    <PackageReference Include="Google.Apis.Drive.v3" Version="1.68.0.3416" />
+    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.68.0.3407" />
     <PackageReference Include="libsodium" Version="1.0.19.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.5">

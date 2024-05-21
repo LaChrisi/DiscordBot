@@ -399,6 +399,117 @@ namespace DiscordBot.Core.Commands.Moderation
                     Log.Error($"command - !admin delete - user:{Context.Message.Author.Id} channel:{Context.Channel.Id} error:{ex.Message}");
                 }
             }
+
+            [Group("sex"), Summary("sex group")]
+            public class SexModule : ModuleBase<SocketCommandContext>
+            {
+                [Command("get"), SummaryAttribute("get a row by id")]
+                public async Task GetByRowID(int rowID = 0)
+                {
+                    try
+                    {
+                        if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
+                        {
+                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                            Log.Warning($"command - admin sex get - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                            return;
+                        }
+
+                        if (rowID != 0 && rowID > 0)
+                        {
+                            SpreadSheetConnector google = new SpreadSheetConnector();
+
+                            google.ConnectToGoogle();
+
+                            Discord.Embed embed = null;
+
+                            var item = google.GetRow(rowID);
+
+                            if (item == null)
+                            {
+                                embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"warning", $"row {rowID} not found"), Colors.warning);
+                                await Context.Channel.SendMessageAsync(embed: embed);
+
+                                throw new Exception();
+                            }
+
+                            if (item.who != "")
+                            {
+                                embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{item.who} ist durch {item.type} gekommen!", $"{item.notes}"), Colors.information, item.when, footer: $"{rowID - 1}");
+                            }
+                            else
+                            {
+                                embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"Wir hatten {item.type}!", $"{item.notes}"), Colors.information, item.when, footer: $"{rowID - 1}");
+                            }
+
+                            await Context.Channel.SendMessageAsync(embed: embed);
+                        }
+                        else
+                        {
+                            await Context.Message.ReplyAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("wrong syntax", "try\n!admin sex get <[rowID]>"), Colors.warning));
+                        }
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"command - !admin sex get - user:{Context.Message.Author.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+                    }
+                }
+
+                [Command("getall"), SummaryAttribute("get a row by id")]
+                public async Task GetAllRows(int rowID = 0)
+                {
+                    try
+                    {
+                        if (!Privileg.CheckById(Context.User.Id, Privileg.owner))
+                        {
+                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You are not my god!"), Colors.warning));
+                            Log.Warning($"command - admin sex get - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                            return;
+                        }
+
+                        SpreadSheetConnector google = new SpreadSheetConnector();
+
+                        int i = 2;
+
+                        if (rowID != 0)
+                        {
+                            i = rowID;
+                        }
+
+                        google.ConnectToGoogle();
+
+                        while (true) 
+                        {
+                            var item = google.GetRow(i);
+
+                            if (item == null)
+                                break;
+
+                            Discord.Embed embed = null;
+
+                            if (item.who != "")
+                            {
+                                embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{item.who} ist durch {item.type} gekommen!", $"{item.notes}"), Colors.information, item.when, footer: $"{i - 1}");
+                            }
+                            else
+                            {
+                                embed = Classes.Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"Wir hatten {item.type}!", $"{item.notes}"), Colors.information, item.when, footer: $"{i - 1}");
+                            }
+
+                            await Context.Channel.SendMessageAsync(embed: embed);
+
+                            i++;
+                        }
+
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("admin sex getall", "Done Successfully!"), Colors.information));
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"command - !admin sex getall - user:{Context.Message.Author.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+                    }
+                }
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "kQqcadTImMvXJRn64uVO9FhgtFkJ+1DXpeou8dhpsNc8Jox0vIDYrHbO5pP7jGyeJUgKCiJ/q3gRS69BUu8ylw==",
+  "dgSpecHash": "4JDwl5ExcrdkqYyQNR4C8FDBKC8o50oRzpVecPQwdLVUL+K/ax/q780EA7Ja2bWLm+clsIr6MTtMXWdgizbHcQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\DiscordBot.csproj",
   "expectedPackageFiles": [
@@ -18,6 +18,8 @@
     "C:\\Users\\Chris\\.nuget\\packages\\google.apis.auth\\1.68.0\\google.apis.auth.1.68.0.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\google.apis.calendar.v3\\1.68.0.3402\\google.apis.calendar.v3.1.68.0.3402.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\google.apis.core\\1.68.0\\google.apis.core.1.68.0.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\google.apis.drive.v3\\1.68.0.3416\\google.apis.drive.v3.1.68.0.3416.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\google.apis.sheets.v4\\1.68.0.3407\\google.apis.sheets.v4.1.68.0.3407.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\google.protobuf\\3.25.1\\google.protobuf.3.25.1.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\k4os.compression.lz4\\1.3.5\\k4os.compression.lz4.1.3.5.nupkg.sha512",

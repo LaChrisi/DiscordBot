@@ -4,6 +4,8 @@ using System.Timers;
 using Discord;
 using Discord.WebSocket;
 using DiscordBot.Core.Commands;
+using Google.Apis.Auth.OAuth2;
+using DiscordBot.Core.Classes;
 
 namespace DiscordBot.Core.Classes
 {
@@ -11,7 +13,7 @@ namespace DiscordBot.Core.Classes
     {
         public static Timer daily_timer;
         public static Timer hourly_timer;
-        public static Timer minutes_15_timer;
+        public static Timer minutes_5_timer;
 
         public static void SetUpDailyTimer(TimeSpan alertTime)
         {
@@ -64,16 +66,103 @@ namespace DiscordBot.Core.Classes
             }
         }
 
-        //hourly_timer event
-        public static async void Hourly_timer_Elapsed(object sender, ElapsedEventArgs eArgs)
+        public static void SetUp5MinutesTimer(TimeSpan alertTime)
+        {
+            try
+            {
+                DateTime current = DateTime.Now;
+                TimeSpan timeToGo = alertTime - current.TimeOfDay;
+
+                minutes_5_timer = new Timer
+                {
+                    AutoReset = false,
+                    Interval = timeToGo.TotalMilliseconds
+                };
+                minutes_5_timer.Elapsed += Minutes_5_timer_Elapsed;
+
+                minutes_5_timer.Start();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Log.Error(ex.Message);
+            }
+        }
+
+        public static async void Minutes_5_timer_Elapsed(object sender, ElapsedEventArgs eArgs)
+        {
+            try
+            {
+                Console.WriteLine(DateTime.Now.TimeOfDay + "minutes_5_timer event");
+                Log.Information("system - minutes_5_timer event - start");
+
+                var global = Global.GetByName("sex_id");
+                int i = Convert.ToInt32(global.value);
+
+                if (i > 1)
+                {
+                    var channel = Program.Client.GetChannel(1242534487561338982) as ISocketMessageChannel;
+
+                    SpreadSheetConnector google = new SpreadSheetConnector();
+                    google.ConnectToGoogle();
+
+                    while (true)
+                    {
+                        var item = google.GetRow(i);
+
+                        if (item == null)
+                            break;
+
+                        Discord.Embed embed = null;
+
+                        if (item.who != "")
+                        {
+                            embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{item.who} ist durch {item.type} gekommen!", $"{item.notes}"), Colors.information, item.when, footer: $"{i - 1}");
+                        }
+                        else
+                        {
+                            embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"Wir hatten {item.type}!", $"{item.notes}"), Colors.information, item.when, footer: $"{i - 1}");
+                        }
+
+                        await channel.SendMessageAsync(embed: embed);
+
+                        i++;
+                        global.value = Convert.ToString(i);
+                        Global.Edit(global);
+
+                        //System.Threading.Thread.Sleep(1000);
+                    }
+                }
+
+                try
+                {
+                    SetUp5MinutesTimer(new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute + 5, 0));
+                }
+                catch (Exception ex)
+                {
+                    SetUp5MinutesTimer(new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute + 5, 0));
+                    Log.Error($"system - minutes_5_timer event - error:{ex.Message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Log.Error($"system - minutes_5_timer event - error:{ex.Message}");
+            }
+        }
+
+            //hourly_timer event
+            public static async void Hourly_timer_Elapsed(object sender, ElapsedEventArgs eArgs)
         {
             try
             {
                 Console.WriteLine(DateTime.Now.TimeOfDay + "hourly_timer event");
                 Log.Information("system - hourly_timer event - start");
 
-                //karma reminder event
                 var channel_event_list = Channel_Event.GetAllByType('k');
+
+                /*
+                //karma reminder event
 
                 foreach (var channel_event in channel_event_list)
                 {
@@ -97,6 +186,7 @@ namespace DiscordBot.Core.Classes
                         }
                     }
                 }
+                */
 
                 //renew event
                 channel_event_list = Channel_Event.GetAllByType('r');
