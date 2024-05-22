@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -51,13 +52,38 @@ namespace DiscordBot.Core.Commands
                 string output = "";
 
                 //start test here
-                Repetitive_Timer.Minutes_5_timer_Elapsed(null, null);
+                //Repetitive_Timer.Minutes_5_timer_Elapsed(null, null);
+
+                var builder = new ComponentBuilder()
+                    //.WithSelectMenu(new SelectMenuBuilder()
+                    //.WithCustomId("who")
+                    //.WithPlaceholder("Wer ist gekommen?")
+                    //.AddOption(new SelectMenuOptionBuilder().WithLabel("Christoph").WithValue("Christoph"))
+                    //.AddOption(new SelectMenuOptionBuilder().WithLabel("Nadine").WithValue("Nadine"))
+                    //)
+                    //.WithSelectMenu(new SelectMenuBuilder()
+                    //.WithCustomId("type")
+                    //.WithPlaceholder("Durch was?")
+                    //.AddOption(new SelectMenuOptionBuilder().WithLabel("Sex").WithValue("Sex"))
+                    //.AddOption(new SelectMenuOptionBuilder().WithLabel("Oral").WithValue("Oral"))
+                    //.AddOption(new SelectMenuOptionBuilder().WithLabel("Masturbation").WithValue("Masturbation"))
+                    //)
+                    //.WithButton("Christoph", "christoph", ButtonStyle.Primary)
+                    //.WithButton("Nadine", "nadine", ButtonStyle.Danger)
+                    //.WithButton("Nadine", "nadine", ButtonStyle.Danger)
+                    //.WithButton("Nadine", "nadine", ButtonStyle.Danger)
+                    .WithButton("Der Akt wurde vollzogen", "start", ButtonStyle.Secondary)
+                    ;
+
+                await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Client.CurrentUser, Field.CreateFieldBuilder("Neuaufnahme", $"Hier kann Sex aufgezeichnet werden:"), Colors.information), components: builder.Build());
+
+               
 
                 //test end
 
                 if (output == "")
                 {
-                    await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Client.CurrentUser, Field.CreateFieldBuilder("test", $"Test successful!"), Colors.information));
+                    //await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Client.CurrentUser, Field.CreateFieldBuilder("test", $"Test successful!"), Colors.information));
                 }
                 else
                 {

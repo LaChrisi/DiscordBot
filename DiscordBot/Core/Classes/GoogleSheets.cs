@@ -1,7 +1,10 @@
 ﻿using Google.Apis.Requests;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
+using Google.Apis.Sheets.v4.Data;
+using Org.BouncyCastle.Utilities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 
@@ -26,7 +29,7 @@ namespace DiscordBot.Core.Classes
         {
             var range = $"Formularantworten!A{rowID}:D{rowID}";
             SpreadsheetsResource.ValuesResource.GetRequest getRequest = sheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
-
+            
             var getResponse = getRequest.Execute();
             IList<IList<Object>> values = getResponse.Values;
             Item item = Item.New(null, null, null, new DateTime()); ;
@@ -55,6 +58,40 @@ namespace DiscordBot.Core.Classes
             }
 
             return item;
+        }
+
+        public void AddRow(Item item)
+        {
+            var row = Global.GetByName("sex_id");
+
+            List<object> ranges = new List<object>();
+
+            var range = $"Formularantworten!A{row.value}";
+            ranges.Add(item.when);
+            ranges.Add(item.who);
+            ranges.Add(item.type);
+            ranges.Add(item.notes);
+
+            ValueRange valueRange = new ValueRange();
+            var oblist = new List<object>();
+            valueRange.MajorDimension = "ROWS";
+
+            int i = 0;
+
+            foreach (var x in ranges)
+            {
+                oblist.Add(x);
+
+                i++;
+            }
+
+            valueRange.Values = new List<IList<object>> { oblist };
+
+            SpreadsheetsResource.ValuesResource.UpdateRequest update = sheetsService.Spreadsheets.Values.Update(valueRange, spreadsheetId, range);
+            update.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
+            UpdateValuesResponse result2 = update.Execute();
+
+            return;
         }
     }
     

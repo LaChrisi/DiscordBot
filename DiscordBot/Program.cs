@@ -14,6 +14,7 @@ using System.Net;
 using System.IO;
 using Discord.Audio;
 using System.Threading;
+using Google.Protobuf;
 
 namespace DiscordBot
 {
@@ -852,7 +853,6 @@ namespace DiscordBot
 
         private async Task Client_InteractionCreated(SocketInteraction interaction)
         {
-            // Checking the type of this interaction
             switch (interaction)
             {
                 // Slash commands
@@ -862,31 +862,236 @@ namespace DiscordBot
 
                 // Button clicks/selection dropdowns
                 case SocketMessageComponent componentInteraction:
-                    await MyMessageComponentHandler(componentInteraction);
+                    await ButtonSelectionHandler(componentInteraction);
                     break;
 
+                case SocketModal commandInteraction:
+                    await ModalSelectionHandler(commandInteraction);
+                    break;
                 // Unused or Unknown/Unsupported
                 default:
                     break;
             }
         }
 
-        
-
-        private async Task MyMessageComponentHandler(SocketMessageComponent interaction)
+        private async Task ModalSelectionHandler(SocketModal interaction)
         {
-            // Get the custom ID 
-            var customId = interaction.Data.CustomId;
-            // Get the user
-            var user = (SocketGuildUser)interaction.User;
-            // Get the guild
-            var guild = user.Guild;
+            try
+            {
+                var customId = interaction.Data.CustomId;
+                var answer = $"{interaction.Data.Components.LastOrDefault().Value}\n{interaction.Data.Components.FirstOrDefault().Value}";
+                var answers = answer.Split("\n");
 
-            // Respond with the update message. This edits the message which this component resides.
-            await interaction.UpdateAsync(msgProps => msgProps.Content = $"Clicked {interaction.Data.CustomId}!");
+                switch (customId)
+                {
+                    case "notes":
 
-            // Also you can followup with a additional messages
-            await interaction.FollowupAsync($"Clicked {interaction.Data.CustomId}!", ephemeral: true);
+                        //await interaction.Channel.SendMessageAsync($"{answers[0]} ist durch {answers[1]} gekommen.\n{answers[2]}");
+
+                        SpreadSheetConnector google = new SpreadSheetConnector();
+                        google.ConnectToGoogle();
+
+                        Item item = new Item(answers[0], answers[1], answers[2], DateTime.Now);
+
+                        google.AddRow(item);
+                        Repetitive_Timer.Minutes_5_timer_Elapsed(null, null);
+
+                        //Back to the beginning
+                        var builder = new ComponentBuilder()
+                                .WithButton("Der Akt wurde vollzogen", "start", ButtonStyle.Secondary)
+                                ;
+
+                        await interaction.UpdateAsync(msgProps =>
+                        {
+                            msgProps.Components = builder.Build();
+                            msgProps.Embed = Core.Classes.Embed.New(interaction.User, Field.CreateFieldBuilder("Neuaufnahme", $"Hier kann Sex aufgezeichnet werden:"), Colors.information);
+                        });
+
+                        break;
+
+                    default:
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"modal - clicked - user:{interaction.User.Id} error:{ex.Message}");
+            }
+        }
+
+        private async Task ButtonSelectionHandler(SocketMessageComponent interaction)
+        {
+            try
+            {
+                var customId = interaction.Data.CustomId;
+                var user = (SocketGuildUser)interaction.User;
+                var guild = user.Guild;
+                var builder = new ComponentBuilder();
+                var modal = new ModalBuilder();
+                var textBuilder = new TextInputBuilder();
+                string answers = "";
+                string[] split = null;
+
+                switch (customId)
+                {
+                    case "start":
+
+                        builder = new ComponentBuilder()
+                            .WithButton("Keiner", "none", ButtonStyle.Secondary)
+                            .WithButton("Christoph", "christoph", ButtonStyle.Primary)
+                            .WithButton("Nadine", "nadine", ButtonStyle.Danger)
+                            .WithButton("Christoph und Nadine", "both", ButtonStyle.Success);
+
+                        await interaction.UpdateAsync(msgProps =>
+                            {
+                                msgProps.Components = builder.Build();
+                                msgProps.Embed = Core.Classes.Embed.New(user, Field.CreateFieldBuilder("Wer ist gekommen?", $"Antworten:"), Colors.information);
+                            });
+
+                        break;
+
+                    case "none":
+
+                        builder = new ComponentBuilder()
+                            .WithButton("Oral", "oral", ButtonStyle.Secondary)
+                            .WithButton("Sex", "sex", ButtonStyle.Primary)
+                            .WithButton("Masturbation", "masturbation", ButtonStyle.Success);
+
+                        await interaction.UpdateAsync(msgProps =>
+                        {
+                            msgProps.Components = builder.Build();
+                            msgProps.Embed = Core.Classes.Embed.New(user, Field.CreateFieldBuilder($"Was wurde durchgeführt?", $"{interaction.Message.Embeds.FirstOrDefault().Fields.FirstOrDefault().Value}\nKeiner"), Colors.information);
+                        });
+
+                        break;
+
+                    case "christoph":
+
+                        builder = new ComponentBuilder()
+                            .WithButton("Oral", "oral", ButtonStyle.Secondary)
+                            .WithButton("Sex", "sex", ButtonStyle.Primary)
+                            .WithButton("Masturbation", "masturbation", ButtonStyle.Success);
+
+                        await interaction.UpdateAsync(msgProps =>
+                        {
+                            msgProps.Components = builder.Build();
+                            msgProps.Embed = Core.Classes.Embed.New(user, Field.CreateFieldBuilder($"Was wurde durchgeführt?", $"{interaction.Message.Embeds.FirstOrDefault().Fields.FirstOrDefault().Value}\nChristoph"), Colors.information);
+                        });
+                        
+                        break;
+
+                    case "nadine":
+
+                        builder = new ComponentBuilder()
+                            .WithButton("Oral", "oral", ButtonStyle.Secondary)
+                            .WithButton("Sex", "sex", ButtonStyle.Primary)
+                            .WithButton("Masturbation", "masturbation", ButtonStyle.Success);
+
+                        await interaction.UpdateAsync(msgProps =>
+                        {
+                            msgProps.Components = builder.Build();
+                            msgProps.Embed = Core.Classes.Embed.New(user, Field.CreateFieldBuilder($"Was wurde durchgeführt?", $"{interaction.Message.Embeds.FirstOrDefault().Fields.FirstOrDefault().Value}\nNadine"), Colors.information);
+                        });
+
+                        break;
+
+                    case "both":
+
+                        builder = new ComponentBuilder()
+                            .WithButton("Oral", "oral", ButtonStyle.Secondary)
+                            .WithButton("Sex", "sex", ButtonStyle.Primary)
+                            .WithButton("Masturbation", "masturbation", ButtonStyle.Success);
+
+                        await interaction.UpdateAsync(msgProps =>
+                        {
+                            msgProps.Components = builder.Build();
+                            msgProps.Embed = Core.Classes.Embed.New(user, Field.CreateFieldBuilder($"Was wurde durchgeführt?", $"{interaction.Message.Embeds.FirstOrDefault().Fields.FirstOrDefault().Value}\nChristoph und Nadine"), Colors.information);
+                        });
+
+                        break;
+
+                    case "oral":
+
+                        answers = $"{interaction.Message.Embeds.FirstOrDefault().Fields.FirstOrDefault().Value}\nOral";
+                        split = answers.Split("\n");
+                        answers = $"{split[1]}\n{split[2]}";
+
+                        textBuilder = new TextInputBuilder()
+                            .WithCustomId("answers")
+                            .WithLabel("Antworten")
+                            .WithStyle(TextInputStyle.Paragraph)
+                            .WithRequired(true)
+                            ;
+
+                        modal = new ModalBuilder()
+                            .WithTitle("Bemerkungen")
+                            .WithCustomId("notes")
+                            .AddTextInput("Was hat dir gut gefallen, oder war Besonders?", "note", placeholder: "Ich liebe dich!", required: false, value: "")
+                            .AddTextInput("Antworten", "answers", TextInputStyle.Paragraph, required: true, value: answers)
+                            ;
+
+                        await interaction.RespondWithModalAsync(modal.Build());
+
+                        break;
+
+                    case "sex":
+
+                        answers = $"{interaction.Message.Embeds.FirstOrDefault().Fields.FirstOrDefault().Value}\nSex";
+                        split = answers.Split("\n");
+                        answers = $"{split[1]}\n{split[2]}";
+
+                        textBuilder = new TextInputBuilder()
+                            .WithCustomId("answers")
+                            .WithLabel("Antworten")
+                            .WithStyle(TextInputStyle.Paragraph)
+                            .WithRequired(true)
+                            ;
+
+                        modal = new ModalBuilder()
+                            .WithTitle("Bemerkungen")
+                            .WithCustomId("notes")
+                            .AddTextInput("Was hat dir gut gefallen, oder war Besonders?", "note", placeholder: "Ich liebe dich!", required: false, value: "")
+                            .AddTextInput("Antworten", "answers", TextInputStyle.Paragraph, required: true, value: answers)
+                            ;
+
+                        await interaction.RespondWithModalAsync(modal.Build());
+
+                        break;
+
+                    case "masturbation":
+
+                        answers = $"{interaction.Message.Embeds.FirstOrDefault().Fields.FirstOrDefault().Value}\nMasturbation";
+                        split = answers.Split("\n");
+                        answers = $"{split[1]}\n{split[2]}";
+
+                        textBuilder = new TextInputBuilder()
+                            .WithCustomId("answers")
+                            .WithLabel("Antworten")
+                            .WithStyle(TextInputStyle.Paragraph)
+                            .WithRequired(true)
+                            ;
+
+                        modal = new ModalBuilder()
+                            .WithTitle("Bemerkungen")
+                            .WithCustomId("notes")
+                            .AddTextInput("Was hat dir gut gefallen, oder war Besonders?", "note", placeholder: "Ich liebe dich!", required: false, value: "")
+                            .AddTextInput("Antworten", "answers", TextInputStyle.Paragraph, required: true, value: answers)
+                            ;
+
+                        await interaction.RespondWithModalAsync(modal.Build());
+
+                        break;
+
+                    default:
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"button - clicked - user:{interaction.User.Id} error:{ex.Message}");
+            }
         }
 
 #pragma warning disable CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.
