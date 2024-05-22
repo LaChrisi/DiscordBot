@@ -1,4 +1,5 @@
-﻿using Google.Apis.Requests;
+﻿using Discord;
+using Google.Apis.Requests;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
@@ -67,23 +68,36 @@ namespace DiscordBot.Core.Classes
             List<object> ranges = new List<object>();
 
             var range = $"Formularantworten!A{row.value}";
-            ranges.Add(item.when);
-            ranges.Add(item.who);
-            ranges.Add(item.type);
-            ranges.Add(item.notes);
 
             ValueRange valueRange = new ValueRange();
             var oblist = new List<object>();
             valueRange.MajorDimension = "ROWS";
 
-            int i = 0;
+            oblist.Add(item.when);
+            oblist.Add(item.who);
+            oblist.Add(item.type);
+            oblist.Add(item.notes);
 
-            foreach (var x in ranges)
-            {
-                oblist.Add(x);
+            valueRange.Values = new List<IList<object>> { oblist };
 
-                i++;
-            }
+            SpreadsheetsResource.ValuesResource.UpdateRequest update = sheetsService.Spreadsheets.Values.Update(valueRange, spreadsheetId, range);
+            update.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
+            UpdateValuesResponse result2 = update.Execute();
+
+            return;
+        }
+        public void DeleteRow(int rowID)
+        {
+            var range = $"Formularantworten!A{rowID}";
+
+            ValueRange valueRange = new ValueRange();
+            var oblist = new List<object>();
+            valueRange.MajorDimension = "ROWS";
+
+            oblist.Add("");
+            oblist.Add("");
+            oblist.Add("");
+            oblist.Add("");
 
             valueRange.Values = new List<IList<object>> { oblist };
 

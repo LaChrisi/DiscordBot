@@ -6,6 +6,7 @@ using Discord.WebSocket;
 using DiscordBot.Core.Commands;
 using Google.Apis.Auth.OAuth2;
 using DiscordBot.Core.Classes;
+using Microsoft.VisualBasic;
 
 namespace DiscordBot.Core.Classes
 {
@@ -143,10 +144,15 @@ namespace DiscordBot.Core.Classes
                             embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"Wir hatten {item.type}!", $"{notes}"), Colors.gray, item.when, footer: $"{i - 1}");
                         }
 
-                        await channel.SendMessageAsync(embed: embed);
+                        var message = await channel.SendMessageAsync(embed: embed);
 
                         i++;
                         global.value = Convert.ToString(i);
+                        Global.Edit(global);
+
+                        global = Global.GetByName("sex_last_message_id");
+                        global.value = message.Id.ToString();
+
                         Global.Edit(global);
                     }
                 }

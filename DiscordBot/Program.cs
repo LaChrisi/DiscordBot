@@ -898,7 +898,8 @@ namespace DiscordBot
 
                         //Back to the beginning
                         var builder = new ComponentBuilder()
-                                .WithButton("Der Akt wurde vollzogen", "start", ButtonStyle.Secondary)
+                                .WithButton("Der Akt wurde vollzogen", "start", ButtonStyle.Success)
+                                .WithButton("letzten Akt löschen", "delete", ButtonStyle.Danger)
                                 ;
 
                         await interaction.UpdateAsync(msgProps =>
@@ -929,19 +930,34 @@ namespace DiscordBot
                 var guild = user.Guild;
                 var builder = new ComponentBuilder();
                 var modal = new ModalBuilder();
-                var textBuilder = new TextInputBuilder();
                 string answers = "";
                 string[] split = null;
 
                 switch (customId)
                 {
+                    case "home":
+
+                        builder = new ComponentBuilder()
+                            .WithButton("Der Akt wurde vollzogen", "start", ButtonStyle.Success)
+                            .WithButton("letzten Akt löschen", "delete", ButtonStyle.Danger)
+                            ;
+
+                        await interaction.UpdateAsync(msgProps =>
+                        {
+                            msgProps.Components = builder.Build();
+                            msgProps.Embed = Core.Classes.Embed.New(user, Field.CreateFieldBuilder("Neuaufnahme", $"Hier kann Sex aufgezeichnet werden:"), Colors.information);
+                        });
+
+                        break;
+
                     case "start":
 
                         builder = new ComponentBuilder()
                             .WithButton("Keiner", "none", ButtonStyle.Secondary)
                             .WithButton("Christoph", "christoph", ButtonStyle.Primary)
                             .WithButton("Nadine", "nadine", ButtonStyle.Danger)
-                            .WithButton("Christoph und Nadine", "both", ButtonStyle.Success);
+                            .WithButton("Christoph und Nadine", "both", ButtonStyle.Success)
+                            .WithButton("Home", "home", ButtonStyle.Secondary);
 
                         await interaction.UpdateAsync(msgProps =>
                             {
@@ -951,12 +967,46 @@ namespace DiscordBot
 
                         break;
 
+                    case "delete":
+
+                        builder = new ComponentBuilder()
+                            .WithButton("Löschen", "deleteyes", ButtonStyle.Danger)
+                            .WithButton("Home", "home", ButtonStyle.Secondary);
+
+                        await interaction.UpdateAsync(msgProps =>
+                        {
+                            msgProps.Components = builder.Build();
+                            msgProps.Embed = Core.Classes.Embed.New(user, Field.CreateFieldBuilder("Den letzten Akt wirklich löschen?", $"Diese Aktion kann nicht rückgängig gemacht werden!"), Colors.information);
+                        });
+
+                        break;
+
+                    case "deleteyes":
+
+                        var sex_last_message_id = (ulong) Convert.ToInt64(Global.GetByName("sex_last_message_id").value);
+                        var sex_id = Global.GetByName("sex_id");
+
+                        var channel = (ISocketMessageChannel) Client.GetChannel(1242565685146816584);
+                        var message = await channel.GetMessageAsync(sex_last_message_id);
+                        await message.DeleteAsync();
+
+                        sex_id.value = (Convert.ToInt32(sex_id.value) - 1).ToString();
+                        Global.Edit(sex_id);
+
+                        SpreadSheetConnector google = new SpreadSheetConnector();
+                        google.ConnectToGoogle();
+
+                        google.DeleteRow(Convert.ToInt32(sex_id.value));
+
+                        break;
+
                     case "none":
 
                         builder = new ComponentBuilder()
                             .WithButton("Oral", "oral", ButtonStyle.Secondary)
                             .WithButton("Sex", "sex", ButtonStyle.Primary)
-                            .WithButton("Masturbation", "masturbation", ButtonStyle.Success);
+                            .WithButton("Masturbation", "masturbation", ButtonStyle.Success)
+                            .WithButton("Home", "home", ButtonStyle.Secondary);
 
                         await interaction.UpdateAsync(msgProps =>
                         {
@@ -971,7 +1021,8 @@ namespace DiscordBot
                         builder = new ComponentBuilder()
                             .WithButton("Oral", "oral", ButtonStyle.Secondary)
                             .WithButton("Sex", "sex", ButtonStyle.Primary)
-                            .WithButton("Masturbation", "masturbation", ButtonStyle.Success);
+                            .WithButton("Masturbation", "masturbation", ButtonStyle.Success)
+                            .WithButton("Home", "home", ButtonStyle.Secondary);
 
                         await interaction.UpdateAsync(msgProps =>
                         {
@@ -986,7 +1037,8 @@ namespace DiscordBot
                         builder = new ComponentBuilder()
                             .WithButton("Oral", "oral", ButtonStyle.Secondary)
                             .WithButton("Sex", "sex", ButtonStyle.Primary)
-                            .WithButton("Masturbation", "masturbation", ButtonStyle.Success);
+                            .WithButton("Masturbation", "masturbation", ButtonStyle.Success)
+                            .WithButton("Home", "home", ButtonStyle.Secondary);
 
                         await interaction.UpdateAsync(msgProps =>
                         {
@@ -1001,7 +1053,8 @@ namespace DiscordBot
                         builder = new ComponentBuilder()
                             .WithButton("Oral", "oral", ButtonStyle.Secondary)
                             .WithButton("Sex", "sex", ButtonStyle.Primary)
-                            .WithButton("Masturbation", "masturbation", ButtonStyle.Success);
+                            .WithButton("Masturbation", "masturbation", ButtonStyle.Success)
+                            .WithButton("Home", "home", ButtonStyle.Secondary);
 
                         await interaction.UpdateAsync(msgProps =>
                         {
@@ -1016,13 +1069,6 @@ namespace DiscordBot
                         answers = $"{interaction.Message.Embeds.FirstOrDefault().Fields.FirstOrDefault().Value}\nOral";
                         split = answers.Split("\n");
                         answers = $"{split[1]}\n{split[2]}";
-
-                        textBuilder = new TextInputBuilder()
-                            .WithCustomId("answers")
-                            .WithLabel("Antworten")
-                            .WithStyle(TextInputStyle.Paragraph)
-                            .WithRequired(true)
-                            ;
 
                         modal = new ModalBuilder()
                             .WithTitle("Bemerkungen")
@@ -1041,13 +1087,6 @@ namespace DiscordBot
                         split = answers.Split("\n");
                         answers = $"{split[1]}\n{split[2]}";
 
-                        textBuilder = new TextInputBuilder()
-                            .WithCustomId("answers")
-                            .WithLabel("Antworten")
-                            .WithStyle(TextInputStyle.Paragraph)
-                            .WithRequired(true)
-                            ;
-
                         modal = new ModalBuilder()
                             .WithTitle("Bemerkungen")
                             .WithCustomId("notes")
@@ -1064,13 +1103,6 @@ namespace DiscordBot
                         answers = $"{interaction.Message.Embeds.FirstOrDefault().Fields.FirstOrDefault().Value}\nMasturbation";
                         split = answers.Split("\n");
                         answers = $"{split[1]}\n{split[2]}";
-
-                        textBuilder = new TextInputBuilder()
-                            .WithCustomId("answers")
-                            .WithLabel("Antworten")
-                            .WithStyle(TextInputStyle.Paragraph)
-                            .WithRequired(true)
-                            ;
 
                         modal = new ModalBuilder()
                             .WithTitle("Bemerkungen")
