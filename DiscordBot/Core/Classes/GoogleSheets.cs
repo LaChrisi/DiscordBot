@@ -63,6 +63,12 @@ namespace DiscordBot.Core.Classes
 
         public void AddRow(Item item)
         {
+            if (item.who == "Christoph und Nadine")
+            {
+                item.who = "Christoph, Nadine";
+            }
+            
+
             var row = Global.GetByName("sex_id");
 
             List<object> ranges = new List<object>();
@@ -73,7 +79,7 @@ namespace DiscordBot.Core.Classes
             var oblist = new List<object>();
             valueRange.MajorDimension = "ROWS";
 
-            oblist.Add(item.when);
+            oblist.Add(item.when.ToString("dd.MM.yyyy HH:mm:ss"));
             oblist.Add(item.who);
             oblist.Add(item.type);
             oblist.Add(item.notes);
