@@ -154,6 +154,53 @@ namespace DiscordBot.Core.Classes
             return Embed.New(Program.Client.Rest.CurrentUser, fields, Colors.information, "top 5 memers", "ordered by upvotes");
         }
 
+        public static Discord.Embed GetSexStats()
+        {
+            List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
+
+            string[] names = { "sex_stats_masturbation_christoph", "sex_stats_masturbation_nadine", "sex_stats_oral", "sex_stats_oral_christoph", "sex_stats_oral_nadine", "sex_stats_sex", "sex_stats_sex_christoph", "sex_stats_sex_nadine" };
+
+            foreach (var name in names)
+            {
+                var global = Global.GetByName(name);
+
+                if (name == "sex_stats_masturbation_christoph")
+                {
+                    fields.Add(Field.CreateFieldBuilder("Anzahl Masturbationen Christoph", global.value));
+                }
+                else if (name == "sex_stats_masturbation_nadine")
+                {
+                    fields.Add(Field.CreateFieldBuilder("Anzahl Masturbationen Nadine", global.value));
+                }
+                else if (name == "sex_stats_oral")
+                {
+                    fields.Add(Field.CreateFieldBuilder("Anzahl Oral Gesamt", global.value));
+                }
+                else if (name == "sex_stats_oral_christoph")
+                {
+                    fields.Add(Field.CreateFieldBuilder("Anzahl Orgasmen Oral Christoph", $"{global.value}   *({(Convert.ToDouble(global.value) / Convert.ToDouble(Global.GetByName("sex_stats_oral").value) * 100).ToString(".0")}%)*"));
+                }
+                else if (name == "sex_stats_oral_nadine")
+                {
+                    fields.Add(Field.CreateFieldBuilder("Anzahl Orgasmen Oral Nadine", $"{global.value}   *({(Convert.ToDouble(global.value) / Convert.ToDouble(Global.GetByName("sex_stats_oral").value) * 100).ToString(".0")}%)*"));
+                }
+                else if (name == "sex_stats_sex")
+                {
+                    fields.Add(Field.CreateFieldBuilder("Anzahl Sex Gesamt", global.value));
+                }
+                else if (name == "sex_stats_sex_christoph")
+                {
+                    fields.Add(Field.CreateFieldBuilder("Anzahl Orgasmen Sex Christoph", $"{global.value}   *({(Convert.ToDouble(global.value) / Convert.ToDouble(Global.GetByName("sex_stats_sex").value) * 100).ToString(".0")}%)*"));
+                }
+                else if (name == "sex_stats_sex_nadine")
+                {
+                    fields.Add(Field.CreateFieldBuilder("Anzahl Orgasmen Sex Nadine", $"{global.value}   *({(Convert.ToDouble(global.value) / Convert.ToDouble(Global.GetByName("sex_stats_sex").value) * 100).ToString(".0")}%)*"));
+                }
+            }
+
+            return Embed.New(Program.Client.CurrentUser, fields, Colors.information);
+        }
+
         public static Discord.Embed GetNextBirthday()
         {
             var items = Birthday.GetNextBirthday();

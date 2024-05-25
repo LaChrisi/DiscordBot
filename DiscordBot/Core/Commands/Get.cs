@@ -12,9 +12,36 @@ namespace DiscordBot.Core.Commands
 {
     public class Get : ModuleBase<SocketCommandContext>
     {
-        [Group("get"), Summary("Group to manage get commands")]
+        [Group("get"), Summary("get commands")]
         public class GetGroup : ModuleBase<SocketCommandContext>
         {
+            [Group("sex"), Summary("sex commands")]
+            public class SexGroup : ModuleBase<SocketCommandContext>
+            {
+                [Command("stats"), Alias("s", "stat"), SummaryAttribute("get the current sex stats")]
+                public async Task SexStatsModule()
+                {
+                    try
+                    {
+                        if (!Privileg.CheckById(Context.User.Id, Privileg.admin))
+                        {
+                            await Context.Channel.SendMessageAsync(embed: Classes.Embed.New(Context.Message.Author, Field.CreateFieldBuilder("warning", "You need to be at least admin to use this command!"), Colors.warning));
+                            Log.Warning($"command - admin reset roles - user:{Context.User.Id} channel:{Context.Channel.Id} privileg to low");
+                            return;
+                        }
+
+                        await Context.Channel.SendMessageAsync(embed: Classes.Embed.GetSexStats());
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"command - sex - stats:{Context.User.Id} channel:{Context.Channel.Id} error:{ex.Message}");
+                    }
+
+                }
+
+
+            }
+
             [Command("stats"), Alias("s", "stat"), Summary("returns your overall stats")]
             public async Task StatsModule(ulong UserID = 0)
             {

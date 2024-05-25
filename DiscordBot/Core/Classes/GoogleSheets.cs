@@ -67,7 +67,10 @@ namespace DiscordBot.Core.Classes
             {
                 item.who = "Christoph, Nadine";
             }
-            
+            else if (item.who == "Keiner")
+            {
+                item.who = "";
+            }
 
             var row = Global.GetByName("sex_id");
 
