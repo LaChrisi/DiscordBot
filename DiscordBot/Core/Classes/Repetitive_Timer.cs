@@ -125,123 +125,17 @@ namespace DiscordBot.Core.Classes
                         else
                             notes = $"{split[0]}";
 
-                        if (item.who != "")
-                        {
-                            if (item.who == "Nadine")
-                            {
-                                embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{item.who} ist durch {item.type} gekommen!", $"{notes}"), Colors.nadine, item.when, footer: $"{i - 1}");
-                            }
-                            else if (item.who == "Christoph")
-                            {
-                                embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{item.who} ist durch {item.type} gekommen!", $"{notes}"), Colors.christoph, item.when, footer: $"{i - 1}");
-                            }
-                            else if (item.who == "Christoph, Nadine")
-                            {
-                                embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"Wir sind beide richtig geil durch {item.type} gekommen!", $"{notes}"), Colors.rumpfi, item.when, footer: $"{i - 1}");
-                            }
-                        }
-                        else
-                        {
-                            embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"Wir hatten {item.type}!", $"{notes}"), Colors.gray, item.when, footer: $"{i - 1}");
-                        }
+                        Program.SexSendStatsDiscord(new Item(item.who, item.type, notes, item.when));
 
-                        var message = await channel.SendMessageAsync(embed: embed);
-
-                        if (item.type == "Sex")
-                        {
-                            global = Global.GetByName("sex_stats_sex");
-                            global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                            Global.Edit(global);
-
-
-                            if (item.who == "Christoph")
-                            {
-                                global = Global.GetByName("sex_stats_sex_christoph");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                            else if (item.who == "Nadine")
-                            {
-                                global = Global.GetByName("sex_stats_sex_nadine");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                            else if (item.who == "Christoph und Nadine")
-                            {
-                                global = Global.GetByName("sex_stats_sex_christoph");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-
-                                global = Global.GetByName("sex_stats_sex_nadine");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                        }
-                        else if (item.type == "Oral")
-                        {
-                            global = Global.GetByName("sex_stats_oral");
-                            global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                            Global.Edit(global);
-
-
-                            if (item.who == "Christoph")
-                            {
-                                global = Global.GetByName("sex_stats_oral_christoph");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                            else if (item.who == "Nadine")
-                            {
-                                global = Global.GetByName("sex_stats_oral_nadine");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                            else if (item.who == "Christoph und Nadine")
-                            {
-                                global = Global.GetByName("sex_stats_oral_christoph");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-
-                                global = Global.GetByName("sex_stats_oral_nadine");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                        }
-                        else if (item.type == "Masturbation")
-                        {
-                            if (item.who == "Christoph")
-                            {
-                                global = Global.GetByName("sex_stats_masturbation_christoph");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                            else if (item.who == "Nadine")
-                            {
-                                global = Global.GetByName("sex_stats_masturbation_nadine");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                        }
+                        Program.AddToSexStats(item, +1);
 
                         i++;
 
-                        global = Global.GetByName("sex_id");
                         global.value = Convert.ToString(i);
-                        Global.Edit(global);
-
-                        global = Global.GetByName("sex_last_message_id");
-                        global.value = message.Id.ToString();
-
                         Global.Edit(global);
                     }
 
-                    var statsChannel = (IMessageChannel)Program.Client.GetChannel(1242853004395282513);
-                    var statsMessage = (IUserMessage)await statsChannel.GetMessageAsync(1243887965722378279);
-
-                    await statsMessage.ModifyAsync(msgProps =>
-                    {
-                        msgProps.Embed = Embed.GetSexStats();
-                    });
+                    Program.UpdateSexStats();
                 }
 
                 try

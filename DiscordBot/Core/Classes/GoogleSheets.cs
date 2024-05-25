@@ -61,39 +61,47 @@ namespace DiscordBot.Core.Classes
             return item;
         }
 
-        public void AddRow(Item item)
+        public void EditRow(Item item, int rowID = 0)
         {
-            if (item.who == "Christoph und Nadine")
+            try
             {
-                item.who = "Christoph, Nadine";
+                if (item.who == "Christoph und Nadine")
+                {
+                    item.who = "Christoph, Nadine";
+                }
+                else if (item.who == "Keiner")
+                {
+                    item.who = "";
+                }
+
+                if (rowID == 0)
+                {
+                    rowID = Convert.ToInt32(Global.GetByName("sex_id").value);
+                }
+
+                List<object> ranges = new List<object>();
+
+                var range = $"Formularantworten!A{rowID}";
+
+                ValueRange valueRange = new ValueRange();
+                var oblist = new List<object>();
+                valueRange.MajorDimension = "ROWS";
+
+                oblist.Add(item.when.ToString("dd.MM.yyyy HH:mm:ss"));
+                oblist.Add(item.who);
+                oblist.Add(item.type);
+                oblist.Add(item.notes);
+
+                valueRange.Values = new List<IList<object>> { oblist };
+
+                SpreadsheetsResource.ValuesResource.UpdateRequest update = sheetsService.Spreadsheets.Values.Update(valueRange, spreadsheetId, range);
+                update.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
+                UpdateValuesResponse result2 = update.Execute();
             }
-            else if (item.who == "Keiner")
+            catch (Exception ex)
             {
-                item.who = "";
+                Log.Error($"system - ModalNotes - error:{ex.Message}");
             }
-
-            var row = Global.GetByName("sex_id");
-
-            List<object> ranges = new List<object>();
-
-            var range = $"Formularantworten!A{row.value}";
-
-            ValueRange valueRange = new ValueRange();
-            var oblist = new List<object>();
-            valueRange.MajorDimension = "ROWS";
-
-            oblist.Add(item.when.ToString("dd.MM.yyyy HH:mm:ss"));
-            oblist.Add(item.who);
-            oblist.Add(item.type);
-            oblist.Add(item.notes);
-
-            valueRange.Values = new List<IList<object>> { oblist };
-
-            SpreadsheetsResource.ValuesResource.UpdateRequest update = sheetsService.Spreadsheets.Values.Update(valueRange, spreadsheetId, range);
-            update.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
-            UpdateValuesResponse result2 = update.Execute();
-
-            return;
         }
         public void DeleteRow(int rowID)
         {
@@ -113,8 +121,6 @@ namespace DiscordBot.Core.Classes
             SpreadsheetsResource.ValuesResource.UpdateRequest update = sheetsService.Spreadsheets.Values.Update(valueRange, spreadsheetId, range);
             update.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
             UpdateValuesResponse result2 = update.Execute();
-
-            return;
         }
     }
     
@@ -145,9 +151,9 @@ namespace DiscordBot.Core.Classes
 
         public Discord.Embed toEmbed()
         {
-            var test = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{who} - {type}", $"{notes}"), Colors.information, when);
+            var embed = Embed.New(Program.Client.CurrentUser, Field.CreateFieldBuilder($"{who} - {type}", $"{notes}"), Colors.information, when);
 
-            return test;
+            return embed;
         }
     }
 }
