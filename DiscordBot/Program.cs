@@ -16,6 +16,7 @@ using Discord.Audio;
 using System.Threading;
 using Google.Protobuf;
 using Discord.Rest;
+using Microsoft.VisualBasic;
 
 namespace DiscordBot
 {
@@ -879,124 +880,7 @@ namespace DiscordBot
         {
             try
             {
-                var customId = interaction.Data.CustomId;
-                var answer = $"{interaction.Data.Components.LastOrDefault().Value}\n{interaction.Data.Components.FirstOrDefault().Value}";
-                var answers = answer.Split("\n");
-
-                switch (customId)
-                {
-                    case "notes":
-
-                        SpreadSheetConnector google = new SpreadSheetConnector();
-                        google.ConnectToGoogle();
-
-                        Item item = new Item(answers[0], answers[1], answers[2], DateTime.Now);
-
-                        google.AddRow(item);
-                        Repetitive_Timer.Minutes_5_timer_Elapsed(null, null);
-
-                        if (item.type == "Sex")
-                        {
-                            var global = Global.GetByName("sex_stats_sex");
-                            global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                            Global.Edit(global);
-
-
-                            if (item.who == "Christoph")
-                            {
-                                global = Global.GetByName("sex_stats_sex_christoph");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                            else if (item.who == "Nadine")
-                            {
-                                global = Global.GetByName("sex_stats_sex_nadine");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                            else if (item.who == "Christoph und Nadine")
-                            {
-                                global = Global.GetByName("sex_stats_sex_christoph");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-
-                                global = Global.GetByName("sex_stats_sex_nadine");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                        }
-                        else if (item.type == "Oral")
-                        {
-                            var global = Global.GetByName("sex_stats_oral");
-                            global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                            Global.Edit(global);
-
-
-                            if (item.who == "Christoph")
-                            {
-                                global = Global.GetByName("sex_stats_oral_christoph");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                            else if (item.who == "Nadine")
-                            {
-                                global = Global.GetByName("sex_stats_oral_nadine");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                            else if (item.who == "Christoph und Nadine")
-                            {
-                                global = Global.GetByName("sex_stats_oral_christoph");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-
-                                global = Global.GetByName("sex_stats_oral_nadine");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                        }
-                        else if (item.type == "Masturbation")
-                        {
-                            if (item.who == "Christoph")
-                            {
-                                var global = Global.GetByName("sex_stats_masturbation_christoph");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                            else if (item.who == "Nadine")
-                            {
-                                var global = Global.GetByName("sex_stats_masturbation_nadine");
-                                global.value = (Convert.ToInt32(global.value) + 1).ToString();
-                                Global.Edit(global);
-                            }
-                        }
-
-                        var channel = (IMessageChannel) Client.GetChannel(1242853004395282513);
-                        var message = (IUserMessage) await channel.GetMessageAsync(1243887965722378279);
-
-                        await message.ModifyAsync(msgProps =>
-                            {
-                                msgProps.Embed = Core.Classes.Embed.GetSexStats();
-                            });
-
-                        //Back to the beginning
-                        var builder = new ComponentBuilder()
-                                .WithButton("Der Akt wurde vollzogen", "start", ButtonStyle.Success)
-                                .WithButton("letzten Akt löschen", "delete", ButtonStyle.Danger)
-                                ;
-
-                        await interaction.UpdateAsync(msgProps =>
-                        {
-                            msgProps.Components = builder.Build();
-                            msgProps.Embed = Core.Classes.Embed.New(interaction.User, Field.CreateFieldBuilder("Neuaufnahme", $"Hier kann Sex aufgezeichnet werden:"), Colors.information);
-                        });
-
-                        break;
-
-                    default:
-
-                        break;
-                }
+                await ModalNotesTask(interaction);
             }
             catch (Exception ex)
             {
@@ -1066,106 +950,7 @@ namespace DiscordBot
 
                     case "deleteyes":
 
-                        var sex_last_message_id = (ulong) Convert.ToInt64(Global.GetByName("sex_last_message_id").value);
-                        var sex_id = Global.GetByName("sex_id");
-
-                        var channel = (ISocketMessageChannel) Client.GetChannel(1242565685146816584);
-                        var message = await channel.GetMessageAsync(sex_last_message_id);
-                        await message.DeleteAsync();
-
-                        sex_id.value = (Convert.ToInt32(sex_id.value) - 1).ToString();
-                        Global.Edit(sex_id);
-
-                        SpreadSheetConnector google = new SpreadSheetConnector();
-                        google.ConnectToGoogle();
-
-                        var item = google.GetRow(Convert.ToInt32(sex_id.value));
-
-                        if (item.type == "Sex")
-                        {
-                            var global = Global.GetByName("sex_stats_sex");
-                            global.value = (Convert.ToInt32(global.value) - 1).ToString();
-                            Global.Edit(global);
-
-
-                            if (item.who == "Christoph")
-                            {
-                                global = Global.GetByName("sex_stats_sex_christoph");
-                                global.value = (Convert.ToInt32(global.value) - 1).ToString();
-                                Global.Edit(global);
-                            }
-                            else if (item.who == "Nadine")
-                            {
-                                global = Global.GetByName("sex_stats_sex_nadine");
-                                global.value = (Convert.ToInt32(global.value) - 1).ToString();
-                                Global.Edit(global);
-                            }
-                            else if (item.who == "Christoph und Nadine")
-                            {
-                                global = Global.GetByName("sex_stats_sex_christoph");
-                                global.value = (Convert.ToInt32(global.value) - 1).ToString();
-                                Global.Edit(global);
-
-                                global = Global.GetByName("sex_stats_sex_nadine");
-                                global.value = (Convert.ToInt32(global.value) - 1).ToString();
-                                Global.Edit(global);
-                            }
-                        }
-                        else if (item.type == "Oral")
-                        {
-                            var global = Global.GetByName("sex_stats_oral");
-                            global.value = (Convert.ToInt32(global.value) - 1).ToString();
-                            Global.Edit(global);
-
-
-                            if (item.who == "Christoph")
-                            {
-                                global = Global.GetByName("sex_stats_oral_christoph");
-                                global.value = (Convert.ToInt32(global.value) - 1).ToString();
-                                Global.Edit(global);
-                            }
-                            else if (item.who == "Nadine")
-                            {
-                                global = Global.GetByName("sex_stats_oral_nadine");
-                                global.value = (Convert.ToInt32(global.value) - 1).ToString();
-                                Global.Edit(global);
-                            }
-                            else if (item.who == "Christoph und Nadine")
-                            {
-                                global = Global.GetByName("sex_stats_oral_christoph");
-                                global.value = (Convert.ToInt32(global.value) - 1).ToString();
-                                Global.Edit(global);
-
-                                global = Global.GetByName("sex_stats_oral_nadine");
-                                global.value = (Convert.ToInt32(global.value) - 1).ToString();
-                                Global.Edit(global);
-                            }
-                        }
-                        else if (item.type == "Masturbation")
-                        {
-                            if (item.who == "Christoph")
-                            {
-                                var global = Global.GetByName("sex_stats_masturbation_christoph");
-                                global.value = (Convert.ToInt32(global.value) - 1).ToString();
-                                Global.Edit(global);
-                            }
-                            else if (item.who == "Nadine")
-                            {
-                                var global = Global.GetByName("sex_stats_masturbation_nadine");
-                                global.value = (Convert.ToInt32(global.value) - 1).ToString();
-                                Global.Edit(global);
-                            }
-                        }
-
-                        google.DeleteRow(Convert.ToInt32(sex_id.value));
-
-                        var statsChannel = (IMessageChannel)Client.GetChannel(1242853004395282513);
-                        var statsMessage = (IUserMessage)await statsChannel.GetMessageAsync(1243887965722378279);
-
-                        await statsMessage.ModifyAsync(msgProps =>
-                        {
-                            msgProps.Embed = Core.Classes.Embed.GetSexStats();
-                        });
+                        await ButtonDeleteYesTask();
 
                         break;
 
@@ -1663,6 +1448,153 @@ namespace DiscordBot
             {
                 Log.Error($"system - broadcast message - message:{Message.Id} error:{ex.Message}");
             }
+        }
+
+        public static async Task ModalNotesTask(SocketModal interaction)
+        {
+            var customId = interaction.Data.CustomId;
+            var answer = $"{interaction.Data.Components.LastOrDefault().Value}\n{interaction.Data.Components.FirstOrDefault().Value}";
+            var answers = answer.Split("\n");
+
+            switch (customId)
+            {
+                case "notes":
+
+                    SpreadSheetConnector google = new SpreadSheetConnector();
+                    google.ConnectToGoogle();
+
+                    Item item = new Item(answers[0], answers[1], answers[2], DateTime.Now);
+
+                    google.AddRow(item);
+
+                    Repetitive_Timer.Minutes_5_timer_Elapsed(null, null);
+
+                    //Back to the beginning
+                    var builder = new ComponentBuilder()
+                            .WithButton("Der Akt wurde vollzogen", "start", ButtonStyle.Success)
+                            .WithButton("letzten Akt löschen", "delete", ButtonStyle.Danger)
+                    ;
+
+                    await interaction.UpdateAsync(msgProps =>
+                    {
+                        msgProps.Components = builder.Build();
+                        msgProps.Embed = Core.Classes.Embed.New(interaction.User, Field.CreateFieldBuilder("Neuaufnahme", $"Hier kann Sex aufgezeichnet werden:"), Colors.information);
+                    });
+
+                    break;
+
+                default:
+
+                    break;
+            }
+        }
+
+        public static async Task ButtonDeleteYesTask()
+        {
+            var sex_last_message_id = (ulong)Convert.ToInt64(Global.GetByName("sex_last_message_id").value);
+            var sex_id = Global.GetByName("sex_id");
+
+            var channel = (ISocketMessageChannel)Client.GetChannel(1242565685146816584);
+            var message = await channel.GetMessageAsync(sex_last_message_id);
+
+            if (message == null)
+                return;
+
+            await message.DeleteAsync();
+
+            sex_id.value = (Convert.ToInt32(sex_id.value) - 1).ToString();
+            Global.Edit(sex_id);
+
+            SpreadSheetConnector google = new SpreadSheetConnector();
+            google.ConnectToGoogle();
+
+            var item = google.GetRow(Convert.ToInt32(sex_id.value));
+
+            if (item.type == "Sex")
+            {
+                var global = Global.GetByName("sex_stats_sex");
+                global.value = (Convert.ToInt32(global.value) - 1).ToString();
+                Global.Edit(global);
+
+
+                if (item.who == "Christoph")
+                {
+                    global = Global.GetByName("sex_stats_sex_christoph");
+                    global.value = (Convert.ToInt32(global.value) - 1).ToString();
+                    Global.Edit(global);
+                }
+                else if (item.who == "Nadine")
+                {
+                    global = Global.GetByName("sex_stats_sex_nadine");
+                    global.value = (Convert.ToInt32(global.value) - 1).ToString();
+                    Global.Edit(global);
+                }
+                else if (item.who == "Christoph und Nadine")
+                {
+                    global = Global.GetByName("sex_stats_sex_christoph");
+                    global.value = (Convert.ToInt32(global.value) - 1).ToString();
+                    Global.Edit(global);
+
+                    global = Global.GetByName("sex_stats_sex_nadine");
+                    global.value = (Convert.ToInt32(global.value) - 1).ToString();
+                    Global.Edit(global);
+                }
+            }
+            else if (item.type == "Oral")
+            {
+                var global = Global.GetByName("sex_stats_oral");
+                global.value = (Convert.ToInt32(global.value) - 1).ToString();
+                Global.Edit(global);
+
+
+                if (item.who == "Christoph")
+                {
+                    global = Global.GetByName("sex_stats_oral_christoph");
+                    global.value = (Convert.ToInt32(global.value) - 1).ToString();
+                    Global.Edit(global);
+                }
+                else if (item.who == "Nadine")
+                {
+                    global = Global.GetByName("sex_stats_oral_nadine");
+                    global.value = (Convert.ToInt32(global.value) - 1).ToString();
+                    Global.Edit(global);
+                }
+                else if (item.who == "Christoph und Nadine")
+                {
+                    global = Global.GetByName("sex_stats_oral_christoph");
+                    global.value = (Convert.ToInt32(global.value) - 1).ToString();
+                    Global.Edit(global);
+
+                    global = Global.GetByName("sex_stats_oral_nadine");
+                    global.value = (Convert.ToInt32(global.value) - 1).ToString();
+                    Global.Edit(global);
+                }
+            }
+            else if (item.type == "Masturbation")
+            {
+                if (item.who == "Christoph")
+                {
+                    var global = Global.GetByName("sex_stats_masturbation_christoph");
+                    global.value = (Convert.ToInt32(global.value) - 1).ToString();
+                    Global.Edit(global);
+                }
+                else if (item.who == "Nadine")
+                {
+                    var global = Global.GetByName("sex_stats_masturbation_nadine");
+                    global.value = (Convert.ToInt32(global.value) - 1).ToString();
+                    Global.Edit(global);
+                }
+            }
+
+            google.DeleteRow(Convert.ToInt32(sex_id.value));
+
+            var statsChannel = (IMessageChannel)Client.GetChannel(1242853004395282513);
+            var statsMessage = (IUserMessage)await statsChannel.GetMessageAsync(1243887965722378279);
+
+            await statsMessage.ModifyAsync(msgProps =>
+            {
+                msgProps.Embed = Core.Classes.Embed.GetSexStats();
+            });
         }
     }
 }
