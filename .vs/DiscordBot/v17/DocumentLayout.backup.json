@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|c:\\users\\chris\\documents\\github\\discordbot\\discordbot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|solutionrelative:discordbot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|c:\\users\\chris\\documents\\github\\discordbot\\discordbot\\core\\classes\\token.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|solutionrelative:discordbot\\core\\classes\\token.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|c:\\users\\chris\\documents\\github\\discordbot\\discordbot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|solutionrelative:discordbot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{08F92D2C-07F5-4E69-81F1-A596BD892BBB}|DiscordBot\\DiscordBot.csproj|c:\\users\\chris\\documents\\github\\discordbot\\discordbot\\core\\classes\\googlesheets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -66,21 +66,20 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\Program.cs",
               "RelativeDocumentMoniker": "DiscordBot\\Program.cs",
               "ToolTip": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\Program.cs",
               "RelativeToolTip": "DiscordBot\\Program.cs",
-              "ViewState": "AgIAAP4CAAAAAAAAAAAQwA4DAAAAAAAAAAAAAA==",
+              "ViewState": "AQIAAAYDAAAAAAAAAAAUwBYDAABXAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2022-10-11T11:47:23.885Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -161,7 +160,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Token.cs",
               "DocumentMoniker": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\Core\\Classes\\Token.cs",
               "RelativeDocumentMoniker": "DiscordBot\\Core\\Classes\\Token.cs",

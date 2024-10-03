@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "4JDwl5ExcrdkqYyQNR4C8FDBKC8o50oRzpVecPQwdLVUL+K/ax/q780EA7Ja2bWLm+clsIr6MTtMXWdgizbHcQ==",
+  "dgSpecHash": "errTNCAC/Xc=",
   "success": true,
   "projectFilePath": "C:\\Users\\Chris\\Documents\\GitHub\\DiscordBot\\DiscordBot\\DiscordBot.csproj",
   "expectedPackageFiles": [
@@ -104,9 +104,9 @@
     "C:\\Users\\Chris\\.nuget\\packages\\youtubeexplode\\6.3.15\\youtubeexplode.6.3.15.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\youtubeexplode.converter\\6.3.15\\youtubeexplode.converter.6.3.15.nupkg.sha512",
     "C:\\Users\\Chris\\.nuget\\packages\\zstdsharp.port\\0.7.1\\zstdsharp.port.0.7.1.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-x64\\8.0.5\\microsoft.netcore.app.runtime.linux-x64.8.0.5.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\8.0.5\\microsoft.netcore.app.host.linux-x64.8.0.5.nupkg.sha512",
-    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-x64\\8.0.5\\microsoft.aspnetcore.app.runtime.linux-x64.8.0.5.nupkg.sha512"
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-x64\\8.0.8\\microsoft.netcore.app.runtime.linux-x64.8.0.8.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\8.0.8\\microsoft.netcore.app.host.linux-x64.8.0.8.nupkg.sha512",
+    "C:\\Users\\Chris\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-x64\\8.0.8\\microsoft.aspnetcore.app.runtime.linux-x64.8.0.8.nupkg.sha512"
   ],
   "logs": []
 }

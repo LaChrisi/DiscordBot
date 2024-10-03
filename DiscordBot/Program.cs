@@ -1523,7 +1523,7 @@ namespace DiscordBot
                         var global = Global.GetByName("sex_id");
 
                         var lastItem = google.GetRow(Convert.ToInt32(global.value) - 1);
-                        AddToSexStats(lastItem, -1);
+                        
 
                         string note = "";
                         string type = "";
@@ -1562,6 +1562,7 @@ namespace DiscordBot
                         google.EditRow(newItem, Convert.ToInt32(global.value) - 1);
 
                         //edit stats
+                        AddToSexStats(lastItem, -1);
                         AddToSexStats(newItem, +1);
 
                         //Update stats

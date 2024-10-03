@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -120,15 +121,15 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Runtime.linux-x64",
-              "version": "[8.0.5, 8.0.5]"
+              "version": "[8.0.8, 8.0.8]"
             },
             {
               "name": "Microsoft.NETCore.App.Host.linux-x64",
-              "version": "[8.0.5, 8.0.5]"
+              "version": "[8.0.8, 8.0.8]"
             },
             {
               "name": "Microsoft.NETCore.App.Runtime.linux-x64",
-              "version": "[8.0.5, 8.0.5]"
+              "version": "[8.0.8, 8.0.8]"
             }
           ],
           "frameworkReferences": {
@@ -136,7 +137,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

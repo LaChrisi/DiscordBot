@@ -91,7 +91,7 @@ namespace DiscordBot.Core.Classes
             }
         }
 
-        public static async void Minutes_5_timer_Elapsed(object sender, ElapsedEventArgs eArgs)
+        public static void Minutes_5_timer_Elapsed(object sender, ElapsedEventArgs eArgs)
         {
             try
             {
@@ -111,7 +111,6 @@ namespace DiscordBot.Core.Classes
                     while (true)
                     {
                         var item = google.GetRow(i);
-                        Discord.Embed embed = null;
 
                         if (item == null)
                             break;
@@ -131,6 +130,7 @@ namespace DiscordBot.Core.Classes
 
                         i++;
 
+                        //sex_id
                         global.value = Convert.ToString(i);
                         Global.Edit(global);
                     }
