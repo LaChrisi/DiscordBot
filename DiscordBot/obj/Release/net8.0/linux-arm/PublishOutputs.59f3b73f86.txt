@@ -1,0 +1,5 @@
+C:\Users\Chris\source\repos\DiscordBot\DiscordBot\bin\Release\net8.0\publish\linux-arm\DiscordBot.pdb
+C:\Users\Chris\source\repos\DiscordBot\DiscordBot\bin\Release\net8.0\publish\linux-arm\libsodium.dll
+C:\Users\Chris\source\repos\DiscordBot\DiscordBot\bin\Release\net8.0\publish\linux-arm\opus.dll
+C:\Users\Chris\source\repos\DiscordBot\DiscordBot\bin\Release\net8.0\publish\linux-arm\libsodium.so
+C:\Users\Chris\source\repos\DiscordBot\DiscordBot\bin\Release\net8.0\publish\linux-arm\DiscordBot
